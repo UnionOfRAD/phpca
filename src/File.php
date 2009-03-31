@@ -70,7 +70,7 @@ class File
   }
 
 
-  public function getFilename()
+  public function getFileName()
   {
     return $this->fileName;
   }

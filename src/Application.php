@@ -200,7 +200,7 @@ class Application
 
       if ($lintResult != '') {
         $this->printLetter('E');
-        $result->addError($file, $lintResult);
+        $result->addError(new LintError($file, strstr($lintResult, PHP_EOL, true)));
         continue;
       }
 
@@ -228,7 +228,12 @@ class Application
         if ($result->hasErrors($file)) {
           echo $file . ':' . PHP_EOL;
           foreach ($result->getErrors($file) as $error) {
-            echo 'Error: ' . $error . PHP_EOL;
+
+            if ($error instanceOf LintError) {
+              echo $error->getMessage() . PHP_EOL;
+            } else {
+              echo 'Line ' . $error->getLine() . ', column ' . $error->getColumn() . ': Error: ' . $error->getMessage() . PHP_EOL;
+            }
           }
           echo PHP_EOL;
         }

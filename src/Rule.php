@@ -49,9 +49,9 @@ abstract class Rule
   protected $file;
   protected $result;
 
-  protected function fail($message)
+  protected function fail($message, $token)
   {
-    $this->result->addError($this->file->getFilename(), $message);
+    $this->result->addError(new Error($this->file->getFileName(), $message, $token));
   }
 
   public function check(File $file, Result $result)

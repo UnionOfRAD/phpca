@@ -38,68 +38,41 @@
 
 namespace spriebsch\PHPca;
 
-class Result
+class Message
 {
-  protected $files = array();
-  protected $errors = array();
-  protected $warnings = array();
+  protected $fileName;
+  protected $token;
+  protected $message;
 
-
-  public function addFile($file)
+  public function __construct($fileName, $message, Token $token = null)
   {
-    $this->files[] = $file;
+    $this->fileName = $fileName;
+    $this->message  = $message;
+    $this->token    = $token;
   }
 
 
-  public function getNumberOfFiles()
+  public function getFileName()
   {
-    return count($this->files);
+    return $this->fileName;
   }
 
 
-  public function addWarning($file, $message)
+  public function getMessage()
   {
-    $this->warnings[$file][] = $message;
+    return $this->message;
   }
 
 
-  public function hasWarnings()
+  public function getLine()
   {
-    return sizeof($this->errors > 0);
+    return $this->token->getLine();
   }
 
 
-  public function getNumberOfWarnings()
+  public function getColumn()
   {
-    return count($this->warnings);
-  }
-
-
-  public function addError(Message $error)
-  {
-    $this->errors[$error->getFileName()][] = $error;
-  }
-
-
-  public function hasErrors($file = null)
-  {
-    if (is_null($file)) {
-      return sizeof($this->errors > 0);
-    }
-
-    return isset($this->errors[$file]);
-  }
-
-
-  public function getErrors($file)
-  {
-    return $this->errors[$file];
-  }
-
-
-  public function getNumberOfErrors()
-  {
-    return count($this->errors);
+    return $this->token->getColumn();
   }
 }
 

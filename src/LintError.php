@@ -38,68 +38,17 @@
 
 namespace spriebsch\PHPca;
 
-class Result
+class LintError extends Message
 {
-  protected $files = array();
-  protected $errors = array();
-  protected $warnings = array();
-
-
-  public function addFile($file)
+  public function getLine()
   {
-    $this->files[] = $file;
+    return 0;
   }
 
 
-  public function getNumberOfFiles()
+  public function getColumn()
   {
-    return count($this->files);
-  }
-
-
-  public function addWarning($file, $message)
-  {
-    $this->warnings[$file][] = $message;
-  }
-
-
-  public function hasWarnings()
-  {
-    return sizeof($this->errors > 0);
-  }
-
-
-  public function getNumberOfWarnings()
-  {
-    return count($this->warnings);
-  }
-
-
-  public function addError(Message $error)
-  {
-    $this->errors[$error->getFileName()][] = $error;
-  }
-
-
-  public function hasErrors($file = null)
-  {
-    if (is_null($file)) {
-      return sizeof($this->errors > 0);
-    }
-
-    return isset($this->errors[$file]);
-  }
-
-
-  public function getErrors($file)
-  {
-    return $this->errors[$file];
-  }
-
-
-  public function getNumberOfErrors()
-  {
-    return count($this->errors);
+    return 0;
   }
 }
 
