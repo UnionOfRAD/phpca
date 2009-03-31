@@ -69,7 +69,7 @@ class Tokenizer
       if ($tokenObj->hasNewline()) {
         // a newline resets the column count
         $line  += $tokenObj->getNewLineCount();
-        $column = 1 + $tokenObj->getTrailingWhitespaceLength();
+        $column = 1 + $tokenObj->getTrailingWhitespaceCount();
       } else {
         $column += $tokenObj->getLength();
       }
