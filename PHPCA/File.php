@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright (c) 2009 Stefan Priebsch <stefan@priebsch.de>
  * All rights reserved.
@@ -9,13 +8,13 @@
  *
  *   * Redistributions of source code must retain the above copyright notice,
  *     this list of conditions and the following disclaimer.
- * 
+ *
  *   * Redistributions in binary form must reproduce the above copyright notice,
  *     this list of conditions and the following disclaimer in the documentation
  *     and/or other materials provided with the distribution.
  *
  *   * Neither the name of Stefan Priebsch nor the names of contributors
- *     may be used to endorse or promote products derived from this software 
+ *     may be used to endorse or promote products derived from this software
  *     without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
@@ -25,7 +24,7 @@
  * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
  * OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
  * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
@@ -57,7 +56,7 @@ class File
    * Constructs the File object
    *
    * We set the file name and source code to keep File independent
-   * from the actual file system. Still, we'll need the file name 
+   * from the actual file system. Still, we'll need the file name
    * later when we output the result.
    *
    * @param string $fileName
@@ -118,7 +117,7 @@ class File
   public function previous()
   {
     if ($this->position == 0) {
-      throw new \OutOfBoundsException('Already at first token'); 
+      throw new \OutOfBoundsException('Already at first token');
     }
 
     $this->position--;
@@ -128,7 +127,7 @@ class File
   public function next()
   {
     if ($this->isEndOfFile()) {
-      throw new \OutOfBoundsException('Already at last token'); 
+      throw new \OutOfBoundsException('Already at last token');
     }
 
     $this->position++;
@@ -142,7 +141,7 @@ class File
     }
 
     if ($position < 0 || $position > count($this->tokens) - 1) {
-      throw new \OutOfBoundsException('Position ' . $position . ' does not exist'); 
+      throw new \OutOfBoundsException('Position ' . $position . ' does not exist');
     }
 
     $this->position = $position;
@@ -200,7 +199,7 @@ class File
   public function getNextTokens($number)
   {
     if ($this->isEndOfFile()) {
-      throw new \OutOfBoundsException('Already at last token'); 
+      throw new \OutOfBoundsException('Already at last token');
     }
 
     return array_slice($this->tokens, $this->position, $number);
@@ -227,5 +226,4 @@ class File
     return $this->getToken();
   }
 }
-
 ?>
