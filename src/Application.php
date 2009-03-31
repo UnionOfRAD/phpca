@@ -179,20 +179,20 @@ class Application
       $result->addFile($file);
     }
 
-    echo PHP_EOL;
-  var_dump($result);
+    echo PHP_EOL . PHP_EOL;
 
-    if ($result->hasErrors()) {
-      echo ': ' . PHP_EOL . PHP_EOL;
-      return;
+    if (!$result->hasErrors()) {
+      echo 'OK';
+    } else {
+      echo 'FAIL';
     }
 
-    if ($result->hasWarnings()) {
-      echo ': ' . PHP_EOL . PHP_EOL;
-      return;
-    }
-
-    echo 'OK' . PHP_EOL . PHP_EOL;
+    echo ' (';
+    echo $result->getNumberOfFiles() . ' files, ';
+    echo $result->getNumberOfErrors() . ' errors, ';
+    echo $result->getNumberOfWarnings() . ' warnings';
+    echo ')';
+    echo PHP_EOL . PHP_EOL;
   }
 
 
