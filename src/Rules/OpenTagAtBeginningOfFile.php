@@ -36,15 +36,10 @@
  * @license    BSD License
  */
 
-$classMap = array(
+namespace spriebsch\PHPca;
 
-  'spriebsch\PHPca\Application'         => 'Application.php',
-  'spriebsch\PHPca\Tokenizer'           => 'Tokenizer.php',
-  'spriebsch\PHPca\File'                => 'File.php',
-  'spriebsch\PHPca\Result'              => 'Result.php',
-  'spriebsch\PHPca\Constants'           => 'Constants.php',
-  'spriebsch\PHPca\Token'               => 'Token.php',
-  'spriebsch\PHPca\Rule'                => 'Rule.php',
-);
+class OpenTagAtBeginningOfFile extends Rule
+{
+}
 
 ?>

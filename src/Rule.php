@@ -36,15 +36,17 @@
  * @license    BSD License
  */
 
-$classMap = array(
+namespace spriebsch\PHPca;
 
-  'spriebsch\PHPca\Application'         => 'Application.php',
-  'spriebsch\PHPca\Tokenizer'           => 'Tokenizer.php',
-  'spriebsch\PHPca\File'                => 'File.php',
-  'spriebsch\PHPca\Result'              => 'Result.php',
-  'spriebsch\PHPca\Constants'           => 'Constants.php',
-  'spriebsch\PHPca\Token'               => 'Token.php',
-  'spriebsch\PHPca\Rule'                => 'Rule.php',
-);
-
-?>
+/**
+ * Base class for a Rule that is enforced on a token stream.
+ *
+ * @author     Stefan Priebsch <stefan@priebsch.de>
+ * @copyright  Stefan Priebsch <stefan@priebsch.de>
+ */
+class Rule
+{
+  public function check(File $file, Result $result)
+  {
+  }
+}
