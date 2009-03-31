@@ -44,9 +44,23 @@ namespace spriebsch\PHPca;
  * @author     Stefan Priebsch <stefan@priebsch.de>
  * @copyright  Stefan Priebsch <stefan@priebsch.de>
  */
-class Rule
+abstract class Rule
 {
+  protected $file;
+  protected $result;
+
+  protected function fail($message)
+  {
+    $this->result->addError($this->file->getFilename(), $message);
+  }
+
   public function check(File $file, Result $result)
   {
+    $this->file   = $file;
+    $this->result = $result;
+
+    $this->doCheck();
   }
+
+  abstract protected function doCheck();
 }
