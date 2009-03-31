@@ -70,6 +70,12 @@ class File
   }
 
 
+  public function getFilename()
+  {
+    return $this->fileName;
+  }
+
+
   public function add(Token $token)
   {
     $this->tokens[] = $token;

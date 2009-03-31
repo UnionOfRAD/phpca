@@ -81,9 +81,13 @@ class Result
   }
 
 
-  public function hasErrors()
+  public function hasErrors($file = null)
   {
-    return sizeof($this->errors > 0);
+    if (is_null($file)) {
+      return sizeof($this->errors > 0);
+    }
+
+    return isset($this->errors[$file]);
   }
 
 

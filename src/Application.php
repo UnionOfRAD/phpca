@@ -103,7 +103,7 @@ class Application
         throw new \RuntimeException('File ' . $file->getFilename() . ' does not contain rule class ' . $classname);
       }
 
-      $list[] = $classname;
+      $list[] = new $classname;
     }
 
     return $list;
@@ -206,14 +206,16 @@ class Application
 
       $tokenizedFile = $tokenizer->tokenize($file, file_get_contents($file));
 
-      foreach ($rules as $ruleClass) {
-        $rule = new $ruleClass;
+      foreach ($rules as $rule) {
+        $tokenizedFile->rewind();
         $rule->check($tokenizedFile, $result);
       }
 
-// print appropriate letter
-
-      $this->printLetter();
+      if ($result->hasErrors($file)) {
+        $this->printLetter('F');
+      } else {
+        $this->printLetter();
+      }
     }
 
     echo PHP_EOL . PHP_EOL;
