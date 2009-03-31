@@ -91,6 +91,12 @@ class Result
   }
 
 
+  public function getErrors($file)
+  {
+    return $this->errors[$file];
+  }
+
+
   public function getNumberOfErrors()
   {
     return count($this->errors);

@@ -223,6 +223,17 @@ class Application
     if (!$result->hasErrors()) {
       echo 'OK';
     } else {
+
+      foreach($files as $file) {  
+        if ($result->hasErrors($file)) {
+          echo $file . ':' . PHP_EOL;
+          foreach ($result->getErrors($file) as $error) {
+            echo 'Error: ' . $error . PHP_EOL;
+          }
+          echo PHP_EOL;
+        }
+      }
+
       echo 'FAIL';
     }
 
