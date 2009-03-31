@@ -50,9 +50,9 @@ class Result
   }
 
 
-  public function addError($file, $message)
+  public function getNumberOfFiles()
   {
-    $this->errors[$file][] = $message;
+    return count($this->files);
   }
 
 
@@ -62,15 +62,33 @@ class Result
   }
 
 
+  public function hasWarnings()
+  {
+    return sizeof($this->errors > 0);
+  }
+
+
+  public function getNumberOfWarnings()
+  {
+    return count($this->warnings);
+  }
+
+
+  public function addError($file, $message)
+  {
+    $this->errors[$file][] = $message;
+  }
+
+
   public function hasErrors()
   {
     return sizeof($this->errors > 0);
   }
 
 
-  public function hasWarnings()
+  public function getNumberOfErrors()
   {
-    return sizeof($this->errors > 0);
+    return count($this->errors);
   }
 }
 ?>
