@@ -40,10 +40,8 @@ namespace spriebsch\PHPca\Tests;
 
 use spriebsch\PHPca\Constants as Constants;
 
-
 require_once 'PHPUnit/Framework.php';
-require_once __DIR__ . '/../src/bootstrap.php';
-
+require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php';
 
 /**
  * Tests for the Constants class.

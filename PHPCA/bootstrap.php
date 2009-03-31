@@ -35,7 +35,7 @@
  * @license    BSD License
  */
 
-require 'PHPCA/AutoLoader.php';
+require __DIR__ . DIRECTORY_SEPARATOR . 'AutoLoader.php';
 
 spriebsch\PHPca\AutoLoader::init();
 spriebsch\PHPca\AutoLoader::register(__DIR__);
