@@ -55,6 +55,16 @@ require_once __DIR__ . '/../src/bootstrap.php';
 class FileTest extends \PHPUnit_Framework_TestCase
 {
   /**
+   * @covers spriebsch\PHPca\File::getFileName
+   */
+  public function testGetFileName()
+  {
+    $file = new File('filename', 'sourcecode');
+    $this->assertEquals('filename', $file->getFileName());
+  }
+
+
+  /**
    * @covers spriebsch\PHPca\File::add
    */
   public function testAdd()
