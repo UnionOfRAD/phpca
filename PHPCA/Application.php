@@ -42,6 +42,12 @@ class Application
   protected $version = '0.1.0';
 
   protected $path;
+
+  /**
+   * Path to a directory containing the rules.
+   */
+  protected $rulePath = 'Rules';
+
   protected $phpExecutable;
 
   protected $positionCount = 0;
@@ -67,6 +73,36 @@ class Application
       }
 
       $list[] = $file->getPathname();
+    }
+
+    return $list;
+  }
+
+
+  protected function loadRules()
+  {
+    $list = array();
+
+    $it = new \DirectoryIterator($this->rulePath);
+
+    foreach ($it as $file) {
+      if (!$file->isFile()) {
+        continue;
+      }
+
+      if (substr($file->getPathname(), -4) != '.php') {
+        continue;
+      }
+
+      $classname = __NAMESPACE__ . '\\' . substr($file->getFilename(), 0, -4);
+
+      require_once $this->rulePath . DIRECTORY_SEPARATOR . $file->getFilename();
+
+      if (!class_exists($classname)) {
+        throw new \RuntimeException('File ' . $file->getFilename() . ' does not contain rule class ' . $classname);
+      }
+
+      $list[] = new $classname;
     }
 
     return $list;
@@ -154,29 +190,32 @@ class Application
     $result = new Result();
 
     $files = $this->createFileList($this->path);
+    $rules = $this->loadRules();
 
     foreach ($files as $file) {
+
+      $result->addFile($file);
 
       $lintResult = $this->runLintCheck($file);
 
       if ($lintResult != '') {
         $this->printLetter('E');
-        $result->addError($file, $lintResult);
+        $result->addError(new LintError($file, strstr($lintResult, PHP_EOL, true)));
         continue;
       }
 
-      $f = $tokenizer->tokenize($file, file_get_contents($file));
-//      var_dump($f->getTokenSequence());
+      $tokenizedFile = $tokenizer->tokenize($file, file_get_contents($file));
 
-// apply rules on the token sequence.
-// store errors
+      foreach ($rules as $rule) {
+        $tokenizedFile->rewind();
+        $rule->check($tokenizedFile, $result);
+      }
 
-// on error, output F letter. (W letter for warning)
-// (when warning level)
-
-// if no errors:
-      $this->printLetter();
-      $result->addFile($file);
+      if ($result->hasErrors($file)) {
+        $this->printLetter('F');
+      } else {
+        $this->printLetter();
+      }
     }
 
     echo PHP_EOL . PHP_EOL;
@@ -184,6 +223,22 @@ class Application
     if (!$result->hasErrors()) {
       echo 'OK';
     } else {
+
+      foreach($files as $file) {  
+        if ($result->hasErrors($file)) {
+          echo $file . ':' . PHP_EOL;
+          foreach ($result->getErrors($file) as $error) {
+
+            if ($error instanceOf LintError) {
+              echo $error->getMessage() . PHP_EOL;
+            } else {
+              echo 'Line ' . $error->getLine() . ', column ' . $error->getColumn() . ': Error: ' . $error->getMessage() . PHP_EOL;
+            }
+          }
+          echo PHP_EOL;
+        }
+      }
+
       echo 'FAIL';
     }
 
@@ -206,7 +261,7 @@ class Application
     }
 
     catch (\RuntimeException $e) {
-      echo $e->getMessage() . PHP_EOL . PHP_EOL;
+      echo 'Error: ' . $e->getMessage() . PHP_EOL . PHP_EOL;
       $this->printUsage();
       exit();
     }

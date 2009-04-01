@@ -74,15 +74,25 @@ class Result
   }
 
 
-  public function addError($file, $message)
+  public function addError(Message $error)
   {
-    $this->errors[$file][] = $message;
+    $this->errors[$error->getFileName()][] = $error;
   }
 
 
-  public function hasErrors()
+  public function hasErrors($file = null)
   {
-    return sizeof($this->errors > 0);
+    if (is_null($file)) {
+      return sizeof($this->errors > 0);
+    }
+
+    return isset($this->errors[$file]);
+  }
+
+
+  public function getErrors($file)
+  {
+    return $this->errors[$file];
   }
 
 
