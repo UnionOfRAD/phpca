@@ -37,7 +37,7 @@
 
 namespace spriebsch\PHPca;
 
-class Application
+class Command
 {
   protected $version = '0.1.0';
 

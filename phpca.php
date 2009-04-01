@@ -42,6 +42,6 @@ if (strpos('@php_bin@', '@php_bin') === 0) {
 
 require 'PHPCA/bootstrap.php';
 
-$app = new spriebsch\PHPca\Application();
+$app = new spriebsch\PHPca\Command();
 $app->run($argv);
 ?>

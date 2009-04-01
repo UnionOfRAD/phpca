@@ -36,7 +36,7 @@
  */
 
 $classMap = array(
-  'spriebsch\PHPca\Application'         => 'Application.php',
+  'spriebsch\PHPca\Command'             => 'TextUI/Command.php',
   'spriebsch\PHPca\Tokenizer'           => 'Tokenizer.php',
   'spriebsch\PHPca\File'                => 'File.php',
   'spriebsch\PHPca\Result'              => 'Result.php',
