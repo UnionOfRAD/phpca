@@ -95,10 +95,10 @@ class Result
     }
 
     if (!isset($this->warningCount[$file])) {
-      return 0;
+      return false;
     }
 
-    return $this->warningCount[$file];
+    return $this->warningCount[$file] > 0;
   }
 
 
@@ -111,6 +111,10 @@ class Result
   public function getWarnings($file)
   {
     $result = array();
+
+    if (!isset($this->messages[$file])) {
+      return array();
+    }
 
     foreach ($this->messages[$file] as $message) {
       if ($message instanceOf Warning) {
@@ -129,10 +133,10 @@ class Result
     }
 
     if (!isset($this->errorCount[$file])) {
-      return 0;
+      return false;
     }
 
-    return $this->errorCount[$file];
+    return $this->errorCount[$file] > 0;
   }
 
 

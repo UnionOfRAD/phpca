@@ -79,9 +79,25 @@ class ResultTest extends \PHPUnit_Framework_TestCase
 
     $this->assertFalse($result->hasWarnings());
 
-    $result->addMessage(new Warning('testfile', 'error message'));
+    $result->addMessage(new Warning('testfile', 'warning message'));
 
     $this->assertTrue($result->hasWarnings());
+  }
+
+
+  /**
+   * @covers spriebsch\PHPca\Result:hasWarnings
+   */
+  public function testHasWarningsForFile()
+  {
+    $result = new Result();
+    $result->addFile('testfile');
+
+    $this->assertFalse($result->hasWarnings('testfile'));
+
+    $result->addMessage(new Warning('testfile', 'warning message'));
+
+    $this->assertTrue($result->hasWarnings('testfile'));
   }
 
 
@@ -92,6 +108,8 @@ class ResultTest extends \PHPUnit_Framework_TestCase
   {
     $result = new Result();
     $result->addFile('testfile');
+
+    $this->assertEquals(array(), $result->getWarnings('testfile'));
 
     $error = new Error('testfile', 'error message');
 
@@ -139,12 +157,30 @@ class ResultTest extends \PHPUnit_Framework_TestCase
 
 
   /**
-   * @covers spriebsch\PHPca\Result::getError
+   * @covers spriebsch\PHPca\Result:hasErrors
    */
-  public function testGetError()
+  public function testHasErrorsForFile()
   {
     $result = new Result();
     $result->addFile('testfile');
+
+    $this->assertFalse($result->hasErrors('testfile'));
+
+    $result->addMessage(new Error('testfile', 'error message'));
+
+    $this->assertTrue($result->hasErrors('testfile'));
+  }
+
+
+  /**
+   * @covers spriebsch\PHPca\Result::getErrors
+   */
+  public function testGetErrors()
+  {
+    $result = new Result();
+    $result->addFile('testfile');
+
+    $this->assertEquals(array(), $result->getErrors('testfile'));
 
     $error1 = new Error('testfile', 'error message');
     $error2 = new Error('testfile', 'another error message');
