@@ -99,14 +99,20 @@ class File
    */
   public function getTokens($id)
   {
-    if (!is_numeric($id)) {
-      throw new \InvalidArgumentException('Numeric value required');
+    if (!is_array($id)) {
+      $id = array($id);
     }
+
+/*
+      if (!is_numeric($token)) {
+        throw new \InvalidArgumentException('Numeric values required');
+      }
+*/
 
     $result = array();
 
     foreach ($this->tokens as $token) {
-      if ($token->getId() == $id) {
+      if (in_array($token->getId(), $id)) {
         $result[] = $token;
       }
     }

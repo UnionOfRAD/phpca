@@ -40,6 +40,9 @@ namespace spriebsch\PHPca;
 
 class Message
 {
+  const ERROR = 0;
+  const WARNING = 1;
+
   protected $fileName;
   protected $token;
   protected $message;

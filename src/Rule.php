@@ -49,9 +49,27 @@ abstract class Rule
   protected $file;
   protected $result;
 
-  protected function fail($message, $token)
+  protected function addMessage($type, $message, $token)
+  {
+    switch ($type) {
+      case Message::ERROR:
+        $this->result->addError(new Error($this->file->getFileName(), $message, $token));
+      break;
+
+      case Message::WARNING:
+        $this->result->addError(new Error($this->file->getFileName(), $message, $token));
+      break;
+    }
+  }
+
+  protected function addError($message, $token)
   {
     $this->result->addError(new Error($this->file->getFileName(), $message, $token));
+  }
+
+  protected function addWarning($message, $token)
+  {
+    $this->result->addError(new Warning($this->file->getFileName(), $message, $token));
   }
 
   public function check(File $file, Result $result)
