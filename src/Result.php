@@ -71,7 +71,7 @@ class Result
       $this->globalErrorCount++;
 
       if (!isset($this->errorCount[$filename])) {
-        $this->errorCount[$filename] = 0;
+        $this->errorCount[$filename] = 1;
       } else {
         $this->errorCount[$filename]++;
       }
@@ -81,7 +81,7 @@ class Result
       $this->globalWarningCount++;
 
       if (!isset($this->warningCount[$filename])) {
-        $this->warningCount[$filename] = 0;
+        $this->warningCount[$filename] = 1;
       } else {
         $this->warningCount[$filename]++;
       }

@@ -224,7 +224,7 @@ class Application
       echo 'OK';
     } else {
 
-      foreach($files as $file) {  
+      foreach($files as $file) {
         if ($result->hasErrors($file)) {
           echo $file . ':' . PHP_EOL;
           foreach ($result->getErrors($file) as $error) {
