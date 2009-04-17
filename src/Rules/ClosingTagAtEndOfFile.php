@@ -42,8 +42,10 @@ class ClosingTagAtEndOfFile extends Rule
 {
   protected function doCheck()
   {
+    // Get last token of the file
     $this->file->last();
     $token = $this->file->getToken();
+
     if ($token->getId() != T_CLOSE_TAG) {
       $this->addError('File does not end with PHP close tag', $token);
     }
