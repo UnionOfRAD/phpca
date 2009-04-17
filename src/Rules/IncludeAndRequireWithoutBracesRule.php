@@ -42,28 +42,15 @@ class IncludeAndRequireWithoutBracesRule extends Rule
 {
   protected function doCheck()
   {
-    // All include and require tokens
-    $tokens = $this->file->getTokens(array(T_INCLUDE, T_INCLUDE_ONCE, T_REQUIRE, T_REQUIRE_ONCE));
+    $this->onPatternAddMessage(array(T_INCLUDE, T_OPEN_BRACE),      Message::ERROR, 'include statement has a brace');
+    $this->onPatternAddMessage(array(T_INCLUDE_ONCE, T_OPEN_BRACE), Message::ERROR, 'include_once statement has a brace');
+    $this->onPatternAddMessage(array(T_REQUIRE, T_OPEN_BRACE),      Message::ERROR, 'require statement has a brace');
+    $this->onPatternAddMessage(array(T_REQUIRE_ONCE, T_OPEN_BRACE), Message::ERROR, 'require_once statement has a brace');
 
-    foreach ($tokens as $token) {
-      $this->file->gotoToken($token);
-      $this->file->next();
-
-      $curr = $this->file->getToken();
-      $next = $this->file->getNextToken();
-
-      // Check wether include/require is followed by a brace
-
-      if ($curr->getId() == T_OPEN_BRACE) {
-        $this->addMessage(Message::ERROR, 'Include/require statement has a brace', $curr);
-      }
-
-      // Check wether include/require is followed by whitespace and a brace
-
-      if ($curr->getId() == T_WHITESPACE && $next->getId() == T_OPEN_BRACE) {
-        $this->addMessage(Message::ERROR, 'Include/require statement has a brace', $next);
-      }
-    }
+    $this->onPatternAddMessage(array(T_INCLUDE, T_WHITESPACE, T_OPEN_BRACE),      Message::ERROR, 'include statement has a brace');
+    $this->onPatternAddMessage(array(T_INCLUDE_ONCE, T_WHITESPACE, T_OPEN_BRACE), Message::ERROR, 'include_once statement has a brace');
+    $this->onPatternAddMessage(array(T_REQUIRE, T_WHITESPACE, T_OPEN_BRACE),      Message::ERROR, 'require statement has a brace');
+    $this->onPatternAddMessage(array(T_REQUIRE_ONCE, T_WHITESPACE, T_OPEN_BRACE), Message::ERROR, 'require_once statement has a brace');
   }
 }
 

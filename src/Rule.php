@@ -49,16 +49,31 @@ abstract class Rule
   protected $file;
   protected $result;
 
-  protected function addMessage($type, $message, $token)
+  protected function onPatternAddMessage($pattern, $type, $message)
   {
-    switch ($type) {
-      case Message::ERROR:
-        $this->result->addMessage(new Error($this->file->getFileName(), $message, $token));
-      break;
+    $pattern = $this->file->findPattern($pattern);
+    if (sizeof($pattern) > 0) {
+      $this->addMessage($type, $message, $pattern);
+    }
+  }
 
-      case Message::WARNING:
-        $this->result->addMessage(new Warning($this->file->getFileName(), $message, $token));
-      break;
+
+  protected function addMessage($type, $message, $tokens)
+  {
+    if (!is_array($tokens)) {
+      $tokens = array($tokens);
+    }
+
+    foreach ($tokens as $token) {
+      switch ($type) {
+        case Message::ERROR:
+          $this->result->addMessage(new Error($this->file->getFileName(), $message, $token));
+        break;
+
+        case Message::WARNING:
+          $this->result->addMessage(new Warning($this->file->getFileName(), $message, $token));
+        break;
+      }
     }
   }
 

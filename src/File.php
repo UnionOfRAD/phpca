@@ -94,6 +94,43 @@ class File
   }
 
 
+  public function hasPattern(array $tokens)
+  {
+  }
+
+  /**
+   * Returns start tokens of given token sequence.
+   */
+  public function findPattern($tokens)
+  {
+    $haystack = implode('-', $this->getTokenIds());
+    $needle = implode('-', $tokens);
+
+    $positions = array();
+
+    do {
+      $pos = strpos($haystack, $needle);
+
+      if ($pos !== false) {
+        $positions[] = substr_count(substr($haystack, 0, $pos), '-');
+        $haystack = substr($haystack, $pos + strlen($needle) + 1);
+      }
+
+    } while ($pos !== false);
+
+    $result = array();
+
+    foreach ($positions as $item) {
+      $this->gotoPosition($item);
+      $result[] = $this->getToken();
+    }
+
+    $this->rewind();
+
+    return $result;
+  }
+
+
   /**
    * Returns an array with all tokens of given ID in the file.
    */
@@ -170,6 +207,18 @@ class File
   public function last()
   {
     $this->position = count($this->tokens) - 1;
+  }
+
+
+  public function getTokenIds()
+  {
+    $result = array();
+
+    foreach ($this->tokens as $token) {
+      $result[] = $token->getId();
+    }
+
+    return $result;
   }
 
 
