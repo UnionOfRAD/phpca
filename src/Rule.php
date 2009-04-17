@@ -49,11 +49,11 @@ abstract class Rule
   protected $file;
   protected $result;
 
-  protected function onPatternAddMessage($pattern, $type, $message)
+  protected function disallow($pattern, $message)
   {
     $pattern = $this->file->findPattern($pattern);
     if (sizeof($pattern) > 0) {
-      $this->addMessage($type, $message, $pattern);
+      $this->addMessage(Message::ERROR, $message, $pattern);
     }
   }
 

@@ -42,15 +42,17 @@ class IncludeAndRequireWithoutBracesRule extends Rule
 {
   protected function doCheck()
   {
-    $this->onPatternAddMessage(array(T_INCLUDE, T_OPEN_BRACE),      Message::ERROR, 'include statement has a brace');
-    $this->onPatternAddMessage(array(T_INCLUDE_ONCE, T_OPEN_BRACE), Message::ERROR, 'include_once statement has a brace');
-    $this->onPatternAddMessage(array(T_REQUIRE, T_OPEN_BRACE),      Message::ERROR, 'require statement has a brace');
-    $this->onPatternAddMessage(array(T_REQUIRE_ONCE, T_OPEN_BRACE), Message::ERROR, 'require_once statement has a brace');
+    $this->disallow(array(T_INCLUDE, T_OPEN_BRACE), 'include statement has a brace');
+    $this->disallow(array(T_INCLUDE, T_WHITESPACE, T_OPEN_BRACE), 'include statement has a brace');
+  
+    $this->disallow(array(T_INCLUDE_ONCE, T_OPEN_BRACE), 'include_once statement has a brace');
+    $this->disallow(array(T_INCLUDE_ONCE, T_WHITESPACE, T_OPEN_BRACE), 'include_once statement has a brace');
 
-    $this->onPatternAddMessage(array(T_INCLUDE, T_WHITESPACE, T_OPEN_BRACE),      Message::ERROR, 'include statement has a brace');
-    $this->onPatternAddMessage(array(T_INCLUDE_ONCE, T_WHITESPACE, T_OPEN_BRACE), Message::ERROR, 'include_once statement has a brace');
-    $this->onPatternAddMessage(array(T_REQUIRE, T_WHITESPACE, T_OPEN_BRACE),      Message::ERROR, 'require statement has a brace');
-    $this->onPatternAddMessage(array(T_REQUIRE_ONCE, T_WHITESPACE, T_OPEN_BRACE), Message::ERROR, 'require_once statement has a brace');
+    $this->disallow(array(T_REQUIRE, T_OPEN_BRACE), 'require statement has a brace');
+    $this->disallow(array(T_REQUIRE, T_WHITESPACE, T_OPEN_BRACE), 'require_once statement has a brace');
+
+    $this->disallow(array(T_REQUIRE_ONCE, T_OPEN_BRACE), 'require statement has a brace');
+    $this->disallow(array(T_REQUIRE_ONCE, T_WHITESPACE, T_OPEN_BRACE), 'require_once statement has a brace');
   }
 }
 
