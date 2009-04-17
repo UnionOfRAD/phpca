@@ -43,7 +43,7 @@ use spriebsch\PHPca\Error as Error;
 use spriebsch\PHPca\Warning as Warning;
 
 require_once 'PHPUnit/Framework.php';
-require_once __DIR__ . '/../src/bootstrap.php';
+require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php';
 
 
 /**
