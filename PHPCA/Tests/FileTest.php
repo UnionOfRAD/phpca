@@ -9,13 +9,13 @@
  *
  *   * Redistributions of source code must retain the above copyright notice,
  *     this list of conditions and the following disclaimer.
- * 
+ *
  *   * Redistributions in binary form must reproduce the above copyright notice,
  *     this list of conditions and the following disclaimer in the documentation
  *     and/or other materials provided with the distribution.
  *
  *   * Neither the name of Stefan Priebsch nor the names of contributors
- *     may be used to endorse or promote products derived from this software 
+ *     may be used to endorse or promote products derived from this software
  *     without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
@@ -25,7 +25,7 @@
  * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
  * OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
  * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN 
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
@@ -41,10 +41,8 @@ namespace spriebsch\PHPca\Tests;
 use spriebsch\PHPca\File as File;
 use spriebsch\PHPca\Token as Token;
 
-
 require_once 'PHPUnit/Framework.php';
-require_once __DIR__ . '/../src/bootstrap.php';
-
+require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php';
 
 /**
  * Tests for the File class.
@@ -154,7 +152,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
   public function testNext()
   {
     $file = new File('filename', 'sourcecode');
-    
+
     $token1 = $this->getMock('spriebsch\PHPca\Token', array(), array(0, 't1', 1, 1, 0));
     $token2 = $this->getMock('spriebsch\PHPca\Token', array(), array(0, 't1', 1, 1, 0));
 
@@ -184,7 +182,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
   public function testGotoPosition()
   {
     $file = new File('filename', 'sourcecode');
-    
+
     $token1 = $this->getMock('spriebsch\PHPca\Token', array(), array(0, 't1', 1, 1, 0));
     $token2 = $this->getMock('spriebsch\PHPca\Token', array(), array(0, 't1', 1, 1, 0));
 
@@ -259,7 +257,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
   public function testLast()
   {
     $file = new File('filename', 'sourcecode');
-    
+
     $token1 = $this->getMock('spriebsch\PHPca\Token', array(), array(0, 't1', 1, 1, 0));
     $token2 = $this->getMock('spriebsch\PHPca\Token', array(), array(0, 't1', 1, 1, 0));
 
@@ -278,7 +276,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
   public function testRewind()
   {
     $file = new File('filename', 'sourcecode');
-    
+
     $token1 = $this->getMock('spriebsch\PHPca\Token', array(), array(0, 't1', 1, 1, 0));
     $token2 = $this->getMock('spriebsch\PHPca\Token', array(), array(0, 't1', 1, 1, 0));
 
@@ -298,7 +296,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
   public function testPrevious()
   {
     $file = new File('filename', 'sourcecode');
-    
+
     $token1 = $this->getMock('spriebsch\PHPca\Token', array(), array(0, 't1', 1, 1, 0));
     $token2 = $this->getMock('spriebsch\PHPca\Token', array(), array(0, 't1', 1, 1, 0));
 
@@ -399,7 +397,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
   public function testGetNextTokens()
   {
     $file = new File('filename', 'sourcecode');
-    
+
     $token1 = $this->getMock('spriebsch\PHPca\Token', array(), array(0, 't1', 1, 1, 0));
     $token2 = $this->getMock('spriebsch\PHPca\Token', array(), array(1, 't2', 1, 1, 1));
     $token3 = $this->getMock('spriebsch\PHPca\Token', array(), array(2, 't3', 1, 1, 2));
@@ -431,7 +429,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
   public function testSkipTo()
   {
     $file = new File('filename', 'sourcecode');
-    
+
     $token1 = new Token(T_OPEN_TAG, '<?php', 1, 1, 0);
     $token2 = new Token(T_WHITESPACE, ' ', 2, 1, 1);
 
@@ -465,7 +463,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
   public function testSkipPast()
   {
     $file = new File('filename', 'sourcecode');
-    
+
     $token1 = new Token(T_OPEN_TAG, '<?php', 1, 1, 0);
     $token2 = new Token(T_WHITESPACE, ' ', 2, 1, 1);
     $token3 = new Token(T_OPEN_TAG, '<?php', 3, 1, 0);
@@ -486,7 +484,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
    */
   public function testSkipPastThrowsRuntimeException()
   {
-    $file = new File('filename', 'sourcecode');    
+    $file = new File('filename', 'sourcecode');
 
     $token = new Token(T_OPEN_TAG, '<?php', 1, 1, 0);
     $file->add($token);
