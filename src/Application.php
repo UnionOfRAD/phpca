@@ -228,7 +228,6 @@ class Application
         if ($result->hasErrors($file)) {
           echo $file . ':' . PHP_EOL;
           foreach ($result->getErrors($file) as $error) {
-
             if ($error instanceOf LintError) {
               echo $error->getMessage() . PHP_EOL;
             } else {

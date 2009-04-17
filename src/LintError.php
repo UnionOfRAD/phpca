@@ -38,7 +38,7 @@
 
 namespace spriebsch\PHPca;
 
-class LintError extends Message
+class LintError extends Error
 {
   public function getLine()
   {
