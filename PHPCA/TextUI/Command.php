@@ -217,7 +217,11 @@ class Command
         $this->printLetter();
       }
     }
+  }
 
+
+  protected function printSummary()
+  {
     echo PHP_EOL . PHP_EOL;
 
     if (!$result->hasErrors()) {
@@ -257,6 +261,7 @@ class Command
     try {
       $this->parseCommandLine($arguments);
       $this->doRun();
+      $this->printSummary();
     }
 
     catch (\RuntimeException $e) {
