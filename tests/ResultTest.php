@@ -55,6 +55,37 @@ require_once __DIR__ . '/../src/bootstrap.php';
 class ResultTest extends \PHPUnit_Framework_TestCase
 {
   /**
+   * @covers spriebsch\PHPca\Result:getNumberOfFiles
+   */
+  public function testGetNumberOfFiles()
+  {
+    $result = new Result();
+
+    $this->assertEquals(0, $result->getNumberOfFiles());
+
+    $result->addFile('testfile');
+
+    $this->assertEquals(1, $result->getNumberOfFiles());
+  }
+
+
+  /**
+   * @covers spriebsch\PHPca\Result:hasWarnings
+   */
+  public function testHasWarnings()
+  {
+    $result = new Result();
+    $result->addFile('testfile');
+
+    $this->assertFalse($result->hasWarnings());
+
+    $result->addMessage(new Warning('testfile', 'error message'));
+
+    $this->assertTrue($result->hasWarnings());
+  }
+
+
+  /**
    * @covers spriebsch\PHPca\Result::getWarnings
    */
   public function testGetWarnings()
@@ -76,6 +107,38 @@ class ResultTest extends \PHPUnit_Framework_TestCase
 
 
   /**
+   * @covers spriebsch\PHPca\Result:getNumberOfWarnings
+   */
+  public function testGetNumberOfWarnings()
+  {
+    $result = new Result();
+    $result->addFile('testfile');
+
+    $this->assertEquals(0, $result->getNumberOfWarnings());
+
+    $result->addMessage(new Warning('testfile', 'warning'));
+
+    $this->assertEquals(1, $result->getNumberOfWarnings());
+  }
+
+
+  /**
+   * @covers spriebsch\PHPca\Result:hasErrors
+   */
+  public function testHasErrors()
+  {
+    $result = new Result();
+    $result->addFile('testfile');
+
+    $this->assertFalse($result->hasErrors());
+
+    $result->addMessage(new Error('testfile', 'error message'));
+
+    $this->assertTrue($result->hasErrors());
+  }
+
+
+  /**
    * @covers spriebsch\PHPca\Result::getError
    */
   public function testGetError()
@@ -93,6 +156,22 @@ class ResultTest extends \PHPUnit_Framework_TestCase
     $result->addMessage($error2);
 
     $this->assertEquals(array($error1, $error2), $result->getErrors('testfile'));
+  }
+
+
+  /**
+   * @covers spriebsch\PHPca\Result:getNumberOfErrors
+   */
+  public function testGetNumberOfErrors()
+  {
+    $result = new Result();
+    $result->addFile('testfile');
+
+    $this->assertEquals(0, $result->getNumberOfErrors());
+
+    $result->addMessage(new Error('testfile', 'error message'));
+
+    $this->assertEquals(1, $result->getNumberOfErrors());
   }
 }
 

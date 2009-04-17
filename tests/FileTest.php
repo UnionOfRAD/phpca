@@ -138,17 +138,6 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
 
   /**
-   * @covers spriebsch\PHPca\File::getTokens
-   * @expectedException \InvalidArgumentException
-   */
-  public function testGetTokensRequiresNumericArgument()
-  {
-    $file = new File('filename', 'sourcecode');
-    $file->getTokens('nonsense');
-  }
-
-
-  /**
    * @covers spriebsch\PHPca\File::previous
    * @expectedException \RuntimeException
    */

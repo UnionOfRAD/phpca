@@ -46,8 +46,8 @@ class Result
   protected $errorCount = array();
   protected $warningCount = array();
 
-  protected $globalErrorCount = array();
-  protected $globalWarningCount = array();
+  protected $globalErrorCount = 0;
+  protected $globalWarningCount = 0;
 
 
   public function addFile($file)
