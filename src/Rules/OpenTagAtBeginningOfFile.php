@@ -46,7 +46,7 @@ class OpenTagAtBeginningOfFile extends Rule
     $token = $this->file->getToken();
 
     if ($token->getId() != T_OPEN_TAG) {
-      $this->addError('File does not begin with regular PHP open tag', $token);
+      $this->addMessage(Message::ERROR, 'File does not begin with regular PHP open tag', $token);
     }
   }
 }

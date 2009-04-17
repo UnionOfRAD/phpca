@@ -131,6 +131,10 @@ class Result
   {
     $result = array();
 
+    if (!isset($this->messages[$file])) {
+      return array();
+    }
+
     foreach ($this->messages[$file] as $message) {
       if ($message instanceOf Error) {
         $result[] = $message;

@@ -200,7 +200,7 @@ class Application
 
       if ($lintResult != '') {
         $this->printLetter('E');
-        $result->addError(new LintError($file, strstr($lintResult, PHP_EOL, true)));
+        $result->addMessage(new LintError($file, strstr($lintResult, PHP_EOL, true)));
         continue;
       }
 
