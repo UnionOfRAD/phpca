@@ -64,14 +64,35 @@ class ResultTest extends \PHPUnit_Framework_TestCase
 
     $error = new Error('testfile', 'error message');
 
-    $warning1 = new Warning('testfile', 'a war');
-    $warning2 = new Warning('testfile', 'error message');
+    $warning1 = new Warning('testfile', 'a warning');
+    $warning2 = new Warning('testfile', 'another warning');
 
     $result->addMessage($error);
     $result->addMessage($warning1);
     $result->addMessage($warning2);
 
     $this->assertEquals(array($warning1, $warning2), $result->getWarnings('testfile'));
+  }
+
+
+  /**
+   * @covers spriebsch\PHPca\Result::getError
+   */
+  public function testGetError()
+  {
+    $result = new Result();
+    $result->addFile('testfile');
+
+    $error1 = new Error('testfile', 'error message');
+    $error2 = new Error('testfile', 'another error message');
+
+    $warning = new Warning('testfile', 'a warning');
+
+    $result->addMessage($error1);
+    $result->addMessage($warning);
+    $result->addMessage($error2);
+
+    $this->assertEquals(array($error1, $error2), $result->getErrors('testfile'));
   }
 }
 
