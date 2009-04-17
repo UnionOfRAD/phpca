@@ -46,11 +46,15 @@ class Command
   /**
    * Path to a directory containing the rules.
    */
-  protected $rulePath = 'Rules';
+  protected $rulePath = 'PHPCA/Rules';
 
   protected $phpExecutable;
 
   protected $positionCount = 0;
+
+  protected $files;
+
+  protected $result;
 
 
   protected function createFileList($path)
@@ -187,20 +191,20 @@ class Command
     Constants::init();
 
     $tokenizer = new Tokenizer();
-    $result = new Result();
-
-    $files = $this->createFileList($this->path);
     $rules = $this->loadRules();
 
-    foreach ($files as $file) {
+    $this->result = new Result();
+    $this->files = $this->createFileList($this->path);
 
-      $result->addFile($file);
+    foreach ($this->files as $file) {
+
+      $this->result->addFile($file);
 
       $lintResult = $this->runLintCheck($file);
 
       if ($lintResult != '') {
         $this->printLetter('E');
-        $result->addMessage(new LintError($file, strstr($lintResult, PHP_EOL, true)));
+        $this->result->addMessage(new LintError($file, strstr($lintResult, PHP_EOL, true)));
         continue;
       }
 
@@ -208,10 +212,10 @@ class Command
 
       foreach ($rules as $rule) {
         $tokenizedFile->rewind();
-        $rule->check($tokenizedFile, $result);
+        $rule->check($tokenizedFile, $this->result);
       }
 
-      if ($result->hasErrors($file)) {
+      if ($this->result->hasErrors($file)) {
         $this->printLetter('F');
       } else {
         $this->printLetter();
@@ -224,14 +228,14 @@ class Command
   {
     echo PHP_EOL . PHP_EOL;
 
-    if (!$result->hasErrors()) {
+    if (!$this->result->hasErrors()) {
       echo 'OK';
     } else {
 
-      foreach($files as $file) {
-        if ($result->hasErrors($file)) {
+      foreach($this->files as $file) {
+        if ($this->result->hasErrors($file)) {
           echo $file . ':' . PHP_EOL;
-          foreach ($result->getErrors($file) as $error) {
+          foreach ($this->result->getErrors($file) as $error) {
             if ($error instanceOf LintError) {
               echo $error->getMessage() . PHP_EOL;
             } else {
@@ -246,10 +250,11 @@ class Command
     }
 
     echo ' (';
-    echo $result->getNumberOfFiles() . ' files, ';
-    echo $result->getNumberOfErrors() . ' errors, ';
-    echo $result->getNumberOfWarnings() . ' warnings';
+    echo $this->result->getNumberOfFiles() . ' files, ';
+    echo $this->result->getNumberOfErrors() . ' errors, ';
+    echo $this->result->getNumberOfWarnings() . ' warnings';
     echo ')';
+
     echo PHP_EOL . PHP_EOL;
   }
 
