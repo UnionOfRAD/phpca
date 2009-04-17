@@ -41,8 +41,13 @@ namespace spriebsch\PHPca;
 class Result
 {
   protected $files = array();
-  protected $errors = array();
-  protected $warnings = array();
+  protected $messages = array();
+
+  protected $errorCount = array();
+  protected $warningCount = array();
+
+  protected $globalErrorCount = array();
+  protected $globalWarningCount = array();
 
 
   public function addFile($file)
@@ -57,49 +62,82 @@ class Result
   }
 
 
-  public function addWarning($file, $message)
+  public function addMessage(Message $message)
   {
-    $this->warnings[$file][] = $message;
+    $filename = $message->getFileName();
+    $this->messages[$filename][] = $message;
+
+    if ($message instanceOf Error) {
+      $this->globalErrorCount++;
+
+      if (!isset($this->errorCount[$filename])) {
+        $this->errorCount[$filename] = 0;
+      } else {
+        $this->errorCount[$filename]++;
+      }
+    }
+
+    if ($message instanceOf Warning) {
+      $this->globalWarningCount++;
+
+      if (!isset($this->warningCount[$filename])) {
+        $this->warningCount[$filename] = 0;
+      } else {
+        $this->warningCount[$filename]++;
+      }
+    }
   }
 
 
   public function hasWarnings()
   {
-    return sizeof($this->errors > 0);
+    return $this->globalWarningCount > 0;
   }
 
 
   public function getNumberOfWarnings()
   {
-    return count($this->warnings);
+    return $this->globalWarningCount;
   }
 
 
-  public function addError(Message $error)
+  public function getWarnings($file)
   {
-    $this->errors[$error->getFileName()][] = $error;
+    $result = array();
+
+    foreach ($this->messages[$file] as $message) {
+      if ($message instanceOf Warning) {
+        $result[] = $message;
+      }
+    }
+
+    return $result;
   }
 
 
   public function hasErrors($file = null)
   {
-    if (is_null($file)) {
-      return sizeof($this->errors > 0);
-    }
-
-    return isset($this->errors[$file]);
-  }
-
-
-  public function getErrors($file)
-  {
-    return $this->errors[$file];
+    return $this->globalErrorCount > 0;
   }
 
 
   public function getNumberOfErrors()
   {
-    return count($this->errors);
+    return $this->globalErrorCount;
+  }
+
+
+  public function getErrors($file)
+  {
+    $result = array();
+
+    foreach ($this->messages[$file] as $message) {
+      if ($message instanceOf Error) {
+        $result[] = $message;
+      }
+    }
+
+    return $result;
   }
 }
 

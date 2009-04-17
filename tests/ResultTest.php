@@ -36,19 +36,43 @@
  * @license    BSD License
  */
 
-$classMap = array(
+namespace spriebsch\PHPca\Tests;
 
-  'spriebsch\PHPca\Application'         => 'Application.php',
-  'spriebsch\PHPca\Tokenizer'           => 'Tokenizer.php',
-  'spriebsch\PHPca\File'                => 'File.php',
-  'spriebsch\PHPca\Result'              => 'Result.php',
-  'spriebsch\PHPca\Message'             => 'Message.php',
-  'spriebsch\PHPca\Error'               => 'Error.php',
-  'spriebsch\PHPca\Warning'             => 'Warning.php',
-  'spriebsch\PHPca\LintError'           => 'LintError.php',
-  'spriebsch\PHPca\Constants'           => 'Constants.php',
-  'spriebsch\PHPca\Token'               => 'Token.php',
-  'spriebsch\PHPca\Rule'                => 'Rule.php',
-);
+use spriebsch\PHPca\Result as Result;
+use spriebsch\PHPca\Error as Error;
+use spriebsch\PHPca\Warning as Warning;
+
+require_once 'PHPUnit/Framework.php';
+require_once __DIR__ . '/../src/bootstrap.php';
+
+
+/**
+ * Tests for the Result class.
+ *
+ * @author     Stefan Priebsch <stefan@priebsch.de>
+ * @copyright  Stefan Priebsch <stefan@priebsch.de>
+ */
+class ResultTest extends \PHPUnit_Framework_TestCase
+{
+  /**
+   * @covers spriebsch\PHPca\Result::getWarnings
+   */
+  public function testGetWarnings()
+  {
+    $result = new Result();
+    $result->addFile('testfile');
+
+    $error = new Error('testfile', 'error message');
+
+    $warning1 = new Warning('testfile', 'a war');
+    $warning2 = new Warning('testfile', 'error message');
+
+    $result->addMessage($error);
+    $result->addMessage($warning1);
+    $result->addMessage($warning2);
+
+    $this->assertEquals(array($warning1, $warning2), $result->getWarnings('testfile'));
+  }
+}
 
 ?>
