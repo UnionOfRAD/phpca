@@ -89,9 +89,17 @@ class Result
   }
 
 
-  public function hasWarnings()
+  public function hasWarnings($file = null)
   {
-    return $this->globalWarningCount > 0;
+    if (is_null($file)) {
+      return $this->globalWarningCount > 0;
+    }
+
+    if (!isset($this->warningCount[$file])) {
+      return 0;
+    }
+
+    return $this->warningCount[$file];
   }
 
 
@@ -117,7 +125,15 @@ class Result
 
   public function hasErrors($file = null)
   {
-    return $this->globalErrorCount > 0;
+    if (is_null($file)) {
+      return $this->globalErrorCount > 0;
+    }
+
+    if (!isset($this->errorCount[$file])) {
+      return 0;
+    }
+
+    return $this->errorCount[$file];
   }
 
 
