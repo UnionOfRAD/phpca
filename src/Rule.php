@@ -53,24 +53,15 @@ abstract class Rule
   {
     switch ($type) {
       case Message::ERROR:
-        $this->result->addError(new Error($this->file->getFileName(), $message, $token));
+        $this->result->addMessage(new Error($this->file->getFileName(), $message, $token));
       break;
 
       case Message::WARNING:
-        $this->result->addError(new Error($this->file->getFileName(), $message, $token));
+        $this->result->addMessage(new Warning($this->file->getFileName(), $message, $token));
       break;
     }
   }
 
-  protected function addError($message, $token)
-  {
-    $this->result->addError(new Error($this->file->getFileName(), $message, $token));
-  }
-
-  protected function addWarning($message, $token)
-  {
-    $this->result->addError(new Warning($this->file->getFileName(), $message, $token));
-  }
 
   public function check(File $file, Result $result)
   {
@@ -79,6 +70,7 @@ abstract class Rule
 
     $this->doCheck();
   }
+
 
   abstract protected function doCheck();
 }
