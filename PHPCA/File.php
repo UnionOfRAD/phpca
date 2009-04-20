@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (c) 2009 Stefan Priebsch <stefan@priebsch.de>
  * All rights reserved.
@@ -287,4 +288,5 @@ class File
     return $this->getToken();
   }
 }
+
 ?>

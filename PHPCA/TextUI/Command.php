@@ -39,7 +39,7 @@ namespace spriebsch\PHPca;
 
 class Command
 {
-  protected $version = '0.1.0';
+  protected $version = '0.2.0';
 
   protected $path;
 

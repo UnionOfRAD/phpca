@@ -150,13 +150,19 @@ class Token
   }
 
 
-  public function getTrailingWhitespaceCount()
+  public function getTrailingWhitespace()
   {
     if (!$this->hasNewLine()) {
-      return strlen($this->text);
+      return '';
     }
 
-    return strlen(strrchr($this->text, "\n")) - 1;
+    return strrchr($this->text, "\n");
+  }
+
+
+  public function getTrailingWhitespaceCount()
+  {
+    return strlen($this->getTrailingWhitespace()) - 1;
   }
 }
 ?>

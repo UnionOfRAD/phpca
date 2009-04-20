@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright (c) 2009 Stefan Priebsch <stefan@priebsch.de>
  * All rights reserved.
@@ -37,60 +38,56 @@
 
 namespace spriebsch\PHPca;
 
-class OneTrueBraceStyle extends Rule
+class Indentation extends Rule
 {
-  protected function doCheck()
-  {
-    // class requires curly braces on next line
-    foreach ($this->file->getTokens(array(T_CLASS)) as $token) {
-      $this->file->gotoToken($token);
+    protected $indentText = '    ';
 
-      $token_line = $this->file->getToken()->getLine();
-      $brace_line = $this->file->skipTo(T_OPEN_CURLY)->getLine();
 
-      if ($token_line == $brace_line) {
-        $this->addMessage(Message::ERROR, 'Opening curly brace for class must be on next line', $token);
-      }
+    protected function getIndentText($indentLevel)
+    {
+      return str_repeat($this->indentText, $indentLevel);
     }
 
 
-    // function requires curly braces on next line
-    foreach ($this->file->getTokens(array(T_FUNCTION)) as $token) {
-      $this->file->gotoToken($token);
+    protected function doCheck()
+    {
+        $line = 1;
+        $indentLevel = 0;
 
-      $token_line = $this->file->getToken()->getLine();
-      $brace_line = $this->file->skipTo(T_OPEN_CURLY)->getLine();
+        while (!$this->file->isEndOfFile()) {
+            $curr = $this->file->getToken();
 
-      if ($token_line == $brace_line) {
-        $this->addMessage(Message::ERROR, 'Opening curly brace for function must be on next line', $token);
-      }
+            // Closing curly brace ends a block
+            if ($curr->getId() == T_CLOSE_CURLY) {
+                $indentLevel--;
+            }
+
+            if ($curr->getLine() > $line) {
+                $line = $curr->getLine() + 1;
+     
+                $prev = $this->file->getPreviousToken();
+
+                // Ignore blank linkes as they are obviously not indented
+                if ($curr->hasNewline() && $curr->getTrailingWhitespaceCount() == 0) {
+                    continue;
+                }
+
+var_dump($curr->getName());
+var_dump('line ' . $line . ' col ' . $curr->getColumn());
+
+                if ($curr->getColumn() != 1 + strlen($this->getIndentText($indentLevel))) {
+                    $this->addMessage(Message::ERROR, 'Wrong indentation', $curr);
+                }
+            }
+
+            // Opening curly brace starts a block
+            if ($curr->getId() == T_OPEN_CURLY) {
+                $indentLevel++;
+            }
+
+            $this->file->next(); 
+        }
     }
-
-
-    // if requires curly braces on the next line
-    foreach ($this->file->getTokens(array(T_IF)) as $token) {
-      $this->file->gotoToken($token);
-
-      $token_line = $this->file->getToken()->getLine();
-      $brace_line = $this->file->skipTo(T_OPEN_CURLY)->getLine();
-
-      if ($token_line != $brace_line) {
-        $this->addMessage(Message::ERROR, 'Opening curly brace for if must be on same line', $token);
-      }
-    }
-
-
-    // foreach requires curly braces on the same line
-    foreach ($this->file->getTokens(array(T_FOREACH)) as $token) {
-      $this->file->gotoToken($token);
-
-      $token_line = $this->file->getToken()->getLine();
-      $brace_line = $this->file->skipTo(T_OPEN_CURLY)->getLine();
-
-      if ($token_line != $brace_line) {
-        $this->addMessage(Message::ERROR, 'Opening curly brace of foreach must be on same line', $token);
-      }
-    }
-  }
 }
+
 ?>
