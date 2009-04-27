@@ -54,6 +54,12 @@ class Result
     $this->files[] = $file;
   }
 
+ 
+  public function getFiles()
+  {
+    return $this->files;
+  }
+
 
   public function getNumberOfFiles()
   {

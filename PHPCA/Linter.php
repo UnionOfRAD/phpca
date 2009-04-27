@@ -18,7 +18,7 @@
  *     without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT  * NOT LIMITED TO,
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER ORCONTRIBUTORS
  * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -35,20 +35,59 @@
  * @license    BSD License
  */
 
-$classMap = array(
-  'spriebsch\PHPca\Command'             => 'TextUI/Command.php',
-  'spriebsch\PHPca\Linter'              => 'Linter.php',
-  'spriebsch\PHPca\FileList'            => 'FileList.php',
-  'spriebsch\PHPca\RuleLoader'          => 'RuleLoader.php',
-  'spriebsch\PHPca\Tokenizer'           => 'Tokenizer.php',
-  'spriebsch\PHPca\File'                => 'File.php',
-  'spriebsch\PHPca\Result'              => 'Result.php',
-  'spriebsch\PHPca\Message'             => 'Message.php',
-  'spriebsch\PHPca\Error'               => 'Error.php',
-  'spriebsch\PHPca\Warning'             => 'Warning.php',
-  'spriebsch\PHPca\LintError'           => 'LintError.php',
-  'spriebsch\PHPca\Constants'           => 'Constants.php',
-  'spriebsch\PHPca\Token'               => 'Token.php',
-  'spriebsch\PHPca\Rule'                => 'Rule.php',
-);
+namespace spriebsch\PHPca;
+
+class Linter
+{
+    /**
+     * @var string
+     */
+    protected $phpExecutable;
+
+
+    /**
+     * Constructs the object
+     *
+     * @param string $phpExecutable Path to PHP executable 
+     */
+    public function __construct($phpExecutable)
+    {
+        $this->phpExecutable = $phpExecutable;
+    }
+
+
+    /**
+     * Run the lint check using given PHP executable.
+     * Returns empty string on success, or error message on failure.
+     *
+     * @param string $file Path to the file to lint
+     * @return string
+     * @throws RuntimeException ... does not exist
+     * @throws RuntimeException ... is not executable
+     */
+    public function check($file)
+    {
+        if (!file_exists($file)) {
+            throw new \RuntimeException('File ' . $file . ' does not exist');
+        }
+
+        if (!file_exists($this->phpExecutable)) {
+            throw new \RuntimeException('PHP executable ' . $this->phpExecutable . ' not found');
+        }
+
+        if (!is_executable($this->phpExecutable)) {
+            throw new \RuntimeException('PHP executable ' . $this->phpExecutable . ' not executable');
+        }
+
+        $cmd = $this->phpExecutable . ' -l ' . escapeshellarg($file) . ' 2>/dev/null';
+        $output = trim(shell_exec($cmd));
+
+        $cmp = 'No syntax errors';
+        if (substr($output, 0, strlen($cmp)) == $cmp) {
+            return '';
+        }
+
+        return $output;
+    }
+}
 ?>

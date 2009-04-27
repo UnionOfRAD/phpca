@@ -18,7 +18,7 @@
  *     without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT  * NOT LIMITED TO,
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER ORCONTRIBUTORS
  * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -57,32 +57,6 @@ class Command
   protected $result;
 
 
-  protected function createFileList($path)
-  {
-    if (is_file($path)) {
-      return array($path);
-    }
-
-    $list = array();
-
-    $it = new \DirectoryIterator($path);
-
-    foreach ($it as $file) {
-      if (!$file->isFile()) {
-        continue;
-      }
-
-      if (substr($file->getPathname(), -4) != '.php') {
-        continue;
-      }
-
-      $list[] = $file->getPathname();
-    }
-
-    return $list;
-  }
-
-
   protected function loadRules()
   {
     $list = array();
@@ -115,8 +89,8 @@ class Command
 
   protected function printUsage()
   {
-    print "Usage: phpca -p path_to_php <file to analyze>\n" .
-          "       phpca -p path_to_php <directory to analyze>\n";
+    print 'Usage: phpca -p path_to_php <file to analyze>' . PHP_EOL .
+          '       phpca -p path_to_php <directory to analyze>' . PHP_EOL . PHP_EOL;
   }
 
 
@@ -136,7 +110,10 @@ class Command
   {
     $arguments = array_slice($arguments, 1);
 
-    for ($i = 0; $i < count($arguments); $i++) {
+    // we have $count switch/value pairs
+    $count = floor(count($arguments) / 2);
+
+    for ($i = 0; $i < $count; $i++) {
 
       switch ($arguments[$i]) {
         case '-h':
@@ -148,59 +125,50 @@ class Command
           $i++;
           $this->phpExecutable = $arguments[$i];
         break;
+
+        default:
+          print 'Unrecognized option ' . $arguments[$i] . PHP_EOL . PHP_EOL;
+          $this->printUsage();
+          exit;
       }
-
-      $last_argument = array_slice($arguments, -1);
-      $this->path = $last_argument[0];
     }
 
-    if ($this->path == '') {
-      throw new \RuntimeException('Missing argument: no file or directory to analyze');
-    }
-
-    if ($this->phpExecutable == '') {
-      throw new \RuntimeException('Missing argument: path to PHP executable (-p) must be specified');
-    }
+    // the last argument is the file or directory name
+    $last_argument = array_slice($arguments, -1);
+    $this->path = $last_argument[0];
   }
 
 
-  protected function runLintCheck($file)
+  protected function checkSettings()
   {
-    $output = trim(shell_exec($this->phpExecutable . ' -l ' . escapeshellarg($file) . ' 2>/dev/null'));
+      if ($this->path == '') {
+          throw new \RuntimeException('Missing argument: no file or directory to analyze');
+      }
 
-    $cmp = 'No syntax errors';
-    if (substr($output, 0, strlen($cmp)) == $cmp) {
-      return '';
-    }
-
-    return $output;
+      if ($this->phpExecutable == '') {
+          throw new \RuntimeException('Missing argument: path to PHP executable (-p) must be specified');
+      }
   }
 
 
   protected function doRun()
   {
-    if (!file_exists($this->phpExecutable)) {
-      throw new \RuntimeException('PHP executable ' . $this->phpExecutable . ' not found');
-    }
-
-    if (!is_executable($this->phpExecutable)) {
-      throw new \RuntimeException('PHP executable ' . $this->phpExecutable . ' not executable');
-    }
-
-
     Constants::init();
+
+    $linter = new Linter($this->phpExecutable);
 
     $tokenizer = new Tokenizer();
     $rules = $this->loadRules();
 
     $this->result = new Result();
-    $this->files = $this->createFileList($this->path);
 
-    foreach ($this->files as $file) {
+    $fileList = new FileList();
+
+    foreach ($fileList->listFiles($this->path) as $file) {
 
       $this->result->addFile($file);
 
-      $lintResult = $this->runLintCheck($file);
+      $lintResult = $linter->check($file);
 
       if ($lintResult != '') {
         $this->printLetter('E');
@@ -232,7 +200,7 @@ class Command
       echo 'OK';
     } else {
 
-      foreach($this->files as $file) {
+      foreach($this->result->getFiles() as $file) {
         if ($this->result->hasErrors($file)) {
           echo $file . ':' . PHP_EOL;
           foreach ($this->result->getErrors($file) as $error) {
@@ -265,6 +233,7 @@ class Command
 
     try {
       $this->parseCommandLine($arguments);
+      $this->checkSettings();
       $this->doRun();
       $this->printSummary();
     }
