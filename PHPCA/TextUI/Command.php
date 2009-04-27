@@ -155,6 +155,7 @@ class Command
     Constants::init();
 
     $linter = new Linter($this->phpExecutable);
+    $linter->checkPhpBinary();
 
     $tokenizer = new Tokenizer();
     $rules = $this->loadRules();
