@@ -39,49 +39,49 @@
 
 namespace spriebsch\PHPca\Tests;
 
-use spriebsch\PHPca\Constants as Constants;
-use spriebsch\PHPca\File as File;
-use spriebsch\PHPca\Token as Token;
-use spriebsch\PHPca\Tokenizer as Tokenizer;
-use spriebsch\PHPca\Result as Result;
-use spriebsch\PHPca\NoTrailingWhitespace as NoTrailingWhitespace;
+use spriebsch\PHPca\NoInlineIf as NoInlineIf;
 
-require_once 'PHPUnit/Framework.php';
-require_once implode(DIRECTORY_SEPARATOR, array(__DIR__, '..', '..', 'bootstrap.php'));
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'RuleTestCase.php';
+require_once implode(DIRECTORY_SEPARATOR, array(__DIR__, '..', '..' , 'Rules', 'NoInlineIf.php'));
 
 /**
- * Abstract base class for rule unit test case.
+ * Tests for the No Inline If Rule.
  *
  * @author     Stefan Priebsch <stefan@priebsch.de>
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
-abstract class RuleTestCase extends \PHPUnit_Framework_TestCase
+class NoInlineIfTest extends RuleTestCase
 {
     protected function setUp()
     {
-        Constants::init();
-
-        $this->tokenizer = new Tokenizer();
-        $this->result = new Result();
-
+        $this->rule = new NoInlineIf();
         parent::setUp();
     }
 
-    protected function tokenize()
+    public function test001()
     {
-        $this->tokenizedFile = $this->tokenizer->tokenize($this->fileName, file_get_contents($this->fileName));
-        $this->rule->check($this->tokenizedFile, $this->result);
-    }
- 
-    protected function assertHasErrorOnLine($line)
-    {
-        foreach ($this->result->getErrors($this->fileName) as $error) {
-            if ($error->getLine() == $line) {
-              return;
-            }
-        }
+        $this->fileName = implode(DIRECTORY_SEPARATOR, array(__DIR__, '..', '_files', 'testdata', 'no_inline_if', '001.php'));
+        $this->tokenize();
 
-        $this->fail('No error on line ' . $line);
+        $this->assertEquals(1, $this->result->getNumberOfErrors());
+        $this->assertHasErrorOnLine(5);
+    }
+
+    public function test002()
+    {
+        $this->fileName = implode(DIRECTORY_SEPARATOR, array(__DIR__, '..', '_files', 'testdata', 'no_inline_if', '002.php'));
+        $this->tokenize();
+
+        $this->assertEquals(1, $this->result->getNumberOfErrors());
+        $this->assertHasErrorOnLine(5);
+    }
+
+    public function test003()
+    {
+        $this->fileName = implode(DIRECTORY_SEPARATOR, array(__DIR__, '..', '_files', 'testdata', 'no_inline_if', '003.php'));
+        $this->tokenize();
+
+        $this->assertEquals(0, $this->result->getNumberOfErrors());
     }
 }
 ?>
