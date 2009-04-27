@@ -18,7 +18,7 @@
  *     without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT  * NOT LIMITED TO,
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER ORCONTRIBUTORS
  * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -35,21 +35,9 @@
  * @license    BSD License
  */
 
-$classMap = array(
-  'spriebsch\PHPca\Exception'           => 'Exception.php',
-  'spriebsch\PHPca\Command'             => 'TextUI/Command.php',
-  'spriebsch\PHPca\Linter'              => 'Linter.php',
-  'spriebsch\PHPca\FileList'            => 'FileList.php',
-  'spriebsch\PHPca\RuleLoader'          => 'RuleLoader.php',
-  'spriebsch\PHPca\Tokenizer'           => 'Tokenizer.php',
-  'spriebsch\PHPca\File'                => 'File.php',
-  'spriebsch\PHPca\Result'              => 'Result.php',
-  'spriebsch\PHPca\Message'             => 'Message.php',
-  'spriebsch\PHPca\Error'               => 'Error.php',
-  'spriebsch\PHPca\Warning'             => 'Warning.php',
-  'spriebsch\PHPca\LintError'           => 'LintError.php',
-  'spriebsch\PHPca\Constants'           => 'Constants.php',
-  'spriebsch\PHPca\Token'               => 'Token.php',
-  'spriebsch\PHPca\Rule'                => 'Rule.php',
-);
+namespace spriebsch\PHPca;
+
+class Exception extends \RuntimeException
+{
+}
 ?>

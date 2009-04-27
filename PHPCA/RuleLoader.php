@@ -73,7 +73,7 @@ class RuleLoader
           require_once $this->rulePath . DIRECTORY_SEPARATOR . $file->getFilename();
 
           if (!class_exists($classname)) {
-              throw new \RuntimeException('File ' . $file->getFilename() . ' does not contain rule class ' . $classname);
+              throw new Exception('File ' . $file->getFilename() . ' does not contain rule class ' . $classname);
           }
 
           $list[] = new $classname;

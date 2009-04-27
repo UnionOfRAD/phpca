@@ -90,7 +90,7 @@ class Constants
   static public function getTokenId($text)
   {
     if (!isset(self::$tokens[$text])) {
-      throw new \RuntimeException('Unknown token ' . $text);
+      throw new Exception('Unknown token ' . $text);
     }
 
     $value = self::$tokens[$text];
@@ -118,7 +118,7 @@ class Constants
       }
     }
 
-    throw new \RuntimeException('Unknown token ' . $id);
+    throw new Exception('Unknown token ' . $id);
   }
 }
 ?>

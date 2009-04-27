@@ -276,7 +276,7 @@ class File
       }
     }
 
-    throw new \RuntimeException('Token not found');
+    throw new Exception('Token not found');
   }
 
 

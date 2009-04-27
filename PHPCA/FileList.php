@@ -51,7 +51,7 @@ class FileList
     public function listFiles($path)
     {
         if (!file_exists($path)) {
-            throw new \RuntimeException('Path ' . $path . ' does not exist');
+            throw new Exception('Path ' . $path . ' does not exist');
         }
 
         // If $path points to a regular file, we don't need to iterate

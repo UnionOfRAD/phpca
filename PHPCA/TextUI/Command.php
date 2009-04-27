@@ -77,7 +77,7 @@ class Command
       require_once $this->rulePath . DIRECTORY_SEPARATOR . $file->getFilename();
 
       if (!class_exists($classname)) {
-        throw new \RuntimeException('File ' . $file->getFilename() . ' does not contain rule class ' . $classname);
+        throw new Exception('File ' . $file->getFilename() . ' does not contain rule class ' . $classname);
       }
 
       $list[] = new $classname;
@@ -127,7 +127,7 @@ class Command
                     break;
 
                 default:
-                    throw new \RuntimeException('Unknown option: ' . $argument);
+                    throw new Exception('Unknown option: ' . $argument);
             }
 
             $argument = array_shift($arguments);
@@ -141,11 +141,11 @@ class Command
   protected function checkSettings()
   {
       if ($this->path == '') {
-          throw new \RuntimeException('Missing argument: no file or directory to analyze');
+          throw new Exception('Missing argument: no file or directory to analyze');
       }
 
       if ($this->phpExecutable == '') {
-          throw new \RuntimeException('Missing argument: path to PHP executable (-p) must be specified');
+          throw new Exception('Missing argument: path to PHP executable (-p) must be specified');
       }
   }
 
@@ -238,7 +238,7 @@ class Command
       $this->printSummary();
     }
 
-    catch (\RuntimeException $e) {
+    catch (Exception $e) {
       echo 'Error: ' . $e->getMessage() . PHP_EOL . PHP_EOL;
       $this->printUsage();
       exit();

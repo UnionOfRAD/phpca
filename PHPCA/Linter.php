@@ -62,25 +62,25 @@ class Linter
      *
      * @param string $file Path to the file to lint
      * @return string
-     * @throws RuntimeException PHP excutable ... not found
-     * @throws RuntimeException PHP excutable ... not executable
-     * @throws RuntimeException Executable ... is not a PHP executable
+     * @throws Exception PHP excutable ... not found
+     * @throws Exception PHP excutable ... not executable
+     * @throws Exception Executable ... is not a PHP executable
      */
     public function checkPhpBinary()
     {
         if (!file_exists($this->phpExecutable)) {
-            throw new \RuntimeException('PHP executable ' . $this->phpExecutable . ' not found');
+            throw new Exception('PHP executable ' . $this->phpExecutable . ' not found');
         }
 
         if (!is_executable($this->phpExecutable)) {
-            throw new \RuntimeException('PHP executable ' . $this->phpExecutable . ' not executable');
+            throw new Exception('PHP executable ' . $this->phpExecutable . ' not executable');
         }
 
         $cmd = $this->phpExecutable . ' -v 2>/dev/null';
         $output = trim(shell_exec($cmd));
 
         if (substr($output, 0, 5) != 'PHP 5') {
-            throw new \RuntimeException($this->phpExecutable . ' is not a PHP executable');
+            throw new Exception($this->phpExecutable . ' is not a PHP executable');
         }
     }
 
@@ -91,12 +91,12 @@ class Linter
      *
      * @param string $file Path to the file to lint
      * @return string
-     * @throws RuntimeException File ... not found
+     * @throws Exception File ... not found
      */
     public function check($file)
     {
         if (!file_exists($file)) {
-            throw new \RuntimeException('File ' . $file . ' not found');
+            throw new Exception('File ' . $file . ' not found');
         }
 
         $cmd = $this->phpExecutable . ' -l ' . escapeshellarg($file) . ' 2>/dev/null';
