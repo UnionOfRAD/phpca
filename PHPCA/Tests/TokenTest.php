@@ -248,7 +248,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
   public function testGetTrailingWhitespaceCountForStringWithoutNewline()
   {
     $t = new Token(367, '<?php', 0, 0, 0);
-    $this->assertEquals(5, $t->getTrailingWhitespaceCount());
+    $this->assertEquals(0, $t->getTrailingWhitespaceCount());
   }
 
 

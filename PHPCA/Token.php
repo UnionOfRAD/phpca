@@ -51,16 +51,16 @@ use spriebsch\PHPca\Token as Token;
  */
 class Token
 {
-  protected $id;
-  protected $text;
-  protected $line;
-  protected $column;
-  protected $position;
-  protected $name;
+    protected $id;
+    protected $text;
+    protected $line;
+    protected $column;
+    protected $position;
+    protected $name;
 
 
-  public function __construct($id, $text, $line, $column, $position)
-  {
+    public function __construct($id, $text, $line, $column, $position)
+    {
     $this->id       = $id;
     $this->text     = $text;
     $this->line     = $line;
@@ -68,24 +68,24 @@ class Token
     $this->position = $position;
 
     $this->name     = Constants::getTokenName($id);
-  }
+    }
 
 
-  /**
-   * Returns the numeric ID of the constant representing this token.
-   *
-   * @return int
-   */
-  public function getId()
-  {
-    return $this->id;
-  }
+    /**
+    * Returns the numeric ID of the constant representing this token.
+    *
+    * @return int
+    */
+    public function getId()
+    {
+        return $this->id;
+    }
 
 
-  public function getText()
-  {
-    return $this->text;
-  }
+    public function getText()
+    {
+        return $this->text;
+    }
 
 
     public function toHex($text)
@@ -105,81 +105,87 @@ class Token
     }
 
 
-  public function getLine()
-  {
-    return $this->line;
-  }
-
-
-  public function getColumn()
-  {
-    return $this->column;
-  }
-
-
-  public function getPosition()
-  {
-    return $this->position;
-  }
-
-
-  /**
-   * Returns the name of the constant representing this token as a string.
-   *
-   * @return string
-   */
-  public function getName()
-  {
-    return $this->name;
-  }
-
-
-  /**
-   * Returns the length in characters of this token.
-   *
-   * @return int
-   */
-  public function getLength()
-  {
-    return strlen($this->text);
-  }
-
-
-  public function hasNewLine()
-  {
-    return strstr($this->text, "\r") !== false ||
-           strstr($this->text, "\n") !== false;
-  }
-
-
-  public function getNewLineCount()
-  {
-    return substr_count($this->text, "\n");
-  }
-
-
-  public function hasWhitespace()
-  {
-    return strstr($this->text, "\r") !== false ||
-           strstr($this->text, "\n") !== false ||
-           strstr($this->text, "\t") !== false ||
-           strstr($this->text, " ")  !== false;
-  }
-
-
-  public function getTrailingWhitespace()
-  {
-    if (!$this->hasNewLine()) {
-      return '';
+    public function getLine()
+    {
+       return $this->line;
     }
 
-    return strrchr($this->text, "\n");
-  }
+
+    public function getColumn()
+    {
+       return $this->column;
+    }
 
 
-  public function getTrailingWhitespaceCount()
-  {
-    return strlen($this->getTrailingWhitespace()) - 1;
-  }
+    public function getPosition()
+    {
+       return $this->position;
+    }
+
+
+    /**
+    * Returns the name of the constant representing this token as a string.
+    *
+    * @return string
+    */
+    public function getName()
+    {
+       return $this->name;
+    }
+
+
+    /**
+    * Returns the length in characters of this token.
+    *
+    * @return int
+    */
+    public function getLength()
+    {
+       return strlen($this->text);
+    }
+
+
+    public function hasNewLine()
+    {
+        return strstr($this->text, "\r") !== false ||
+               strstr($this->text, "\n") !== false;
+    }
+
+
+    public function getNewLineCount()
+    {
+        return substr_count($this->text, "\n");
+    }
+
+
+    public function hasWhitespace()
+    {
+        return strstr($this->text, "\r") !== false ||
+            strstr($this->text, "\n") !== false ||
+            strstr($this->text, "\t") !== false ||
+            strstr($this->text, " ")  !== false;
+    }
+
+
+    public function getTrailingWhitespace()
+    {
+        if (!$this->hasNewLine()) {
+            return '';
+        }
+
+        return strrchr($this->text, "\n");
+    }
+
+
+    public function getTrailingWhitespaceCount()
+    {
+        $count = strlen($this->getTrailingWhitespace()) - 1;
+
+        if ($count < 0) {
+            $count = 0;
+        }
+
+        return $count;
+    }
 }
 ?>
