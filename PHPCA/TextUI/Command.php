@@ -106,36 +106,35 @@ class Command
   }
 
 
-  protected function parseCommandLine($arguments)
-  {
-    $arguments = array_slice($arguments, 1);
+    protected function parseCommandLine($arguments)
+    {
+        // Remove phpca's file name
+        array_shift($arguments);
 
-    // we have $count switch/value pairs
-    $count = floor(count($arguments) / 2);
+        $argument = array_shift($arguments);
 
-    for ($i = 0; $i < $count; $i++) {
+        while (substr($argument, 0, 1) == '-') {
 
-      switch ($arguments[$i]) {
-        case '-h':
-          $this->printUsage();
-          exit();
-        break;
+            switch ($argument) {
 
-        case '-p':
-          $i++;
-          $this->phpExecutable = $arguments[$i];
-        break;
+                case '-h':
+                case '--help':
+                    $this->printUsage();
+                    exit();
 
-        default:
-          print 'Unrecognized option ' . $arguments[$i] . PHP_EOL . PHP_EOL;
-          $this->printUsage();
-          exit;
-      }
-    }
+                case '-p':
+                    $this->phpExecutable = array_shift($arguments);
+                    break;
 
-    // the last argument is the file or directory name
-    $last_argument = array_slice($arguments, -1);
-    $this->path = $last_argument[0];
+                default:
+                    throw new \RuntimeException('Unknown option: ' . $argument);
+            }
+
+            $argument = array_shift($arguments);
+        }
+
+        // the last argument is the file or directory name
+        $this->path = $argument;
   }
 
 
