@@ -31,12 +31,18 @@
  *
  * @package    PHPca
  * @author     Stefan Priebsch <stefan@priebsch.de>
- * @copyright  Stefan Priebsch <stefan@priebsch.de>
+ * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  * @license    BSD License
  */
 
 namespace spriebsch\PHPca;
 
+/**
+ * Command to run phpcs from the command line.
+ *
+ * @author     Stefan Priebsch <stefan@priebsch.de>
+ * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
+ */
 class Command
 {
   protected $version = '0.2.0';

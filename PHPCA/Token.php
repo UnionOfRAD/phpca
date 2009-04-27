@@ -88,6 +88,23 @@ class Token
   }
 
 
+    public function toHex($text)
+    {
+        $result = array();
+
+        for ($i = 0; $i < strlen($text); $i++) {
+            $char = dechex(ord($text[$i]));
+            if (strlen($char) == 1) {
+              $char = '0' . $char;
+            }
+
+            $result[] = $char;
+        }
+
+        return implode(' ', $result);
+    }
+
+
   public function getLine()
   {
     return $this->line;
@@ -130,8 +147,8 @@ class Token
 
   public function hasNewLine()
   {
-    return strstr($this->text, "\r") ||
-           strstr($this->text, "\n");
+    return strstr($this->text, "\r") !== false ||
+           strstr($this->text, "\n") !== false;
   }
 
 

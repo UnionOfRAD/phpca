@@ -1,6 +1,7 @@
 <?php
-
 /**
+ * This file is part of phpca, the static code analyzer for PHP.
+ *
  * Copyright (c) 2009 Stefan Priebsch <stefan@priebsch.de>
  * All rights reserved.
  *
@@ -19,7 +20,7 @@
  *     without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT  * NOT LIMITED TO,
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER ORCONTRIBUTORS
  * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -32,64 +33,39 @@
  *
  * @package    PHPca
  * @author     Stefan Priebsch <stefan@priebsch.de>
- * @copyright  Stefan Priebsch <stefan@priebsch.de>
+ * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  * @license    BSD License
  */
 
 namespace spriebsch\PHPca;
 
-class Indentation extends Rule
+/**
+ * No Trailing Whitespace Rule
+ * 
+ * Checks for trailing whitespace at the end of lines.
+ *
+ * @author     Stefan Priebsch <stefan@priebsch.de>
+ * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
+ */
+class NoTrailingWhitespace extends Rule
 {
-    protected $indentText = '    ';
-
-
-    protected function getIndentText($indentLevel)
-    {
-      return str_repeat($this->indentText, $indentLevel);
-    }
-
-
     protected function doCheck()
     {
-        $line = 1;
-        $indentLevel = 0;
-
         while (!$this->file->isEndOfFile()) {
-            $curr = $this->file->getToken();
+            $token = $this->file->getToken();
 
-            // Closing curly brace ends a block
-            if ($curr->getId() == T_CLOSE_CURLY) {
-                $indentLevel--;
-            }
+            if ($token->hasNewline()) {
+                // Remove trailing newlines (the tokenizer always puts them there)
+                $text = rtrim($token->getText(), "\n");
 
-            if ($curr->getLine() > $line) {
-                $line = $curr->getLine() + 1;
-     
-                $prev = $this->file->getPreviousToken();
-
-                // Ignore blank linkes as they are obviously not indented
-                if ($curr->hasNewline() && $curr->getTrailingWhitespaceCount() == 0) {
-                    continue;
-                }
-
-/*
-var_dump($curr->getName());
-var_dump('line ' . $line . ' col ' . $curr->getColumn());
-*/
-
-                if ($curr->getColumn() != 1 + strlen($this->getIndentText($indentLevel))) {
-                    $this->addMessage(Message::ERROR, 'Wrong indentation', $curr);
+                // Is the last character that is left a space?
+                if (substr($text, -1, 1) == ' ') {
+                    $this->addMessage(Message::ERROR, 'Trailing whitespace', $token);
                 }
             }
 
-            // Opening curly brace starts a block
-            if ($curr->getId() == T_OPEN_CURLY) {
-                $indentLevel++;
-            }
-
-            $this->file->next(); 
+            $this->file->next();
         }
     }
 }
-
 ?>
