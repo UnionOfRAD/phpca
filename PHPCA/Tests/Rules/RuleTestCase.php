@@ -39,59 +39,46 @@
 
 namespace spriebsch\PHPca\Tests;
 
+use spriebsch\PHPca\File as File;
+use spriebsch\PHPca\Token as Token;
+use spriebsch\PHPca\Tokenizer as Tokenizer;
+use spriebsch\PHPca\Result as Result;
 use spriebsch\PHPca\NoTrailingWhitespace as NoTrailingWhitespace;
 
-require_once __DIR__ . DIRECTORY_SEPARATOR . 'RuleTestCase.php';
-require_once implode(DIRECTORY_SEPARATOR, array(__DIR__, '..', '..' , 'Rules', 'NoTrailingWhitespace.php'));
+require_once 'PHPUnit/Framework.php';
+require_once implode(DIRECTORY_SEPARATOR, array(__DIR__, '..', '..', 'bootstrap.php'));
 
 /**
- * Tests for the No Trailing Whitespace Rule.
+ * Abstract base class for rule unit test case.
  *
  * @author     Stefan Priebsch <stefan@priebsch.de>
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
-class NoTrailingWhitespaceTest extends RuleTestCase
+abstract class RuleTestCase extends \PHPUnit_Framework_TestCase
 {
     protected function setUp()
     {
-        $this->rule = new NoTrailingWhitespace();
+        $this->tokenizer = new Tokenizer();
+        $this->result = new Result();
+
         parent::setUp();
     }
 
-    public function test001()
+    protected function tokenize()
     {
-        $this->fileName = implode(DIRECTORY_SEPARATOR, array(__DIR__, '..', '_files', 'testdata', 'trailing_whitespace', '001.php'));
-        $this->tokenize();
-
-        $this->assertEquals(1, $this->result->getNumberOfErrors());
-        $this->assertHasErrorOnLine(5);
+        $this->tokenizedFile = $this->tokenizer->tokenize($this->fileName, file_get_contents($this->fileName));
+        $this->rule->check($this->tokenizedFile, $this->result);
     }
-
-    public function test002()
+ 
+    protected function assertHasErrorOnLine($line)
     {
-        $this->fileName = implode(DIRECTORY_SEPARATOR, array(__DIR__, '..', '_files', 'testdata', 'trailing_whitespace', '002.php'));
-        $this->tokenize();
+        foreach ($this->result->getErrors($this->fileName) as $error) {
+            if ($error->getLine() == $line) {
+              return;
+            }
+        }
 
-        $this->assertEquals(1, $this->result->getNumberOfErrors());
-        $this->assertHasErrorOnLine(1);
-    }
-
-    public function test003()
-    {
-        $this->fileName = implode(DIRECTORY_SEPARATOR, array(__DIR__, '..', '_files', 'testdata', 'trailing_whitespace', '003.php'));
-        $this->tokenize();
-
-        $this->assertEquals(3, $this->result->getNumberOfErrors());
-        $this->assertHasErrorOnLine(5);
-    }
-
-    public function test004()
-    {
-        $this->fileName = implode(DIRECTORY_SEPARATOR, array(__DIR__, '..', '_files', 'testdata', 'trailing_whitespace', '004.php'));
-        $this->tokenize();
-
-        $this->assertEquals(1, $this->result->getNumberOfErrors());
-        $this->assertHasErrorOnLine(4);
+        $this->fail('No error on line ' . $line);
     }
 }
 ?>
