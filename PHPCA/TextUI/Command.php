@@ -45,23 +45,53 @@ namespace spriebsch\PHPca;
  */
 class Command
 {
+    /**
+     * PHPCA version number
+     *
+     * @var string
+     */
     protected $version = '0.2.0';
 
+    /**
+     * Path or file to analyze
+     *
+     * @var string
+     */
     protected $path;
 
     /**
-    * Path to a directory containing the rules.
-    */
+     * Path to a directory containing the rules.
+     *
+     * @var string
+     */
     protected $rulePath = 'PHPCA/Rules';
 
+    /**
+     * Path to PHP executable
+     *
+     * @var string
+     */
     protected $phpExecutable;
 
+    /**
+     * Position counter for dot output
+     *
+     * @var integer
+     */
     protected $positionCount = 0;
 
-    protected $files;
-
+    /**
+     * Result object
+     *
+     * @var Result
+     */
     protected $result;
 
+    /**
+     * Load the rules to check for
+     *
+     * @return void
+     */
     protected function loadRules()
     {
         $list = array();
@@ -91,12 +121,23 @@ class Command
         return $list;
     }
 
+    /**
+     * Print usage message
+     *
+     * @return void
+     */
     protected function printUsage()
     {
         print 'Usage: phpca -p path_to_php <file to analyze>' . PHP_EOL .
               '       phpca -p path_to_php <directory to analyze>' . PHP_EOL . PHP_EOL;
     }
 
+    /**
+     * Print one character representing a checked file. Defaults to dot.
+     *
+     * @param string $letter character to print
+     * @return void
+     */
     protected function printLetter($letter = '.')
     {
         if ($this->positionCount > 58) {
@@ -108,6 +149,12 @@ class Command
         $this->positionCount++;
     }
 
+    /**
+     * Parse the command line.
+     *
+     * @param array $arguments $argv
+     * @return void
+     */
     protected function parseCommandLine($arguments)
     {
         // Remove phpca's file name
@@ -139,6 +186,12 @@ class Command
         $this->path = $argument;
     }
 
+    /**
+     * Check settings before checking files.
+     *
+     * @return void
+     * @throws Exception
+     */
     protected function checkSettings()
     {
         if ($this->path == '') {
@@ -150,6 +203,11 @@ class Command
         }
     }
 
+    /**
+     * Run the checks
+     *
+     * @return void
+     */
     protected function doRun()
     {
         Constants::init();
@@ -191,6 +249,11 @@ class Command
         }
     }
 
+    /**
+     * Print the test summary
+     *
+     * @return void
+     */
     protected function printSummary()
     {
         echo PHP_EOL . PHP_EOL;
@@ -225,6 +288,11 @@ class Command
         echo PHP_EOL . PHP_EOL;
     }
 
+    /**
+     * Run PHPCA
+     *
+     * @param array $arguments $argv
+     */
     public function run($arguments)
     {
         echo 'PHP Code Analyzer ' . $this->version . ' by Stefan Priebsch' . PHP_EOL . PHP_EOL;
