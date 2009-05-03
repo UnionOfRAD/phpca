@@ -256,5 +256,23 @@ class TokenTest extends \PHPUnit_Framework_TestCase
         $t = new Token(367, "<?php \n  ", 0, 0, 0);
         $this->assertEquals(2, $t->getTrailingWhitespaceCount());
     }
+
+    /**
+    * @covers Token::toHex
+    */
+    public function testToHex()
+    {
+        $t = new Token(367, "<?php", 0, 0, 0);
+        $this->assertEquals('61 62 63', $t->toHex('abc'));
+    }
+
+    /**
+    * @covers Token::toHex
+    */
+    public function testToHexForOneDigitCharacter()
+    {
+        $t = new Token(367, "<?php", 0, 0, 0);
+        $this->assertEquals('0a', $t->toHex("\n"));
+    }
 }
 ?>
