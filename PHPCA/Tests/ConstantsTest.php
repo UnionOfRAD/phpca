@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright (c) 2009 Stefan Priebsch <stefan@priebsch.de>
  * All rights reserved.
@@ -19,7 +18,7 @@
  *     without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT  * NOT LIMITED TO,
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER ORCONTRIBUTORS
  * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -51,66 +50,60 @@ require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php';
  */
 class ConstantsTest extends \PHPUnit_Framework_TestCase
 {
-  /**
-   * @covers spriebsch\PHPca\Constants::init
-   */
-  public function testInitDefinesConstants()
-  {
-    Constants::init();
-    $this->assertTrue(array_key_exists('T_DIV', get_defined_constants()));
-  }
+    /**
+    * @covers spriebsch\PHPca\Constants::init
+    */
+    public function testInitDefinesConstants()
+    {
+        Constants::init();
+        $this->assertTrue(array_key_exists('T_DIV', get_defined_constants()));
+    }
 
+    /**
+    * @covers spriebsch\PHPca\Constants::getTokenId
+    */
+    public function testGetTokenId()
+    {
+        Constants::init();
+        $this->assertEquals(516, Constants::getTokenId('/'));
+    }
 
-  /**
-   * @covers spriebsch\PHPca\Constants::getTokenId
-   */
-  public function testGetTokenId()
-  {
-    Constants::init();
-    $this->assertEquals(516, Constants::getTokenId('/'));
-  }
+    /**
+    * @covers spriebsch\PHPca\Constants::getTokenId
+    * @expectedException \RuntimeException
+    */
+    public function testGetTokenIdThrowsExceptionOnUnknownToken()
+    {
+        Constants::init();
+        Constants::getTokenId('does not exist');
+    }
 
+    /**
+    * @covers spriebsch\PHPca\Constants::getTokenName
+    */
+    public function testGetTokenName()
+    {
+        Constants::init();
+        $this->assertEquals('T_DIV', Constants::getTokenName(516));
+    }
 
-  /**
-   * @covers spriebsch\PHPca\Constants::getTokenId
-   * @expectedException \RuntimeException
-   */
-  public function testGetTokenIdThrowsExceptionOnUnknownToken()
-  {
-    Constants::init();
-    Constants::getTokenId('does not exist');
-  }
+    /**
+    * @covers spriebsch\PHPca\Constants::getTokenName
+    */
+    public function testGetTokenNameReturnsTokenizerToken()
+    {
+        Constants::init();
+        $this->assertEquals('T_DOC_COMMENT', Constants::getTokenName(367));
+    }
 
-
-  /**
-   * @covers spriebsch\PHPca\Constants::getTokenName
-   */
-  public function testGetTokenName()
-  {
-    Constants::init();
-    $this->assertEquals('T_DIV', Constants::getTokenName(516));
-  }
-
-
-  /**
-   * @covers spriebsch\PHPca\Constants::getTokenName
-   */
-  public function testGetTokenNameReturnsTokenizerToken()
-  {
-    Constants::init();
-    $this->assertEquals('T_DOC_COMMENT', Constants::getTokenName(367));
-  }
-
-
-  /**
-   * @covers spriebsch\PHPca\Constants::getTokenName
-   * @expectedException \RuntimeException
-   */
-  public function testGetTokenNameThrowsExceptionOnUnknownToken()
-  {
-    Constants::init();
-    Constants::getTokenName(9999);
-  }
+    /**
+    * @covers spriebsch\PHPca\Constants::getTokenName
+    * @expectedException \RuntimeException
+    */
+    public function testGetTokenNameThrowsExceptionOnUnknownToken()
+    {
+        Constants::init();
+        Constants::getTokenName(9999);
+    }
 }
-
 ?>

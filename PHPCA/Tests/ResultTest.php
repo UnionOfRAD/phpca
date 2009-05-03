@@ -63,7 +63,6 @@ class ResultTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array('testfile'), $result->getFiles());
     }
 
-
     /**
     * @covers spriebsch\PHPca\Result:getNumberOfFiles
     */
@@ -77,7 +76,6 @@ class ResultTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(1, $result->getNumberOfFiles());
     }
-
 
     /**
     * @covers spriebsch\PHPca\Result:hasWarnings
@@ -94,7 +92,6 @@ class ResultTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($result->hasWarnings());
     }
 
-
     /**
     * @covers spriebsch\PHPca\Result:hasWarnings
     */
@@ -109,7 +106,6 @@ class ResultTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($result->hasWarnings('testfile'));
     }
-
 
     /**
     * @covers spriebsch\PHPca\Result::getWarnings
@@ -133,7 +129,6 @@ class ResultTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array($warning1, $warning2), $result->getWarnings('testfile'));
     }
 
-
     /**
     * @covers spriebsch\PHPca\Result:getNumberOfWarnings
     */
@@ -148,7 +143,6 @@ class ResultTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(1, $result->getNumberOfWarnings());
     }
-
 
     /**
     * @covers spriebsch\PHPca\Result:hasErrors
@@ -165,7 +159,6 @@ class ResultTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($result->hasErrors());
     }
 
-
     /**
     * @covers spriebsch\PHPca\Result:hasErrors
     */
@@ -180,7 +173,6 @@ class ResultTest extends \PHPUnit_Framework_TestCase
 
         $this->assertTrue($result->hasErrors('testfile'));
     }
-
 
     /**
     * @covers spriebsch\PHPca\Result::getErrors
@@ -203,7 +195,6 @@ class ResultTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(array($error1, $error2), $result->getErrors('testfile'));
     }
-
 
     /**
     * @covers spriebsch\PHPca\Result:getNumberOfErrors
