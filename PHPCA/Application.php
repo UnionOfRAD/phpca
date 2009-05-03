@@ -85,9 +85,9 @@ class Application
      *
      * @return array $list List of Rule class names
      */
-    public function loadRules($rulePath = '')
+    public function loadRules($rulePath = null)
     {
-        if ($rulePath != '') {
+        if (!is_null($rulePath)) {
             $this->rulePath = $rulePath;
         }
 
@@ -133,12 +133,10 @@ class Application
         $linter->checkPhpBinary();
 
         $tokenizer = new Tokenizer();
+        $result    = new Result();
+        $fileList  = new FileList();
 
         $rules = $this->loadRules();
-
-        $result = new Result();
-
-        $fileList = new FileList();
 
         foreach ($fileList->listFiles($path) as $file) {
 
@@ -146,24 +144,19 @@ class Application
 
             $lintResult = $linter->check($file);
 
-            if ($lintResult != '') {
-                $this->progressPrinter->showProgress('E');
-                $result->addMessage(new LintError($file, strstr($lintResult, PHP_EOL, true)));
-                continue;
-            }
+            if ($lintResult == '') {
+                $tokenizedFile = $tokenizer->tokenize($file, file_get_contents($file));
 
-            $tokenizedFile = $tokenizer->tokenize($file, file_get_contents($file));
+                foreach ($rules as $rule) {
+                    $tokenizedFile->rewind();
+                    $rule->check($tokenizedFile, $result);
+                }
 
-            foreach ($rules as $rule) {
-                $tokenizedFile->rewind();
-                $rule->check($tokenizedFile, $result);
-            }
-
-            if ($result->hasErrors($file)) {
-                $this->progressPrinter->showProgress('F');
             } else {
-                $this->progressPrinter->showProgress();
+                $result->addMessage(new LintError($file, strstr($lintResult, PHP_EOL, true)));
             }
+
+            $this->progressPrinter->showProgress($file, $result);
         }
 
         return $result;

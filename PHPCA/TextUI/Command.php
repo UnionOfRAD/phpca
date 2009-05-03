@@ -78,19 +78,41 @@ class Command
     }
 
     /**
+     * Get letter to display progress
+     * (E on lint error, F for failed checks, . for successful check)
+     *
+     * @param string $file File that was checked
+     * @param Result $result Result object
+     * @return string
+     */
+    protected function getProgressLetter($file, Result $result)
+    {
+        if (!$result->hasErrors($file)) {
+            return '.';
+        }
+
+        if ($result->hasLintError($file)) {
+            return 'E';
+        }
+
+        return 'F';
+    }
+
+    /**
      * Print one character representing a checked file. Defaults to dot.
      *
-     * @param string $letter character to print
+     * @param string $file File that was checked
+     * @param Result $result Result object
      * @return void
      */
-    public function showProgress($letter = '.')
+    public function showProgress($file, Result $result)
     {
         if ($this->positionCount > 58) {
             echo PHP_EOL;
             $this->positionCount = 0;
         }
 
-        echo $letter;
+        echo $this->getProgressLetter($file, $result);
         $this->positionCount++;
     }
 

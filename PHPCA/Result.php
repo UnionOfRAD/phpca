@@ -142,6 +142,21 @@ class Result
         return $this->globalErrorCount;
     }
 
+    public function hasLintError($file)
+    {
+        if (!isset($this->messages[$file])) {
+            return false;
+        }
+
+        foreach ($this->messages[$file] as $message) {
+            if ($message instanceOf LintError) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public function getErrors($file)
     {
         $result = array();
