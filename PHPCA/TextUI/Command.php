@@ -67,13 +67,6 @@ class Command
     protected $positionCount = 0;
 
     /**
-     * Result object
-     *
-     * @var Result
-     */
-    protected $result;
-
-    /**
      * Print usage message
      *
      * @return void
@@ -90,7 +83,7 @@ class Command
      * @param string $letter character to print
      * @return void
      */
-    protected function printLetter($letter = '.')
+    public function showProgress($letter = '.')
     {
         if ($this->positionCount > 58) {
             echo PHP_EOL;
@@ -156,54 +149,6 @@ class Command
     }
 
     /**
-     * Run the checks
-     *
-     * @return void
-     */
-    protected function doRun()
-    {
-        Constants::init();
-
-        $linter = new Linter($this->phpExecutable);
-        $linter->checkPhpBinary();
-
-        $tokenizer = new Tokenizer();
-
-        $application = new Application();
-        $rules = $application->loadRules();
-
-        $this->result = new Result();
-
-        $fileList = new FileList();
-
-        foreach ($fileList->listFiles($this->path) as $file) {
-
-            $this->result->addFile($file);
-
-            $lintResult = $linter->check($file);
-
-            if ($lintResult != '') {
-                $this->printLetter('E');
-                $this->result->addMessage(new LintError($file, strstr($lintResult, PHP_EOL, true)));
-                continue;
-            }
-
-            $tokenizedFile = $tokenizer->tokenize($file, file_get_contents($file));
-
-            foreach ($rules as $rule) {
-                $tokenizedFile->rewind();
-                $rule->check($tokenizedFile, $this->result);
-            }
-
-            if ($this->result->hasErrors($file)) {
-                $this->printLetter('F');
-            } else {
-                $this->printLetter();
-            }
-        }
-    }
-
-    /**
      * Print the test summary
      *
      * @return void
@@ -254,7 +199,12 @@ class Command
         try {
             $this->parseCommandLine($arguments);
             $this->checkSettings();
-            $this->doRun();
+
+            $application = new Application();
+            $application->registerProgressPrinter($this);
+
+            $this->result = $application->run($this->phpExecutable, $this->path);
+
             $this->printSummary();
         }
 

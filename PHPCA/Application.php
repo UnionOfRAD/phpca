@@ -60,6 +60,27 @@ class Application
     protected $rulePath = 'PHPCA/Rules';
 
     /**
+     * Result object
+     *
+     * @var Result
+     */
+    protected $result;
+
+    protected $progressPrinter;
+
+    /**
+     * Register progress printer
+     */
+    public function registerProgressPrinter($progressPrinter)
+    {
+        if (!method_exists($progressPrinter, 'showProgress')) {
+            throw new Exception('Progress printer does not have a showProgress() method');
+        }
+
+        $this->progressPrinter = $progressPrinter;
+    }
+
+    /**
      * Load the rules to check
      *
      * @return array $list List of Rule class names
@@ -95,6 +116,57 @@ class Application
         }
 
         return $list;
+    }
+
+    /**
+     * Main method
+     *
+     * @param string $phpExecutable path to PHP executable for lint check
+     * @param string $path          path to file(s) to check
+     * @return Result check result object
+     */
+    public function run($phpExecutable, $path)
+    {
+        Constants::init();
+
+        $linter = new Linter($phpExecutable);
+        $linter->checkPhpBinary();
+
+        $tokenizer = new Tokenizer();
+
+        $rules = $this->loadRules();
+
+        $result = new Result();
+
+        $fileList = new FileList();
+
+        foreach ($fileList->listFiles($path) as $file) {
+
+            $result->addFile($file);
+
+            $lintResult = $linter->check($file);
+
+            if ($lintResult != '') {
+                $this->progressPrinter->showProgress('E');
+                $result->addMessage(new LintError($file, strstr($lintResult, PHP_EOL, true)));
+                continue;
+            }
+
+            $tokenizedFile = $tokenizer->tokenize($file, file_get_contents($file));
+
+            foreach ($rules as $rule) {
+                $tokenizedFile->rewind();
+                $rule->check($tokenizedFile, $result);
+            }
+
+            if ($result->hasErrors($file)) {
+                $this->progressPrinter->showProgress('F');
+            } else {
+                $this->progressPrinter->showProgress();
+            }
+        }
+
+        return $result;
     }
 }
 ?>
