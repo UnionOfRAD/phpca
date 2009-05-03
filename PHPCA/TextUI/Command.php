@@ -37,6 +37,8 @@
 
 namespace spriebsch\PHPca;
 
+use spriebsch\PHPca\Application as Application;
+
 /**
  * Command to run phpcs from the command line.
  *
@@ -45,13 +47,6 @@ namespace spriebsch\PHPca;
  */
 class Command
 {
-    /**
-     * PHPCA version number
-     *
-     * @var string
-     */
-    protected $version = '0.2.0';
-
     /**
      * Path or file to analyze
      *
@@ -295,7 +290,7 @@ class Command
      */
     public function run($arguments)
     {
-        echo 'PHP Code Analyzer ' . $this->version . ' by Stefan Priebsch' . PHP_EOL . PHP_EOL;
+        echo 'PHP Code Analyzer ' . Application::$version . ' by Stefan Priebsch' . PHP_EOL . PHP_EOL;
 
         try {
             $this->parseCommandLine($arguments);

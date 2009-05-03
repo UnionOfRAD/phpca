@@ -35,22 +35,22 @@
  * @license    BSD License
  */
 
-$classMap = array(
-    'spriebsch\PHPca\Application'         => 'Application.php',
-    'spriebsch\PHPca\Exception'           => 'Exception.php',
-    'spriebsch\PHPca\Command'             => 'TextUI/Command.php',
-    'spriebsch\PHPca\Linter'              => 'Linter.php',
-    'spriebsch\PHPca\FileList'            => 'FileList.php',
-    'spriebsch\PHPca\RuleLoader'          => 'RuleLoader.php',
-    'spriebsch\PHPca\Tokenizer'           => 'Tokenizer.php',
-    'spriebsch\PHPca\File'                => 'File.php',
-    'spriebsch\PHPca\Result'              => 'Result.php',
-    'spriebsch\PHPca\Message'             => 'Message.php',
-    'spriebsch\PHPca\Error'               => 'Error.php',
-    'spriebsch\PHPca\Warning'             => 'Warning.php',
-    'spriebsch\PHPca\LintError'           => 'LintError.php',
-    'spriebsch\PHPca\Constants'           => 'Constants.php',
-    'spriebsch\PHPca\Token'               => 'Token.php',
-    'spriebsch\PHPca\Rule'                => 'Rule.php',
-);
+namespace spriebsch\PHPca;
+
+/**
+ * The PHPCA application.
+ *
+ * @author     Stefan Priebsch <stefan@priebsch.de>
+ * @copyright  Stefan Priebsch <stefan@priebsch.de>
+ */
+class Application
+{
+    /**
+     * PHPCA version number
+     *
+     * @var string
+     */
+    static public $version = '0.2.5';
+
+}
 ?>
