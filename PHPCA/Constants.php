@@ -18,7 +18,7 @@
  *     without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT  * NOT LIMITED TO,
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER ORCONTRIBUTORS
  * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -47,78 +47,75 @@ namespace spriebsch\PHPca;
  */
 class Constants
 {
-  static protected $tokens = array(
-    '('  => array(501, 'T_OPEN_BRACE'),
-    ')'  => array(502, 'T_CLOSE_BRACE'),
-    '['  => array(503, 'T_OPEN_BRACKET'),
-    ']'  => array(504, 'T_CLOSE_BRACKET'),
-    '{'  => array(505, 'T_OPEN_CURLY'),
-    '}'  => array(506, 'T_CLOSE_CURLY'),
-    ';'  => array(507, 'T_SEMICOLON'),
-    '.'  => array(508, 'T_DOT'),
-    ','  => array(509, 'T_COMMA'),
-    '='  => array(510, 'T_EQUAL'),
-    '<'  => array(511, 'T_LT'),
-    '>'  => array(512, 'T_GT'),
-    '+'  => array(513, 'T_PLUS'),
-    '-'  => array(514, 'T_MINUS'),
-    '*'  => array(515, 'T_MULT'),
-    '/'  => array(516, 'T_DIV'),
-    '?'  => array(517, 'T_QUESTIONMARK'),
-    ':'  => array(518, 'T_COLON'),
-  );
+    static protected $tokens = array(
+        '('  => array(501, 'T_OPEN_BRACE'),
+        ')'  => array(502, 'T_CLOSE_BRACE'),
+        '['  => array(503, 'T_OPEN_BRACKET'),
+        ']'  => array(504, 'T_CLOSE_BRACKET'),
+        '{'  => array(505, 'T_OPEN_CURLY'),
+        '}'  => array(506, 'T_CLOSE_CURLY'),
+        ';'  => array(507, 'T_SEMICOLON'),
+        '.'  => array(508, 'T_DOT'),
+        ','  => array(509, 'T_COMMA'),
+        '='  => array(510, 'T_EQUAL'),
+        '<'  => array(511, 'T_LT'),
+        '>'  => array(512, 'T_GT'),
+        '+'  => array(513, 'T_PLUS'),
+        '-'  => array(514, 'T_MINUS'),
+        '*'  => array(515, 'T_MULT'),
+        '/'  => array(516, 'T_DIV'),
+        '?'  => array(517, 'T_QUESTIONMARK'),
+        ':'  => array(518, 'T_COLON'),
+    );
 
-
-  /**
-   * Defines our custom constants.
-   */
-  static public function init()
-  {
-    foreach (self::$tokens as $key => $value) {
-      if (!defined($value[1])) {
-        define($value[1], $value[0]);
-      }
-    }
-  }
-
-
-  /**
-   * Returns the id for a given token string.
-   *
-   * @return int
-   */
-  static public function getTokenId($text)
-  {
-    if (!isset(self::$tokens[$text])) {
-      throw new Exception('Unknown token ' . $text);
+    /**
+    * Defines our custom constants.
+    */
+    static public function init()
+    {
+        foreach (self::$tokens as $key => $value) {
+            if (!defined($value[1])) {
+                define($value[1], $value[0]);
+            }
+        }
     }
 
-    $value = self::$tokens[$text];
-    return $value[0];
-  }
+    /**
+    * Returns the id for a given token string.
+    *
+    * @return int
+    */
+    static public function getTokenId($text)
+    {
+        if (!isset(self::$tokens[$text])) {
+            throw new Exception('Unknown token ' . $text);
+        }
 
-
-  /**
-   * Returns the token constant name as a string.
-   * IDs below 500 are PHP's built-in tokenizer constants,
-   * IDs above 500 are our own custom tokens.
-   *
-   * @param int $id
-   * @return string
-   */
-  static public function getTokenName($id)
-  {
-    if ($id < 500) {
-      return token_name($id);
+        $value = self::$tokens[$text];
+        return $value[0];
     }
 
-    foreach (self::$tokens as $key => $value) {
-      if ($value[0] == $id) {
-        return $value[1];
-      }
-    }
+    /**
+    * Returns the token constant name as a string.
+    * IDs below 500 are PHP's built-in tokenizer constants,
+    * IDs above 500 are our own custom tokens.
+    *
+    * @param int $id
+    * @return string
+    */
+    static public function getTokenName($id)
+    {
+        if ($id < 500) {
+            return token_name($id);
+        }
 
-    throw new Exception('Unknown token ' . $id);
-  }
+        foreach (self::$tokens as $key => $value) {
+            if ($value[0] == $id) {
+                return $value[1];
+            }
+        }
+
+        throw new Exception('Unknown token ' . $id);
+    }
 }
 ?>

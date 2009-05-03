@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright (c) 2009 Stefan Priebsch <stefan@priebsch.de>
  * All rights reserved.
@@ -19,7 +18,7 @@
  *     without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT  * NOT LIMITED TO,
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER ORCONTRIBUTORS
  * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -43,70 +42,65 @@ namespace spriebsch\PHPca;
  */
 class Message
 {
-  const ERROR = 0;
-  const WARNING = 1;
+    const ERROR = 0;
+    const WARNING = 1;
 
-  protected $fileName;
-  protected $token;
-  protected $message;
+    protected $fileName;
+    protected $token;
+    protected $message;
 
-  /**
-   * Creates the Message object.
-   *
-   * @param string $fileName
-   * @param string $message
-   * @param Token $token
-   */
-  public function __construct($fileName, $message, Token $token = null)
-  {
-    $this->fileName = $fileName;
-    $this->message  = $message;
-    $this->token    = $token;
-  }
+    /**
+    * Creates the Message object.
+    *
+    * @param string $fileName
+    * @param string $message
+    * @param Token $token
+    */
+    public function __construct($fileName, $message, Token $token = null)
+    {
+        $this->fileName = $fileName;
+        $this->message  = $message;
+        $this->token    = $token;
+    }
 
+    /**
+    * Returns the file name
+    *
+    * @returns string
+    */
+    public function getFileName()
+    {
+        return $this->fileName;
+    }
 
-  /**
-   * Returns the file name
-   *
-   * @returns string
-   */
-  public function getFileName()
-  {
-    return $this->fileName;
-  }
+    /**
+    * Returns the message text
+    *
+    * @returns string
+    */
+    public function getMessage()
+    {
+        return $this->message;
+    }
 
+    /**
+    * Returns the line in the source file the message refers to
+    *
+    * @returns integer
+    */
+    public function getLine()
+    {
+        return $this->token->getLine();
+    }
 
-  /**
-   * Returns the message text
-   *
-   * @returns string
-   */
-  public function getMessage()
-  {
-    return $this->message;
-  }
-
-
-  /**
-   * Returns the line in the source file the message refers to
-   *
-   * @returns integer
-   */
-  public function getLine()
-  {
-    return $this->token->getLine();
-  }
-
-
-  /**
-   * Returns the column in the source file the message refers to
-   *
-   * @returns integer
-   */
-  public function getColumn()
-  {
-    return $this->token->getColumn();
-  }
+    /**
+    * Returns the column in the source file the message refers to
+    *
+    * @returns integer
+    */
+    public function getColumn()
+    {
+       return $this->token->getColumn();
+    }
 }
-
 ?>

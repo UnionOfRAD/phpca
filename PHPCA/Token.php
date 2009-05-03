@@ -18,7 +18,7 @@
  *     without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT  * NOT LIMITED TO,
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER ORCONTRIBUTORS
  * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -95,7 +95,7 @@ class Token
         for ($i = 0; $i < strlen($text); $i++) {
             $char = dechex(ord($text[$i]));
             if (strlen($char) == 1) {
-              $char = '0' . $char;
+                $char = '0' . $char;
             }
 
             $result[] = $char;
@@ -161,9 +161,9 @@ class Token
     public function hasWhitespace()
     {
         return strstr($this->text, "\r") !== false ||
-            strstr($this->text, "\n") !== false ||
-            strstr($this->text, "\t") !== false ||
-            strstr($this->text, " ")  !== false;
+               strstr($this->text, "\n") !== false ||
+               strstr($this->text, "\t") !== false ||
+               strstr($this->text, " ")  !== false;
     }
 
 

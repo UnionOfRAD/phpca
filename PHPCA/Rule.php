@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright (c) 2009 Stefan Priebsch <stefan@priebsch.de>
  * All rights reserved.
@@ -19,7 +18,7 @@
  *     without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT  * NOT LIMITED TO,
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER ORCONTRIBUTORS
  * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -46,46 +45,44 @@ namespace spriebsch\PHPca;
  */
 abstract class Rule
 {
-  protected $file;
-  protected $result;
+    protected $file;
+    protected $result;
 
-  protected function disallow($pattern, $message)
-  {
-    $pattern = $this->file->findPattern($pattern);
-    if (sizeof($pattern) > 0) {
-      $this->addMessage(Message::ERROR, $message, $pattern);
-    }
-  }
-
-
-  protected function addMessage($type, $message, $tokens)
-  {
-    if (!is_array($tokens)) {
-      $tokens = array($tokens);
+    protected function disallow($pattern, $message)
+    {
+        $pattern = $this->file->findPattern($pattern);
+        if (sizeof($pattern) > 0) {
+            $this->addMessage(Message::ERROR, $message, $pattern);
+        }
     }
 
-    foreach ($tokens as $token) {
-      switch ($type) {
-        case Message::ERROR:
-          $this->result->addMessage(new Error($this->file->getFileName(), $message, $token));
-        break;
 
-        case Message::WARNING:
-          $this->result->addMessage(new Warning($this->file->getFileName(), $message, $token));
-        break;
-      }
+    protected function addMessage($type, $message, $tokens)
+    {
+        if (!is_array($tokens)) {
+            $tokens = array($tokens);
+        }
+
+        foreach ($tokens as $token) {
+            switch ($type) {
+                case Message::ERROR:
+                    $this->result->addMessage(new Error($this->file->getFileName(), $message, $token));
+                break;
+
+                case Message::WARNING:
+                    $this->result->addMessage(new Warning($this->file->getFileName(), $message, $token));
+                break;
+            }
+        }
     }
-  }
 
+    public function check(File $file, Result $result)
+    {
+        $this->file   = $file;
+        $this->result = $result;
 
-  public function check(File $file, Result $result)
-  {
-    $this->file   = $file;
-    $this->result = $result;
+        $this->doCheck();
+    }
 
-    $this->doCheck();
-  }
-
-
-  abstract protected function doCheck();
+    abstract protected function doCheck();
 }

@@ -18,7 +18,7 @@
  *     without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT  * NOT LIMITED TO,
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER ORCONTRIBUTORS
  * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -39,134 +39,124 @@ namespace spriebsch\PHPca;
 
 class Result
 {
-  protected $files = array();
-  protected $messages = array();
+    protected $files = array();
+    protected $messages = array();
 
-  protected $errorCount = array();
-  protected $warningCount = array();
+    protected $errorCount = array();
+    protected $warningCount = array();
 
-  protected $globalErrorCount = 0;
-  protected $globalWarningCount = 0;
+    protected $globalErrorCount = 0;
+    protected $globalWarningCount = 0;
 
-
-  public function addFile($file)
-  {
-    $this->files[] = $file;
-  }
-
- 
-  public function getFiles()
-  {
-    return $this->files;
-  }
-
-
-  public function getNumberOfFiles()
-  {
-    return count($this->files);
-  }
-
-
-  public function addMessage(Message $message)
-  {
-    $filename = $message->getFileName();
-    $this->messages[$filename][] = $message;
-
-    if ($message instanceOf Error) {
-      $this->globalErrorCount++;
-
-      if (!isset($this->errorCount[$filename])) {
-        $this->errorCount[$filename] = 1;
-      } else {
-        $this->errorCount[$filename]++;
-      }
+    public function addFile($file)
+    {
+        $this->files[] = $file;
     }
 
-    if ($message instanceOf Warning) {
-      $this->globalWarningCount++;
-
-      if (!isset($this->warningCount[$filename])) {
-        $this->warningCount[$filename] = 1;
-      } else {
-        $this->warningCount[$filename]++;
-      }
-    }
-  }
-
-
-  public function hasWarnings($file = null)
-  {
-    if (is_null($file)) {
-      return $this->globalWarningCount > 0;
+    public function getFiles()
+    {
+        return $this->files;
     }
 
-    if (!isset($this->warningCount[$file])) {
-      return false;
+    public function getNumberOfFiles()
+    {
+        return count($this->files);
     }
 
-    return $this->warningCount[$file] > 0;
-  }
+    public function addMessage(Message $message)
+    {
+        $filename = $message->getFileName();
+        $this->messages[$filename][] = $message;
 
+        if ($message instanceOf Error) {
+            $this->globalErrorCount++;
 
-  public function getNumberOfWarnings()
-  {
-    return $this->globalWarningCount;
-  }
+            if (!isset($this->errorCount[$filename])) {
+                $this->errorCount[$filename] = 1;
+            } else {
+                $this->errorCount[$filename]++;
+            }
+        }
 
+        if ($message instanceOf Warning) {
+            $this->globalWarningCount++;
 
-  public function getWarnings($file)
-  {
-    $result = array();
-
-    if (!isset($this->messages[$file])) {
-      return array();
+            if (!isset($this->warningCount[$filename])) {
+                $this->warningCount[$filename] = 1;
+            } else {
+              $this->warningCount[$filename]++;
+            }
+        }
     }
 
-    foreach ($this->messages[$file] as $message) {
-      if ($message instanceOf Warning) {
-        $result[] = $message;
-      }
+    public function hasWarnings($file = null)
+    {
+        if (is_null($file)) {
+            return $this->globalWarningCount > 0;
+        }
+
+        if (!isset($this->warningCount[$file])) {
+            return false;
+        }
+
+        return $this->warningCount[$file] > 0;
     }
 
-    return $result;
-  }
-
-
-  public function hasErrors($file = null)
-  {
-    if (is_null($file)) {
-      return $this->globalErrorCount > 0;
+    public function getNumberOfWarnings()
+    {
+        return $this->globalWarningCount;
     }
 
-    if (!isset($this->errorCount[$file])) {
-      return false;
+    public function getWarnings($file)
+    {
+        $result = array();
+
+        if (!isset($this->messages[$file])) {
+            return array();
+        }
+
+        foreach ($this->messages[$file] as $message) {
+            if ($message instanceOf Warning) {
+                $result[] = $message;
+            }
+        }
+
+        return $result;
     }
 
-    return $this->errorCount[$file] > 0;
-  }
+    public function hasErrors($file = null)
+    {
+        if (is_null($file)) {
+            return $this->globalErrorCount > 0;
+        }
 
+        if (!isset($this->errorCount[$file])) {
+            return false;
+        }
 
-  public function getNumberOfErrors()
-  {
-    return $this->globalErrorCount;
-  }
-
-
-  public function getErrors($file)
-  {
-    $result = array();
-
-    if (!isset($this->messages[$file])) {
-      return array();
+        return $this->errorCount[$file] > 0;
     }
 
-    foreach ($this->messages[$file] as $message) {
-      if ($message instanceOf Error) {
-        $result[] = $message;
-      }
+    public function getNumberOfErrors()
+    {
+        return $this->globalErrorCount;
     }
 
-    return $result;
-  }
+    public function getErrors($file)
+    {
+        $result = array();
+
+        if (!isset($this->messages[$file])) {
+            return array();
+        }
+
+        foreach ($this->messages[$file] as $message) {
+            if ($message instanceOf Error) {
+                $result[] = $message;
+            }
+        }
+
+        return $result;
+    }
 }
 ?>

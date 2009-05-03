@@ -18,7 +18,7 @@
  *     without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT  * NOT LIMITED TO,
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER ORCONTRIBUTORS
  * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -39,103 +39,99 @@ namespace spriebsch\PHPca;
 
 class AutoLoader
 {
-  /**
-   * @var array
-   */
-  static protected $classPaths = array();
+    /**
+    * @var array
+    */
+    static protected $classPaths = array();
 
-  /**
-   * @var array
-   */
-  static protected $classMaps = array();
+    /**
+    * @var array
+    */
+    static protected $classMaps = array();
 
+    /**
+    * Register autoload path.
+    * If enoClassMap.php is present in that directory, it is used
+    * for class => filename mapping. If no classmap is given,
+    * or it is empty, classes are loaded directly from given path.
+    *
+    * @param string $classPath Path to load classes from
+    * @return null
+    */
+    static public function register($classPath)
+    {
+        if (substr($classPath, -1) != '/') {
+            $classPath .= '/';
+        }
 
- /**
-  * Register autoload path.
-  * If enoClassMap.php is present in that directory, it is used
-  * for class => filename mapping. If no classmap is given,
-  * or it is empty, classes are loaded directly from given path.
-  *
-  * @param string $classPath Path to load classes from
-  * @return null
-  */
-  static public function register($classPath)
-  {
-    if (substr($classPath, -1) != '/') {
-      $classPath .= '/';
+        self::$classPaths[] = $classPath;
+
+        if (file_exists($classPath . '/classMap.php')) {
+            include $classPath . '/classMap.php';
+            self::$classMaps[] = $classMap;
+        } else {
+            self::$classMaps[] = array();
+        }
     }
 
-    self::$classPaths[] = $classPath;
+    /**
+    * Initialize the autoloader
+    *
+    * @return null
+    */
+    static public function init()
+    {
+        if (function_exists('__autoload')) {
+            spl_autoload_register('__autoload');
+        }
 
-    if (file_exists($classPath . '/classMap.php')) {
-      include $classPath . '/classMap.php';
-      self::$classMaps[] = $classMap;
-    } else {
-      self::$classMaps[] = array();
-    }
-  }
-
-
- /**
-  * Initialize the autoloader
-  *
-  * @return null
-  */
-  static public function init()
-  {
-    if (function_exists('__autoload')) {
-      spl_autoload_register('__autoload');
+        spl_autoload_register(array('spriebsch\PHPca\AutoLoader', 'autoload'));
     }
 
-    spl_autoload_register(array('spriebsch\PHPca\AutoLoader', 'autoload'));
-  }
+    /**
+    * Determines wether given class is in one of the maps.
+    *
+    * @param string $class Class name to check for
+    * @return boolean
+    */
+    static public function hasClass($class)
+    {
+        $count = count(self::$classMaps);
 
+        for ($i = 0; $i < $count; $i++) {
+            if (isset(self::$classMaps[$i][$class])) {
+                return true;
+            }
+        }
 
-  /**
-   * Determines wether given class is in one of the maps.
-   *
-   * @param string $class Class name to check for
-   * @return boolean
-   */
-  static public function hasClass($class)
-  {
-    $count = count(self::$classMaps);
-
-    for ($i = 0; $i < $count; $i++) {
-      if (isset(self::$classMaps[$i][$class])) {
-        return true;
-      }
+        return false;
     }
 
-    return false;
-  }
+    /**
+    * Autoload method
+    *
+    * Autoloads eno classes from given classpath.
+    * Classes are located in the "class" subdirectory.
+    *
+    * @param string $class Class name to autoload
+    * @return null
+    */
+    static public function autoload($class)
+    {
+        if (substr($class, 0, 9) != 'spriebsch') {
+            return;
+        }
 
+        $count = count(self::$classMaps);
 
- /**
-  * Autoload method
-  *
-  * Autoloads eno classes from given classpath.
-  * Classes are located in the "class" subdirectory.
-  *
-  * @param string $class Class name to autoload
-  * @return null
-  */
-  static public function autoload($class)
-  {
-    if (substr($class, 0, 9) != 'spriebsch') {
-      return;
+        for ($i = 0; $i < $count; $i++) {
+            if (isset(self::$classMaps[$i][$class])) {
+                include self::$classPaths[$i] . self::$classMaps[$i][$class];
+                return true;
+            }
+        }
+
+        return false;
     }
-
-    $count = count(self::$classMaps);
-
-    for ($i = 0; $i < $count; $i++) {
-      if (isset(self::$classMaps[$i][$class])) {
-        include self::$classPaths[$i] . self::$classMaps[$i][$class];
-        return true;
-      }
-    }
-
-    return false;
-  }
 }
 ?>

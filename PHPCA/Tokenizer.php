@@ -18,7 +18,7 @@
  *     without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT  * NOT LIMITED TO,
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER ORCONTRIBUTORS
  * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -44,40 +44,40 @@ namespace spriebsch\PHPca;
  */
 class Tokenizer
 {
-  public function tokenize($fileName, $sourceCode)
-  {
-    $position = 0;
-    $line     = 1;
-    $column   = 1;
+    public function tokenize($fileName, $sourceCode)
+    {
+        $position = 0;
+        $line     = 1;
+        $column   = 1;
 
-    $file = new File($fileName, $sourceCode);
+        $file = new File($fileName, $sourceCode);
 
-    foreach(token_get_all($sourceCode) as $token) {
-      if (is_array($token)) {
-        $id   = $token[0];
-        $text = $token[1];
-        $line = $token[2];
-      } else {
-        // it's not a PHP token, so we use one we have defined
-        $id   = Constants::getTokenId($token);
-        $text = $token;
-      }
+        foreach(token_get_all($sourceCode) as $token) {
+            if (is_array($token)) {
+                $id   = $token[0];
+                $text = $token[1];
+                $line = $token[2];
+            } else {
+                // it's not a PHP token, so we use one we have defined
+                $id   = Constants::getTokenId($token);
+                $text = $token;
+            }
 
-      $tokenObj = new Token($id, $text, $line, $column, $position);
+            $tokenObj = new Token($id, $text, $line, $column, $position);
 
-      if ($tokenObj->hasNewline()) {
-        // a newline resets the column count
-        $line  += $tokenObj->getNewLineCount();
-        $column = 1 + $tokenObj->getTrailingWhitespaceCount();
-      } else {
-        $column += $tokenObj->getLength();
-      }
+            if ($tokenObj->hasNewline()) {
+                // a newline resets the column count
+                $line  += $tokenObj->getNewLineCount();
+                $column = 1 + $tokenObj->getTrailingWhitespaceCount();
+            } else {
+                $column += $tokenObj->getLength();
+            }
 
-      $file->add($tokenObj);
-      $position++;
+            $file->add($tokenObj);
+            $position++;
+        }
+
+        return $file;
     }
-
-    return $file;
-  }
 }
 ?>
