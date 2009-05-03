@@ -127,6 +127,14 @@ class Application
      */
     public function run($phpExecutable, $path)
     {
+        if ($path == '') {
+            throw new Exception('No file or directory to analyze');
+        }
+
+        if ($phpExecutable == '') {
+            throw new Exception('No path to PHP executable specified');
+        }
+
         Constants::init();
 
         $linter = new Linter($phpExecutable);
