@@ -52,5 +52,49 @@ class Application
      */
     static public $version = '0.2.5';
 
+    /**
+     * Path to the directory containing the rules
+     *
+     * @var string
+     */
+    protected $rulePath = 'PHPCA/Rules';
+
+    /**
+     * Load the rules to check
+     *
+     * @return array $list List of Rule class names
+     */
+    public function loadRules($rulePath = '')
+    {
+        if ($rulePath != '') {
+            $this->rulePath = $rulePath;
+        }
+
+        $list = array();
+
+        $it = new \DirectoryIterator($this->rulePath);
+
+        foreach ($it as $file) {
+            if (!$file->isFile()) {
+                continue;
+            }
+
+            if (substr($file->getPathname(), -4) != '.php') {
+                continue;
+            }
+
+            $classname = __NAMESPACE__ . '\\' . substr($file->getFilename(), 0, -4);
+
+            require_once $this->rulePath . DIRECTORY_SEPARATOR . $file->getFilename();
+
+            if (!class_exists($classname)) {
+                throw new Exception('File ' . $file->getFilename() . ' does not contain rule class ' . $classname);
+            }
+
+            $list[] = new $classname;
+        }
+
+        return $list;
+    }
 }
 ?>

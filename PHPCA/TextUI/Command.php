@@ -37,8 +37,6 @@
 
 namespace spriebsch\PHPca;
 
-use spriebsch\PHPca\Application as Application;
-
 /**
  * Command to run phpcs from the command line.
  *
@@ -53,13 +51,6 @@ class Command
      * @var string
      */
     protected $path;
-
-    /**
-     * Path to a directory containing the rules.
-     *
-     * @var string
-     */
-    protected $rulePath = 'PHPCA/Rules';
 
     /**
      * Path to PHP executable
@@ -81,40 +72,6 @@ class Command
      * @var Result
      */
     protected $result;
-
-    /**
-     * Load the rules to check for
-     *
-     * @return void
-     */
-    protected function loadRules()
-    {
-        $list = array();
-
-        $it = new \DirectoryIterator($this->rulePath);
-
-        foreach ($it as $file) {
-            if (!$file->isFile()) {
-                continue;
-            }
-
-            if (substr($file->getPathname(), -4) != '.php') {
-                continue;
-            }
-
-            $classname = __NAMESPACE__ . '\\' . substr($file->getFilename(), 0, -4);
-
-            require_once $this->rulePath . DIRECTORY_SEPARATOR . $file->getFilename();
-
-            if (!class_exists($classname)) {
-                throw new Exception('File ' . $file->getFilename() . ' does not contain rule class ' . $classname);
-            }
-
-            $list[] = new $classname;
-        }
-
-        return $list;
-    }
 
     /**
      * Print usage message
@@ -211,7 +168,9 @@ class Command
         $linter->checkPhpBinary();
 
         $tokenizer = new Tokenizer();
-        $rules = $this->loadRules();
+
+        $application = new Application();
+        $rules = $application->loadRules();
 
         $this->result = new Result();
 
