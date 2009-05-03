@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright (c) 2009 Stefan Priebsch <stefan@priebsch.de>
  * All rights reserved.
@@ -40,15 +39,14 @@ namespace spriebsch\PHPca;
 
 class OpenTagAtBeginningOfFile extends Rule
 {
-  protected function doCheck()
-  {
-    // Read first token of the file
-    $token = $this->file->getToken();
+    protected function doCheck()
+    {
+        // Read first token of the file
+        $token = $this->file->getToken();
 
-    if ($token->getId() != T_OPEN_TAG) {
-      $this->addMessage(Message::ERROR, 'File does not begin with regular PHP open tag', $token);
+        if ($token->getId() != T_OPEN_TAG) {
+            $this->addMessage(Message::ERROR, 'File does not begin with regular PHP open tag', $token);
+        }
     }
-  }
 }
-
 ?>

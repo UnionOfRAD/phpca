@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright (c) 2009 Stefan Priebsch <stefan@priebsch.de>
  * All rights reserved.
@@ -19,7 +18,7 @@
  *     without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT  * NOT LIMITED TO,
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER ORCONTRIBUTORS
  * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -40,16 +39,15 @@ namespace spriebsch\PHPca;
 
 class ClosingTagAtEndOfFile extends Rule
 {
-  protected function doCheck()
-  {
-    // Get last token of the file
-    $this->file->last();
-    $token = $this->file->getToken();
+    protected function doCheck()
+    {
+        // Get last token of the file
+        $this->file->last();
+        $token = $this->file->getToken();
 
-    if ($token->getId() != T_CLOSE_TAG) {
-      $this->addMessage(Message::ERROR, 'File does not end with PHP close tag', $token);
+        if ($token->getId() != T_CLOSE_TAG) {
+            $this->addMessage(Message::ERROR, 'File does not end with PHP close tag', $token);
+        }
     }
-  }
 }
-
 ?>

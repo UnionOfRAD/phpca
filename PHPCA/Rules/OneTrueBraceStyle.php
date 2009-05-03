@@ -39,58 +39,56 @@ namespace spriebsch\PHPca;
 
 class OneTrueBraceStyle extends Rule
 {
-  protected function doCheck()
-  {
-    // class requires curly braces on next line
-    foreach ($this->file->getTokens(array(T_CLASS)) as $token) {
-      $this->file->gotoToken($token);
+    protected function doCheck()
+    {
+        // class requires curly braces on next line
+        foreach ($this->file->getTokens(array(T_CLASS)) as $token) {
+            $this->file->gotoToken($token);
 
-      $token_line = $this->file->getToken()->getLine();
-      $brace_line = $this->file->skipTo(T_OPEN_CURLY)->getLine();
+            $token_line = $this->file->getToken()->getLine();
+            $brace_line = $this->file->skipTo(T_OPEN_CURLY)->getLine();
 
-      if ($token_line == $brace_line) {
-        $this->addMessage(Message::ERROR, 'Opening curly brace for class must be on next line', $token);
-      }
+            if ($token_line == $brace_line) {
+                $this->addMessage(Message::ERROR, 'Opening curly brace for class must be on next line', $token);
+            }
+        }
+
+
+        // function requires curly braces on next line
+        foreach ($this->file->getTokens(array(T_FUNCTION)) as $token) {
+            $this->file->gotoToken($token);
+
+            $token_line = $this->file->getToken()->getLine();
+            $brace_line = $this->file->skipTo(T_OPEN_CURLY)->getLine();
+
+            if ($token_line == $brace_line) {
+                $this->addMessage(Message::ERROR, 'Opening curly brace for function must be on next line', $token);
+            }
+        }
+
+        // if requires curly braces on the next line
+        foreach ($this->file->getTokens(array(T_IF)) as $token) {
+            $this->file->gotoToken($token);
+
+            $token_line = $this->file->getToken()->getLine();
+            $brace_line = $this->file->skipTo(T_OPEN_CURLY)->getLine();
+
+            if ($token_line != $brace_line) {
+                $this->addMessage(Message::ERROR, 'Opening curly brace for if must be on same line', $token);
+            }
+        }
+
+        // foreach requires curly braces on the same line
+        foreach ($this->file->getTokens(array(T_FOREACH)) as $token) {
+            $this->file->gotoToken($token);
+
+            $token_line = $this->file->getToken()->getLine();
+            $brace_line = $this->file->skipTo(T_OPEN_CURLY)->getLine();
+
+            if ($token_line != $brace_line) {
+                $this->addMessage(Message::ERROR, 'Opening curly brace of foreach must be on same line', $token);
+            }
+        }
     }
-
-
-    // function requires curly braces on next line
-    foreach ($this->file->getTokens(array(T_FUNCTION)) as $token) {
-      $this->file->gotoToken($token);
-
-      $token_line = $this->file->getToken()->getLine();
-      $brace_line = $this->file->skipTo(T_OPEN_CURLY)->getLine();
-
-      if ($token_line == $brace_line) {
-        $this->addMessage(Message::ERROR, 'Opening curly brace for function must be on next line', $token);
-      }
-    }
-
-
-    // if requires curly braces on the next line
-    foreach ($this->file->getTokens(array(T_IF)) as $token) {
-      $this->file->gotoToken($token);
-
-      $token_line = $this->file->getToken()->getLine();
-      $brace_line = $this->file->skipTo(T_OPEN_CURLY)->getLine();
-
-      if ($token_line != $brace_line) {
-        $this->addMessage(Message::ERROR, 'Opening curly brace for if must be on same line', $token);
-      }
-    }
-
-
-    // foreach requires curly braces on the same line
-    foreach ($this->file->getTokens(array(T_FOREACH)) as $token) {
-      $this->file->gotoToken($token);
-
-      $token_line = $this->file->getToken()->getLine();
-      $brace_line = $this->file->skipTo(T_OPEN_CURLY)->getLine();
-
-      if ($token_line != $brace_line) {
-        $this->addMessage(Message::ERROR, 'Opening curly brace of foreach must be on same line', $token);
-      }
-    }
-  }
 }
 ?>

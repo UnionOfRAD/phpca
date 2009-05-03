@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Copyright (c) 2009 Stefan Priebsch <stefan@priebsch.de>
  * All rights reserved.
@@ -42,12 +41,10 @@ class Indentation extends Rule
 {
     protected $indentText = '    ';
 
-
     protected function getIndentText($indentLevel)
     {
-      return str_repeat($this->indentText, $indentLevel);
+        return str_repeat($this->indentText, $indentLevel);
     }
-
 
     protected function doCheck()
     {
@@ -91,5 +88,4 @@ var_dump('line ' . $line . ' col ' . $curr->getColumn());
         }
     }
 }
-
 ?>
