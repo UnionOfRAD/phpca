@@ -31,12 +31,19 @@
  *
  * @package    PHPca
  * @author     Stefan Priebsch <stefan@priebsch.de>
- * @copyright  Stefan Priebsch <stefan@priebsch.de>
+ * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  * @license    BSD License
  */
 
 namespace spriebsch\PHPca;
 
+/**
+ * The Linter executes a lint check (php -l) on a given file.
+ * This is necessary because files with syntax errors cannot be tokenized correctly.
+ *
+ * @author     Stefan Priebsch <stefan@priebsch.de>
+ * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
+ */
 class Linter
 {
     /**
@@ -44,27 +51,27 @@ class Linter
      */
     protected $phpExecutable;
 
-
     /**
      * Constructs the object
      *
-     * @param string $phpExecutable Path to PHP executable 
+     * @param string $phpExecutable Path to PHP executable
+     * @return void
      */
     public function __construct($phpExecutable)
     {
         $this->phpExecutable = $phpExecutable;
     }
 
-
     /**
-     * Run the lint check using given PHP executable.
-     * Returns empty string on success, or error message on failure.
+     * Make sure given path points to an executable PHP binary.
+     * Throws an exception when the check fails.
+     * This is so done that we can display the error message in the GUI.
      *
-     * @param string $file Path to the file to lint
-     * @return string
+     * @return void
+     *
      * @throws Exception PHP excutable ... not found
      * @throws Exception PHP excutable ... not executable
-     * @throws Exception Executable ... is not a PHP executable
+     * @throws Exception ... is not a PHP executable
      */
     public function checkPhpBinary()
     {
@@ -84,13 +91,12 @@ class Linter
         }
     }
 
-
     /**
      * Run the lint check using given PHP executable.
-     * Returns empty string on success, or error message on failure.
      *
      * @param string $file Path to the file to lint
-     * @return string
+     * @return string Empty string on success, or error message on failure
+     *
      * @throws Exception File ... not found
      */
     public function check($file)

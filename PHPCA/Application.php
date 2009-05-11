@@ -31,7 +31,7 @@
  *
  * @package    PHPca
  * @author     Stefan Priebsch <stefan@priebsch.de>
- * @copyright  Stefan Priebsch <stefan@priebsch.de>
+ * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  * @license    BSD License
  */
 
@@ -41,38 +41,43 @@ namespace spriebsch\PHPca;
  * The PHPCA application.
  *
  * @author     Stefan Priebsch <stefan@priebsch.de>
- * @copyright  Stefan Priebsch <stefan@priebsch.de>
+ * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
 class Application
 {
     /**
-     * PHPCA version number
-     *
      * @var string
      */
-    static public $version = '0.2.5';
+    static public $version = '0.2.7';
 
     /**
-     * Path to the directory containing the rules
-     *
      * @var string
      */
     protected $rulePath = 'PHPCA/Rules';
 
     /**
-     * Result object
-     *
      * @var Result
      */
     protected $result;
 
+    /**
+     * @var object
+     */
     protected $progressPrinter;
 
     /**
-     * Register progress printer
+     * Register a callback that is notified whenever a file has been processed.
+     * Can be used to display a dot, E of F for each processed file in console mode.
+     *
+     * @param object
+     * @return void
      */
     public function registerProgressPrinter($progressPrinter)
     {
+        if (!is_object($progressPrinter)) {
+            throw new Exception('Progress printer must be an object instance');
+        }
+
         if (!method_exists($progressPrinter, 'showProgress')) {
             throw new Exception('Progress printer does not have a showProgress() method');
         }
@@ -81,9 +86,12 @@ class Application
     }
 
     /**
-     * Load the rules to check
+     * Recursively loads the rules to check from given directory.
+     * Each rules must be a subclass of Rule and in namespace spriebsch\PHPca.
      *
-     * @return array $list List of Rule class names
+     * @param string $rulePath path of the rule directory
+     * @return array Rule class names
+     * @todo enforce Rule subclass or create interface to implement
      */
     public function loadRules($rulePath = null)
     {
@@ -93,7 +101,7 @@ class Application
 
         $list = array();
 
-        $it = new \DirectoryIterator($this->rulePath);
+        $it = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($this->rulePath));
 
         foreach ($it as $file) {
             if (!$file->isFile()) {
@@ -119,25 +127,25 @@ class Application
     }
 
     /**
-     * Main method
+     * Main method of phpca. Executes the static code analysis.
      *
-     * @param string $phpExecutable path to PHP executable for lint check
-     * @param string $path          path to file(s) to check
-     * @return Result check result object
+     * @param string $pathToPhpExecutable path to PHP executable for lint check
+     * @param string $fileOrDirectory     path to file or directory to check
+     * @return object Result
      */
-    public function run($phpExecutable, $path)
+    public function run($pathToPhpExecutable, $fileOrDirectory)
     {
-        if ($path == '') {
+        if ($fileOrDirectory == '') {
             throw new Exception('No file or directory to analyze');
         }
 
-        if ($phpExecutable == '') {
+        if ($pathToPhpExecutable == '') {
             throw new Exception('No path to PHP executable specified');
         }
 
         Constants::init();
 
-        $linter = new Linter($phpExecutable);
+        $linter = new Linter($pathToPhpExecutable);
         $linter->checkPhpBinary();
 
         $tokenizer = new Tokenizer();
@@ -146,7 +154,7 @@ class Application
 
         $rules = $this->loadRules();
 
-        foreach ($fileList->listFiles($path) as $file) {
+        foreach ($fileList->listFiles($fileOrDirectory) as $file) {
 
             $result->addFile($file);
 
