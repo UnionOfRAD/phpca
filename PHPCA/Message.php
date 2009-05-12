@@ -90,6 +90,10 @@ class Message
     */
     public function getLine()
     {
+        if (!is_object($this->token)) {
+            return 0;
+        }
+    
         return $this->token->getLine();
     }
 
@@ -100,6 +104,10 @@ class Message
     */
     public function getColumn()
     {
+        if (!is_object($this->token)) {
+            return 0;
+        }
+
        return $this->token->getColumn();
     }
 }
