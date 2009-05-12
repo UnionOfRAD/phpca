@@ -31,7 +31,7 @@
  *
  * @package    PHPca
  * @author     Stefan Priebsch <stefan@priebsch.de>
- * @copyright  Stefan Priebsch <stefan@priebsch.de>
+ * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  * @license    BSD License
  */
 
@@ -43,7 +43,7 @@ namespace spriebsch\PHPca;
  * PHP does not define tokenizer constants for, we define our own.
  *
  * @author     Stefan Priebsch <stefan@priebsch.de>
- * @copyright  Stefan Priebsch <stefan@priebsch.de>
+ * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
 class Constants
 {
@@ -65,7 +65,10 @@ class Constants
         '*'  => array(515, 'T_MULT'),
         '/'  => array(516, 'T_DIV'),
         '?'  => array(517, 'T_QUESTIONMARK'),
-        ':'  => array(518, 'T_COLON'),
+        '!'  => array(518, 'T_EXCLAMATIONMARK'),
+        ':'  => array(519, 'T_COLON'),
+        '"'  => array(520, 'T_DOUBLE_QUOTES'),
+        '@'  => array(521, 'T_AT'),
     );
 
     /**
@@ -88,7 +91,7 @@ class Constants
     static public function getTokenId($text)
     {
         if (!isset(self::$tokens[$text])) {
-            throw new Exception('Unknown token ' . $text);
+            throw new UnknownTokenException($text);
         }
 
         $value = self::$tokens[$text];
