@@ -31,7 +31,7 @@
  *
  * @package    PHPca
  * @author     Stefan Priebsch <stefan@priebsch.de>
- * @copyright  Stefan Priebsch <stefan@priebsch.de>
+ * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  * @license    BSD License
  */
 
@@ -44,8 +44,10 @@ namespace spriebsch\PHPca;
  */
 class Tokenizer
 {
-    public function tokenize($fileName, $sourceCode)
+    static public function tokenize($fileName, $sourceCode)
     {
+        Constants::init();
+
         $position = 0;
         $line     = 1;
         $column   = 1;
@@ -58,9 +60,16 @@ class Tokenizer
                 $text = $token[1];
                 $line = $token[2];
             } else {
-                // it's not a PHP token, so we use one we have defined
-                $id   = Constants::getTokenId($token);
-                $text = $token;
+            
+                try {
+                    // it's not a PHP token, so we use one we have defined
+                    $id   = Constants::getTokenId($token);
+                    $text = $token;
+                }
+
+                catch (UnkownTokenException $e) {
+                    throw new Exception('Unknown token ' . $e->getText() . ' in file ' . $fileName);
+                }
             }
 
             $tokenObj = new Token($id, $text, $line, $column, $position);
