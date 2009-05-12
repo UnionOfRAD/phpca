@@ -193,7 +193,9 @@ class ResultTest extends \PHPUnit_Framework_TestCase
         $result->addMessage($warning);
         $result->addMessage($error2);
 
-        $this->assertEquals(array($error1, $error2), $result->getErrors('testfile'));
+        $this->assertContains($error1, $result->getErrors('testfile'));
+        $this->assertContains($error2, $result->getErrors('testfile'));
+        $this->assertEquals(2, count($result->getErrors('testfile')));
     }
 
     /**
