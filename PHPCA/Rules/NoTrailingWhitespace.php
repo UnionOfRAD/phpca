@@ -50,16 +50,15 @@ namespace spriebsch\PHPca;
 class NoTrailingWhitespace extends Rule
 {
     protected function doCheck()
-    {
+    {    
         while (!$this->file->isEndOfFile()) {
             $token = $this->file->getToken();
 
             if ($token->hasNewline()) {
-                // Remove trailing newlines (the tokenizer always puts them there)
-                $text = rtrim($token->getText(), "\n");
 
-                // Is the last character that is left a space?
-                if (substr($text, -1, 1) == ' ') {
+                $text = $token->getText();
+
+                if (strrchr(substr($text, 1), "\n") == " ") {
                     $this->addMessage(Message::ERROR, 'Trailing whitespace', $token);
                 }
             }
