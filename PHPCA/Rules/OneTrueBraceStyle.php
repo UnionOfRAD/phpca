@@ -18,7 +18,7 @@
  *     without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT  * NOT LIMITED TO,
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER ORCONTRIBUTORS
  * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -31,7 +31,7 @@
  *
  * @package    PHPca
  * @author     Stefan Priebsch <stefan@priebsch.de>
- * @copyright  Stefan Priebsch <stefan@priebsch.de>
+ * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  * @license    BSD License
  */
 
@@ -57,6 +57,21 @@ class OneTrueBraceStyle extends Rule
         // function requires curly braces on next line
         foreach ($this->file->getTokens(array(T_FUNCTION)) as $token) {
             $this->file->gotoToken($token);
+            $this->file->previous();
+            
+            // 
+//            if ($this->file->hasPattern('T_ABSTRACT [T_WHITESPACE] T_PUBLIC|T_PROTECTED|T_PRIVATE [T_WHITESPACE] T_FUNCTION') {
+
+//            exit;
+            
+            
+/*            
+            if ($this->file->hasPattern(array(T_ABSTRACT, array(T_WHITESPACE, T_PUBLIC, T_PROTECTED, T_PRIVATE), T_FUNCTION))) {
+
+            if ($this->file->hasPatternContaining($token, array(T_ABSTRACT, array(T_WHITESPACE, T_PUBLIC, T_PROTECTED, T_PRIVATE), T_FUNCTION))) {
+              continue;
+            }
+*/
 
             $token_line = $this->file->getToken()->getLine();
             $brace_line = $this->file->skipTo(T_OPEN_CURLY)->getLine();

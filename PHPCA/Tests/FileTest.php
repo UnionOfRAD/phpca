@@ -39,6 +39,8 @@ namespace spriebsch\PHPca\Tests;
 
 use spriebsch\PHPca\File as File;
 use spriebsch\PHPca\Token as Token;
+use spriebsch\PHPca\Tokenizer as Tokenizer;
+use spriebsch\PHPca\Constants as Constants;
 
 require_once 'PHPUnit/Framework.php';
 require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'bootstrap.php';
@@ -463,5 +465,55 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
         $file->skipPast(9999);
     }
+
+    /**
+    * @covers spriebsch\PHPca\File::findRegexPattern
+    */
+    public function testFindRegexPatternSingleTokenMatch()
+    {
+        $file = Tokenizer::tokenize('filename', '<?php class Foo { abstract public function bar(); } ?>');
+
+        $this->assertTrue($file->hasRegexPattern('T_PUBLIC'));
+    }
+
+    /**
+    * @covers spriebsch\PHPca\File::findRegexPattern
+    */
+    public function testFindRegexPatternSingleTokenMismatch()
+    {
+        $file = Tokenizer::tokenize('filename', '<?php class Foo { abstract public function bar(); } ?>');
+
+        $this->assertFalse($file->hasRegexPattern('T_IF'));
+    }
+
+    /**
+    * @covers spriebsch\PHPca\File::findRegexPattern
+    */
+    public function testFindRegexPatternTwoTokensMatch()
+    {
+        $file = Tokenizer::tokenize('filename', '<?php class Foo { abstract public function bar(); } ?>');
+
+        $this->assertTrue($file->hasRegexPattern('T_OPEN_BRACE T_CLOSE_BRACE'));
+    }
+
+    /**
+    * @covers spriebsch\PHPca\File::findRegexPattern
+    */
+    public function testFindRegexPatternOptionalTokensPresent()
+    {
+        $file = Tokenizer::tokenize('filename', '<?php class Foo { abstract public function bar(); } ?>');
+
+        $this->assertTrue($file->hasRegexPattern('T_ABSTRACT T_WHITESPACE (T_PUBLIC)? T_WHITESPACE T_FUNCTION'));
+    }
+    
+    /**
+    * @covers spriebsch\PHPca\File::findRegexPattern
+    */
+    public function testFindRegexPatternOptionalTokensAbsent()
+    {
+        $file = Tokenizer::tokenize('filename', '<?php class Foo { abstract function bar(); } ?>');
+
+        $this->assertFalse($file->hasRegexPattern('T_ABSTRACT T_WHITESPACE (T_PUBLIC)? T_WHITESPACE T_FUNCTION'));
+    }    
 }
 ?>

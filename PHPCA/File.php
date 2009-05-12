@@ -31,7 +31,7 @@
  *
  * @package    PHPca
  * @author     Stefan Priebsch <stefan@priebsch.de>
- * @copyright  Stefan Priebsch <stefan@priebsch.de>
+ * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  * @license    BSD License
  */
 
@@ -42,7 +42,7 @@ namespace spriebsch\PHPca;
  * and provides several means of navigating these Tokens.
  *
  * @author     Stefan Priebsch <stefan@priebsch.de>
- * @copyright  Stefan Priebsch <stefan@priebsch.de>
+ * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
 class File
 {
@@ -86,9 +86,22 @@ class File
     {
         return $this->tokens[$this->position];
     }
-
-    public function hasPattern(array $tokens)
+    
+    public function hasRegexPattern($pattern)
     {
+        $tokens = array();
+
+        foreach ($this->tokens as $token) {
+            $tokens[] = $token->getName();
+        }
+
+        $haystack = implode(' ', $tokens);
+
+//        $pattern = preg_replace('/(\[.*)\] /', '$1 ]?', $pattern);
+
+        preg_match_all('/' . $pattern . '/', $haystack, $matches);
+
+        return sizeof($matches[0]) > 0;
     }
 
     /**
@@ -256,7 +269,7 @@ class File
             }
         }
 
-        throw new Exception('Token not found');
+        throw new Exception('Token ' . Constants::getTokenName($token) . ' not found');
     }
 
     public function skipPast($token)

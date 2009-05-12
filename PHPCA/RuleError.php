@@ -31,61 +31,23 @@
  *
  * @package    PHPca
  * @author     Stefan Priebsch <stefan@priebsch.de>
- * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
+ * @copyright  Stefan Priebsch <stefan@priebsch.de>
  * @license    BSD License
  */
 
 namespace spriebsch\PHPca;
 
-/**
- * Base class for a Rule that is enforced on a token stream.
- *
- * @author     Stefan Priebsch <stefan@priebsch.de>
- * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
- */
-abstract class Rule
+class RuleError extends Error
 {
-    protected $file;
-    protected $result;
-
-    /**
-     * Disallow a token pattern.
-     */
-    protected function disallow($pattern, $message)
+    public function getLine()
     {
-        $pattern = $this->file->findPattern($pattern);
-        if (sizeof($pattern) > 0) {
-            $this->addMessage(Message::ERROR, $message, $pattern);
-        }
+       return 0;
     }
 
 
-    protected function addMessage($type, $message, $tokens)
+    public function getColumn()
     {
-        if (!is_array($tokens)) {
-            $tokens = array($tokens);
-        }
-
-        foreach ($tokens as $token) {
-            switch ($type) {
-                case Message::ERROR:
-                    $this->result->addMessage(new Error($this->file->getFileName(), $message, $token));
-                break;
-
-                case Message::WARNING:
-                    $this->result->addMessage(new Warning($this->file->getFileName(), $message, $token));
-                break;
-            }
-        }
+       return 0;
     }
-
-    public function check(File $file, Result $result)
-    {
-        $this->file   = $file;
-        $this->result = $result;
-
-        $this->doCheck();
-    }
-
-    abstract protected function doCheck();
 }
+?>
