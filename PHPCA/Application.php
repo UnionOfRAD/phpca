@@ -148,7 +148,6 @@ class Application
         $linter = new Linter($pathToPhpExecutable);
         $linter->checkPhpBinary();
 
-        $tokenizer = new Tokenizer();
         $result    = new Result();
         $fileList  = new FileList();
 
@@ -161,11 +160,17 @@ class Application
             $lintResult = $linter->check($file);
 
             if ($lintResult == '') {
-                $tokenizedFile = $tokenizer->tokenize($file, file_get_contents($file));
+                $tokenizedFile = Tokenizer::tokenize($file, file_get_contents($file));
 
                 foreach ($rules as $rule) {
                     $tokenizedFile->rewind();
-                    $rule->check($tokenizedFile, $result);
+                    try {
+                        $rule->check($tokenizedFile, $result);
+                    }
+
+                    catch (Exception $e) {
+                        $result->addMessage(new RuleError($file, 'Rule ' . get_class($rule) . ': ' . $e->getMessage()));
+                    }
                 }
 
             } else {

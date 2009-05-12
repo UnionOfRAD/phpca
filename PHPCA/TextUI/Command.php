@@ -190,7 +190,7 @@ class Command
                         if ($error instanceOf LintError) {
                             echo $error->getMessage() . PHP_EOL;
                         } else {
-                            echo 'Line ' . $error->getLine() . ', column ' . $error->getColumn() . ': Error: ' . $error->getMessage() . PHP_EOL;
+                            echo sprintf('%4u', $error->getLine()) . '|' . sprintf('%3u', $error->getColumn()) . '| ' . $error->getMessage() . PHP_EOL;
                         }
                     }
                     echo PHP_EOL;

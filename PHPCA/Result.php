@@ -171,7 +171,30 @@ class Result
             }
         }
 
+        usort($result, array($this, 'sortByLine'));
+
         return $result;
+    }
+    
+    protected function sortByLine($t1, $t2)
+    {
+        $l1 = $t1->getLine();
+        $l2 = $t2->getLine();
+
+        // When line numbers match, sort by column
+        if ($l1 == $l2)
+        {
+            $c1 = $t1->getColumn();
+            $c2 = $t2->getColumn();
+
+            if ($c1 == $c2) {
+                return 0;
+            }
+
+            return ($c1 > $c2) ? 1 : -1;
+        }
+
+        return ($l1 > $l2) ? 1 : -1;
     }
 }
 ?>
