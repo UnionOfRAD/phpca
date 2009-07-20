@@ -53,17 +53,37 @@ class NoTrailingWhitespace extends Rule
     {    
         while (!$this->file->isEndOfFile()) {
             $token = $this->file->getToken();
+            $this->file->next();
 
-            if ($token->hasNewline()) {
-
-                $text = $token->getText();
-
-                if (strrchr(substr($text, 1), "\n") == " ") {
-                    $this->addMessage(Message::ERROR, 'Trailing whitespace', $token);
-                }
+            if (!$token->hasNewline()) {
+                continue;
             }
 
-            $this->file->next();
+            $text = $token->getText();
+
+
+/*
+multiline whitespace might still have trailing ones
+
+            if (substr($text, -1) == "\n") {
+                break;
+            }
+*/  
+            
+            // whitespace-only line?
+            if (strlen($text) != 1 && strlen(trim($text)) == 0) {
+                $this->addMessage(Message::ERROR, 'Trailing whitespace', $token);
+                continue;
+            }
+
+            if (strrchr(substr($text, 1), "\n") == " ") {
+                $this->addMessage(Message::ERROR, 'Trailing whitespace', $token);
+                continue;
+            }
+
+// var_dump($token->toHex($text));
+//var_dump(strstr($text, "\n"));
+// var_dump($text);                
         }
     }
 }

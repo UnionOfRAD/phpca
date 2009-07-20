@@ -47,7 +47,7 @@ use spriebsch\PHPca\Token as Token;
  * we have defined our own in Constants.
  *
  * @author     Stefan Priebsch <stefan@priebsch.de>
- * @copyright  Stefan Priebsch <stefan@priebsch.de>
+ * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
 class Token
 {

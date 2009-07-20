@@ -1,0 +1,8 @@
+Rules to add
+
+* enforce \n line endings
+* do not allow tabulators in files
+* no eval statement
+* no deprecated PHPDoc tags (@access, ...)
+* one blank after comma in argument lists
+* no alternative control structures like if ... endif etc.

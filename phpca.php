@@ -40,7 +40,7 @@ if (strpos('@php_bin@', '@php_bin') === 0) {
     set_include_path(__DIR__ . PATH_SEPARATOR . get_include_path());
 }
 
-require 'PHPCA/bootstrap.php';
+require __DIR__ . '/src/bootstrap.php';
 
 $app = new spriebsch\PHPca\Command();
 $app->run($argv);
