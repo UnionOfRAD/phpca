@@ -44,11 +44,11 @@ namespace spriebsch\PHPca\Pattern;
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
 
-class OneOrMore extends Pattern
+class OneOrMore implements PatternInterface
 {
     protected $innerPattern;
     
-    public function __construct(Pattern $pattern)
+    public function __construct(PatternInterface $pattern)
     {
         $this->innerPattern = $pattern;
     }

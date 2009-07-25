@@ -37,30 +37,14 @@
 
 namespace spriebsch\PHPca\Pattern;
 
-use spriebsch\PHPca\Constants;
-
 /**
- * Represents a single token in a search pattern.
+ * Interface that all Patterns must implement.
  *
  * @author     Stefan Priebsch <stefan@priebsch.de>
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
-class Token implements PatternInterface
+interface PatternInterface
 {
-    protected $id;
-
-    public function __construct($tokenId)
-    {
-        $this->id = $tokenId;
-    }
-
-    public function getRegEx()
-    {
-        if ($this->id == T_ANY) {
-            return '(\bT_.*\b )';
-        }
-
-        return '(\b' . Constants::getTokenName($this->id) . '\b)';
-    }
+    public function getRegEx();
 }
 ?>

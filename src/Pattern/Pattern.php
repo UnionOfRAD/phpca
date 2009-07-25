@@ -43,20 +43,20 @@ namespace spriebsch\PHPca\Pattern;
  * @author     Stefan Priebsch <stefan@priebsch.de>
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
-class Pattern
+class Pattern implements PatternInterface
 {
     protected $items = array();
 
     protected function checkType(array $patterns)
     {
         foreach($patterns as $pattern) {
-            if (!$pattern instanceOf Pattern) {
+            if (!$pattern instanceOf PatternInterface) {
                 throw new PatternException('Pattern expected');
             }
         }
     }
 
-    public function add(Pattern $pattern)
+    public function add(PatternInterface $pattern)
     {
         $this->items[] = $pattern;
         return $this;
@@ -74,12 +74,12 @@ class Pattern
         return $this->add(new OneOf($patterns));
     }
 
-    public function oneOrMore(Pattern $pattern)
+    public function oneOrMore(PatternInterface $pattern)
     {
         return $this->add(new OneOrMore($pattern));
     }
 
-    public function zeroOrMore(Pattern $pattern)
+    public function zeroOrMore(PatternInterface $pattern)
     {
         return $this->add(new ZeroOrMore($pattern));
     }

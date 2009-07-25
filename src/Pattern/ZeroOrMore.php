@@ -44,11 +44,11 @@ namespace spriebsch\PHPca\Pattern;
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
 
-class ZeroOrMore extends Pattern
+class ZeroOrMore implements PatternInterface
 {
     protected $innerPattern;
 
-    public function __construct(Pattern $pattern)
+    public function __construct(PatternInterface $pattern)
     {
         $this->innerPattern = $pattern;
     }
