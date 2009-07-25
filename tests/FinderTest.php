@@ -272,8 +272,5 @@ class FinderTest extends \PHPUnit_Framework_TestCase
         // The last element of the second result must be T_FUNCTION
         $this->assertEquals('T_FUNCTION', $result[1][2]->getName());
     }
-
-// test pattern with two matches
-
 }
 ?>
