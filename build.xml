@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+
+<project name="PHPca" default="build" basedir=".">
+
+    <target name="clean" description="Clean up.">
+        <delete dir="_docs" />
+        <delete dir="_coverage" />
+        <delete dir="_phar" />
+    </target>
+
+    <target name="build" depends="lint, test, doc, phar" description="Performs quality assurance." />
+
+    <target name="phar" description="Creates executable Phar archive in _phar/.">
+        <delete dir="_phar" />
+        <mkdir dir="_phar" />
+        <exec command="php CreatePhar.php" checkReturn="true"/>
+    </target>
+
+    <target name="doc" description="Creates API documentation in _docs/html/.">
+        <delete dir="_docs" />
+        <exec command="doxygen" checkReturn="true"/>
+    </target>
+
+    <target name="lint" description="Run a lint check on all PHP files.">
+        <phplint haltonfailure="true">
+            <fileset dir="src">
+                <include name="*.php"/>
+                <include name="**/*.php"/>
+            </fileset>
+        </phplint>
+
+        <phplint haltonfailure="true">
+            <fileset dir="tests">
+                <include name="*.php"/>
+                <include name="**/*.php"/>
+            </fileset>
+        </phplint>
+    </target>
+
+    <target name="test" description="Runs all unit tests.">
+        <exec command="phpunit --configuration phpunit.xml" passthru="true" checkReturn="true" />
+    </target>
+
+</project>
