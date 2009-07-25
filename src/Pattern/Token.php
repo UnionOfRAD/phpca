@@ -44,7 +44,6 @@ use spriebsch\PHPca\Constants;
  *
  * @author     Stefan Priebsch <stefan@priebsch.de>
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
- * @todo RENAME THIS CLASS
  */
 class Token implements PatternInterface
 {
