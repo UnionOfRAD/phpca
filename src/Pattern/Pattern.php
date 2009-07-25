@@ -42,6 +42,7 @@ namespace spriebsch\PHPca\Pattern;
  *
  * @author     Stefan Priebsch <stefan@priebsch.de>
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
+ * @todo allow use of token constants instead of token objects in (sub)pattern constructors?
  */
 class Pattern implements PatternInterface
 {
@@ -91,13 +92,25 @@ class Pattern implements PatternInterface
 
     public function getRegEx()
     {
-        $result = array();
+        $result = '';
 
-        foreach ($this->items as $item) {
-            $result[] = $item->getRegEx();
+        for ($i = 0; $i < sizeof($this->items); $i++) {
+            $separator = true;
+            $part = $this->items[$i]->getRegEx();
+
+            $result .= $part;
+
+            $lastChar = substr($part, -1);
+            if ($lastChar == '*' || $lastChar == '+') {
+                $separator = false;
+            }
+
+            if ($separator && $i < sizeof($this->items) - 1) {
+                $result .= ' ';
+            }
         }
 
-        return implode(' ', $result);
+        return $result;
     }
 }
 ?>

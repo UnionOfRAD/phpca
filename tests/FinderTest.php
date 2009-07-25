@@ -132,11 +132,148 @@ class FinderTest extends \PHPUnit_Framework_TestCase
         // Since there is only one match, the result array must contain one element
         $this->assertEquals(1, sizeof($result));
 
-        // Since we've matched for one token, the match must contain seven elements
+        // Since we've matched for one token, the match must contain one element
         $this->assertEquals(1, sizeof($result[0]));
 
         // The first element must be T_FUNCTION
         $this->assertEquals('T_FUNCTION', $result[0][0]->getName());
     }
+
+    public function testFindPatternFindsChainedTokens()
+    {
+        $file = Tokenizer::tokenize('filename', "<?php \n\n function hello()\n{\n    print 'hello world';\n} \n ?>");
+
+        $pattern = new Pattern();
+        $pattern->token(T_FUNCTION)
+                ->token(T_WHITESPACE)
+                ->token(T_STRING);
+
+        $result = Finder::findPattern($file, $pattern);
+
+        // Since there is only one match, the result array must contain one element
+        $this->assertEquals(1, sizeof($result));
+
+        // Since we've matched for three tokens, the match must contain three elements
+        $this->assertEquals(3, sizeof($result[0]));
+
+        // The first element must be T_FUNCTION
+        $this->assertEquals('T_FUNCTION', $result[0][0]->getName());
+
+        // The second element must be T_WHITESPACE
+        $this->assertEquals('T_WHITESPACE', $result[0][1]->getName());
+
+        // The third element must be T_STRING
+        $this->assertEquals('T_STRING', $result[0][2]->getName());
+    }
+
+    public function testFindPatternWithZeroOrMore()
+    {
+        $file = Tokenizer::tokenize('filename', "<?php \n\n function hello(\$a, \$b)\n{\n    print 'hello world';\n} \n ?>");
+
+        $pattern = new Pattern();
+        $pattern->token(T_FUNCTION)
+                ->token(T_WHITESPACE)
+                ->token(T_STRING)
+                ->token(T_OPEN_BRACKET)
+                ->zeroOrMore(new Token(T_ANY))
+                ->token(T_CLOSE_BRACKET);
+
+        $result = Finder::findPattern($file, $pattern);
+
+        // Since there is only one match, the result array must contain one element
+        $this->assertEquals(1, sizeof($result));
+
+        // The sequence also contains the tokens for "$a, $b"
+        $this->assertEquals(9, sizeof($result[0]));
+
+        // The first element must be T_FUNCTION
+        $this->assertEquals('T_FUNCTION', $result[0][0]->getName());
+
+        // The last element must be T_CLOSE_BRACKET
+        $this->assertEquals('T_CLOSE_BRACKET', $result[0][8]->getName());
+    }
+
+    public function testFindPatternWithOneOrMore()
+    {
+        $file = Tokenizer::tokenize('filename', "<?php \n\n function hello(\$a, \$b)\n{\n    print 'hello world';\n} \n ?>");
+
+        $pattern = new Pattern();
+        $pattern->token(T_OPEN_BRACKET)
+                ->token(T_VARIABLE)
+                ->oneOrMore(new Token(T_ANY))
+                ->token(T_CLOSE_BRACKET);
+
+        $result = Finder::findPattern($file, $pattern);
+
+        // Since there is only one match, the result array must contain one element
+        $this->assertEquals(1, sizeof($result));
+
+        $this->assertEquals(6, sizeof($result[0]));
+
+        // The first element must be T_OPEN_BRACKET
+        $this->assertEquals('T_OPEN_BRACKET', $result[0][0]->getName());
+
+        // The last element must be T_CLOSE_BRACKET
+        $this->assertEquals('T_CLOSE_BRACKET', $result[0][5]->getName());
+    }
+
+    public function testFindPatternWithOneOf()
+    {
+        $file = Tokenizer::tokenize('filename', "<?php \n\n class Test { public function hello(\$a, \$b)\n{\n    print 'hello world';\n}\n} \n ?>");
+
+        $pattern = new Pattern();
+        $pattern->oneOf(array(new Token(T_PUBLIC), new Token(T_PROTECTED), new Token(T_PRIVATE)))
+                ->token(T_WHITESPACE)
+                ->token(T_FUNCTION);
+
+        $result = Finder::findPattern($file, $pattern);
+
+        // Since there is only one match, the result array must contain one element
+        $this->assertEquals(1, sizeof($result));
+
+        $this->assertEquals(3, sizeof($result[0]));
+
+        // The first element must be T_PUBLIC
+        $this->assertEquals('T_PUBLIC', $result[0][0]->getName());
+
+        // The last element must be T_FUNCTION
+        $this->assertEquals('T_FUNCTION', $result[0][2]->getName());
+    }
+
+    public function testFindPatternWithTwoMatches()
+    {
+        $file = Tokenizer::tokenize('filename', "<?php \n\n class Test { public function hello(\$a, \$b) {}\n protected function sayHello(\$a, \$b) {}} \n ?>");
+
+        $pattern = new Pattern();
+        $pattern->oneOf(array(new Token(T_PUBLIC), new Token(T_PROTECTED), new Token(T_PRIVATE)))
+                ->token(T_WHITESPACE)
+                ->token(T_FUNCTION);
+
+        $result = Finder::findPattern($file, $pattern);
+
+        // Since there are two matches, the result array must contain two elements
+        $this->assertEquals(2, sizeof($result));
+
+        // First result must have three elements
+        $this->assertEquals(3, sizeof($result[0]));
+
+        // The first element of the first result must be T_PUBLIC
+        $this->assertEquals('T_PUBLIC', $result[0][0]->getName());
+
+        // The last element of the first result must be T_FUNCTION
+        $this->assertEquals('T_FUNCTION', $result[0][2]->getName());
+
+        // Second result must have three elements
+        $this->assertEquals(3, sizeof($result[1]));
+
+        // The first element of the second result must be T_PROTECTED
+        $this->assertEquals('T_PROTECTED', $result[1][0]->getName());
+
+        // The last element of the second result must be T_FUNCTION
+        $this->assertEquals('T_FUNCTION', $result[1][2]->getName());
+    }
+
+// test pattern with two matches
+
 }
 ?>

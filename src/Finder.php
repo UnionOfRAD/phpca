@@ -44,6 +44,7 @@ use spriebsch\PHPca\Pattern\PatternInterface;
  *
  * @author     Stefan Priebsch <stefan@priebsch.de>
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
+ * @todo This class might have to become FileFinder, if we also need a Finder for a plain array of Token objects
  */
 class Finder
 {
