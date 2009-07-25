@@ -35,28 +35,31 @@
  * @license    BSD License
  */
 
-// @codeCoverageIgnoreStart
-$_classMap = array(
-    'spriebsch\PHPca\Constants'                => 'Constants.php',
-    'spriebsch\PHPca\Helper'                   => 'Helper.php',
-    'spriebsch\PHPca\Token'                    => 'Token.php',
-    'spriebsch\PHPca\Tokenizer'                => 'Tokenizer.php',
-    'spriebsch\PHPca\File'                     => 'File.php',
-    'spriebsch\PHPca\Finder'                   => 'Finder.php',
-    'spriebsch\PHPca\TokenFilterIterator'      => 'TokenFilterIterator.php',
-    'spriebsch\PHPca\Result'                   => 'Result.php',
-    'spriebsch\PHPca\Message'                  => 'Message.php',
-    'spriebsch\PHPca\Warning'                  => 'Warning.php',
-    'spriebsch\PHPca\Error'                    => 'Error.php',
-    'spriebsch\PHPca\LintError'                => 'LintError.php',
-    'spriebsch\PHPca\UnknownTokenException'    => 'UnknownTokenException.php',
+namespace spriebsch\PHPca;
 
-    'spriebsch\PHPca\Pattern\PatternInterface' => 'Pattern/PatternInterface.php',
-    'spriebsch\PHPca\Pattern\Pattern'          => 'Pattern/Pattern.php',
-    'spriebsch\PHPca\Pattern\Token'            => 'Pattern/Token.php',
-    'spriebsch\PHPca\Pattern\OneOf'            => 'Pattern/OneOf.php',
-    'spriebsch\PHPca\Pattern\ZeroOrMore'       => 'Pattern/ZeroOrMore.php',
-    'spriebsch\PHPca\Pattern\OneOrMore'        => 'Pattern/OneOrMore.php',
-);
-// @codeCoverageIgnoreEnd
+class Helper
+{
+    /**
+     * Helper method to convert a string to hex representation.
+     * Should be used for debugging purposes only.
+     *
+     * @param string $text
+     * @return string
+     */
+    static public function toHex($text)
+    {
+        $result = array();
+
+        for ($i = 0; $i < strlen($text); $i++) {
+            $char = dechex(ord($text[$i]));
+            if (strlen($char) == 1) {
+                $char = '0' . $char;
+            }
+
+            $result[] = $char;
+        }
+
+        return implode(' ', $result);
+    }
+}
 ?>

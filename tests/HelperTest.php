@@ -35,28 +35,45 @@
  * @license    BSD License
  */
 
-// @codeCoverageIgnoreStart
-$_classMap = array(
-    'spriebsch\PHPca\Constants'                => 'Constants.php',
-    'spriebsch\PHPca\Helper'                   => 'Helper.php',
-    'spriebsch\PHPca\Token'                    => 'Token.php',
-    'spriebsch\PHPca\Tokenizer'                => 'Tokenizer.php',
-    'spriebsch\PHPca\File'                     => 'File.php',
-    'spriebsch\PHPca\Finder'                   => 'Finder.php',
-    'spriebsch\PHPca\TokenFilterIterator'      => 'TokenFilterIterator.php',
-    'spriebsch\PHPca\Result'                   => 'Result.php',
-    'spriebsch\PHPca\Message'                  => 'Message.php',
-    'spriebsch\PHPca\Warning'                  => 'Warning.php',
-    'spriebsch\PHPca\Error'                    => 'Error.php',
-    'spriebsch\PHPca\LintError'                => 'LintError.php',
-    'spriebsch\PHPca\UnknownTokenException'    => 'UnknownTokenException.php',
+namespace spriebsch\PHPca;
 
-    'spriebsch\PHPca\Pattern\PatternInterface' => 'Pattern/PatternInterface.php',
-    'spriebsch\PHPca\Pattern\Pattern'          => 'Pattern/Pattern.php',
-    'spriebsch\PHPca\Pattern\Token'            => 'Pattern/Token.php',
-    'spriebsch\PHPca\Pattern\OneOf'            => 'Pattern/OneOf.php',
-    'spriebsch\PHPca\Pattern\ZeroOrMore'       => 'Pattern/ZeroOrMore.php',
-    'spriebsch\PHPca\Pattern\OneOrMore'        => 'Pattern/OneOrMore.php',
-);
-// @codeCoverageIgnoreEnd
+require_once 'PHPUnit/Framework.php';
+require_once __DIR__ . '/../src/Exceptions.php';
+require_once __DIR__ . '/../src/Loader.php';
+
+/**
+ * Tests for the Helper class.
+ *
+ * @author     Stefan Priebsch <stefan@priebsch.de>
+ * @copyright  Stefan Priebsch <stefan@priebsch.de>
+ */
+class HelperTest extends \PHPUnit_Framework_TestCase
+{
+    protected function setUp()
+    {
+        Loader::init();
+        Loader::registerPath(__DIR__ . '/../src');
+    }
+
+    protected function tearDown()
+    {
+        Loader::reset();
+    }
+
+    /**
+     * @covers spriebsch\PHPca\Helper::toHex
+     */
+    public function testToHex()
+    {
+        $this->assertEquals('68 65 6c 6c 6f 20 77 6f 72 6c 64', Helper::toHex('hello world'));
+    }
+
+    /**
+     * @covers spriebsch\PHPca\Helper::toHex
+     */
+    public function testToHexPrependsLeadingZeroes()
+    {
+        $this->assertEquals('0a', Helper::toHex("\n"));
+    }
+}
 ?>
