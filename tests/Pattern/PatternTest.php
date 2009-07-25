@@ -98,5 +98,49 @@ class PatternTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('(\bT_OPEN_TAG\b) (\bT_FUNCTION\b)', $pattern->getRegEx());
     }
+
+    /**
+     * @covers \spriebsch\PHPca\Pattern\Pattern::oneOf
+     * @expectedException \Exception
+     */
+    public function testOneOfThrowsExceptionWhenArrayElementIsNoPattern()
+    {
+        $pattern = new Pattern();
+        $pattern->oneOf(array('nonsense'));
+    }
+
+    /**
+     * @covers \spriebsch\PHPca\Pattern\Pattern::oneOf
+     */
+    public function testOneOfMapsToRegExWithoutTrailingBlank()
+    {
+        $pattern = new Pattern();
+        $pattern->oneOf(array(new Token(T_OPEN_TAG), new Token(T_FUNCTION)));
+
+        $this->assertEquals('((\bT_OPEN_TAG\b)|(\bT_FUNCTION\b))', $pattern->getRegEx());
+    }
+
+    /**
+     * @covers \spriebsch\PHPca\Pattern\Pattern::oneOrMore
+     */
+    public function testOneOrMoreMapsToRegExWithoutTrailingBlank()
+    {
+        $pattern = new Pattern();
+        $pattern->oneOrMore(new Token(T_OPEN_TAG));
+
+        $this->assertEquals('(\bT_OPEN_TAG\b)+', $pattern->getRegEx());
+    }
+
+    /**
+     * @covers \spriebsch\PHPca\Pattern\Pattern::zeroOrMore
+     */
+    public function testZeroOrMoreMapsToRegExWithoutTrailingBlank()
+    {
+        $pattern = new Pattern();
+        $pattern->zeroOrMore(new Token(T_OPEN_TAG));
+
+        $this->assertEquals('(\bT_OPEN_TAG\b)*', $pattern->getRegEx());
+    }
+
 }
 ?>

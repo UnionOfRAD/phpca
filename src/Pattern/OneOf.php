@@ -47,7 +47,8 @@ class OneOf extends Pattern
 {
     public function __construct(array $patterns)
     {
-        $this->ensureType($patterns);
+        $this->checkType($patterns);
+
         $this->items = $patterns;
     }
 

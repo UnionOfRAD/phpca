@@ -47,11 +47,11 @@ class Pattern
 {
     protected $items = array();
 
-    protected function ensureType(array $patterns)
+    protected function checkType(array $patterns)
     {
         foreach($patterns as $pattern) {
             if (!$pattern instanceOf Pattern) {
-                throw new spriebsch\PHPca\Exception('Pattern expected');
+                throw new PatternException('Pattern expected');
             }
         }
     }
@@ -64,28 +64,24 @@ class Pattern
 
     public function token($tokenId)
     {
-        $this->items[] = new Token($tokenId);
-        return $this;
+        return $this->add(new Token($tokenId));
     }
 
     public function oneOf(array $patterns)
     {
-        $this->ensureType($patterns);
+        $this->checkType($patterns);
 
-        $this->items[] = new OneOf($patterns);
-        return $this;
+        return $this->add(new OneOf($patterns));
     }
 
     public function oneOrMore(Pattern $pattern)
     {
-        $this->items[] = new OneOrMore($pattern);
-        return $this;
+        return $this->add(new OneOrMore($pattern));
     }
 
     public function zeroOrMore(Pattern $pattern)
     {
-        $this->items[] = new ZeroOrMore($pattern);
-        return $this;
+        return $this->add(new ZeroOrMore($pattern));
     }
 
     public function getRegEx()
