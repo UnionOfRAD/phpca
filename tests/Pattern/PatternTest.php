@@ -162,6 +162,5 @@ class PatternTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('(\bT_OPEN_TAG\b)*', $pattern->getRegEx());
     }
-
 }
 ?>
