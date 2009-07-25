@@ -42,7 +42,6 @@ namespace spriebsch\PHPca\Pattern;
  *
  * @author     Stefan Priebsch <stefan@priebsch.de>
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
- * @todo allow use of token constants instead of token objects in (sub)pattern constructors?
  */
 class Pattern implements PatternInterface
 {
