@@ -35,24 +35,27 @@
  * @license    BSD License
  */
 
-namespace spriebsch\PHPca;
+namespace spriebsch\PHPca\Pattern;
+
+use spriebsch\PHPca\Loader;
+use spriebsch\PHPca\Constants;
 
 require_once 'PHPUnit/Framework.php';
-require_once __DIR__ . '/../src/Exceptions.php';
-require_once __DIR__ . '/../src/Loader.php';
+require_once __DIR__ . '/../../src/Exceptions.php';
+require_once __DIR__ . '/../../src/Loader.php';
 
 /**
- * Tests for the Pattern class.
+ * Tests for the OneOrMore Pattern class.
  *
  * @author     Stefan Priebsch <stefan@priebsch.de>
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
-class PatternTest extends \PHPUnit_Framework_TestCase
+class OneOrMoreTest extends \PHPUnit_Framework_TestCase
 {
     protected function setUp()
     {
         Loader::init();
-        Loader::registerPath(__DIR__ . '/../src');
+        Loader::registerPath(__DIR__ . '/../../src');
 
         Constants::init();
     }
@@ -62,48 +65,12 @@ class PatternTest extends \PHPUnit_Framework_TestCase
         Loader::reset();
     }
 
-    public function testRegularToken()
+    /**
+     * @covers \spriebsch\PHPca\Pattern\OneOrMore
+     */
+    public function testOneOrMoreMapsToPlusRegEx()
     {
-        $pattern = new Pattern();
-        $pattern->token(T_WHITESPACE);
-
-        $this->assertEquals('(\bT_WHITESPACE\b)', $pattern->getRegEx());
-    }
-
-    public function testAnyToken()
-    {
-        $pattern = new Pattern();
-        $pattern->token(T_ANY);
-
-        $this->assertEquals('(\bT_.*\b )', $pattern->getRegEx());
-    }
-
-    public function testTwoTokens()
-    {
-        $pattern = new Pattern();
-        $pattern->token(T_OPEN_TAG)
-                ->token(T_FUNCTION);
-
-        $this->assertEquals('(\bT_OPEN_TAG\b) (\bT_FUNCTION\b)', $pattern->getRegEx());
-    }
-
-    public function testOneOf()
-    {
-        $pattern = new OneOfPattern(array(new SingleToken(T_OPEN_TAG), new SingleToken(T_FUNCTION)));
-
-        $this->assertEquals('((\bT_OPEN_TAG\b)|(\bT_FUNCTION\b)) ', $pattern->getRegEx());
-    }
-
-    public function testOneOrMorePattern()
-    {
-        $pattern = new OneOrMorePattern(new SingleToken(T_OPEN_TAG));
-
-        $this->assertEquals('(\bT_OPEN_TAG\b)* ', $pattern->getRegEx());
-    }
-
-    public function testAtLeastOncePattern()
-    {
-        $pattern = new AtLeastOncePattern(new SingleToken(T_OPEN_TAG));
+        $pattern = new OneOrMore(new Token(T_OPEN_TAG));
 
         $this->assertEquals('(\bT_OPEN_TAG\b)+ ', $pattern->getRegEx());
     }
