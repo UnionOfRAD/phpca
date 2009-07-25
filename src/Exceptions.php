@@ -48,6 +48,8 @@ namespace spriebsch\PHPca
     class UnknownVariableException extends Exception {}
 
     class TokenizerException extends Exception {}
+
+    class EmptyPatternException extends Exception {}
 }
 
 namespace spriebsch\PHPca\Pattern

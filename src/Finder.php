@@ -37,6 +37,8 @@
 
 namespace spriebsch\PHPca;
 
+use spriebsch\PHPca\Pattern\PatternInterface;
+
 /**
  * Finds tokens in a File.
  *
@@ -99,9 +101,13 @@ class Finder
         return sizeof(self::findToken($file, $tokenId)) > 0;
     }
 
-    static public function findPattern(File $file, Pattern $pattern)
+    static public function findPattern(File $file, PatternInterface $pattern)
     {
-        preg_match_all('/' . $pattern->getRegex() . '/U', (string) $file, $matches);
+        if ($pattern->isEmpty()) {
+            throw new EmptyPatternException('Pattern is empty');
+        }
+
+        preg_match_all('/' . $pattern->getRegEx() . '/U', (string) $file, $matches);
         return self::toTokens($file, $matches[0]);
     }
 }

@@ -37,6 +37,9 @@
 
 namespace spriebsch\PHPca;
 
+use spriebsch\PHPca\Pattern\Pattern;
+use spriebsch\PHPca\Pattern\Token;
+
 require_once 'PHPUnit/Framework.php';
 require_once __DIR__ . '/../src/Exceptions.php';
 require_once __DIR__ . '/../src/Loader.php';
@@ -53,6 +56,8 @@ class FinderTest extends \PHPUnit_Framework_TestCase
     {
         Loader::init();
         Loader::registerPath(__DIR__ . '/../src');
+
+        Constants::init();
     }
 
     protected function tearDown()
@@ -105,74 +110,33 @@ class FinderTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse(Finder::containsToken($file, T_CLASS));
     }
 
-/*
- *
- *
-    public function testFindPattern()
+    /**
+     * @expectedException spriebsch\PHPca\EmptyPatternException
+     */
+    public function testFindPatternThrowsExceptionOnEmptyPattern()
+    {
+        $file = Tokenizer::tokenize('filename', "<?php \n\n function hello()\n{\n    print 'hello world';\n} \n ?>");
+        $pattern = new Pattern();
+        $result = Finder::findPattern($file, $pattern);
+    }
+
+    public function testFindPatternFindsSingleToken()
     {
         $file = Tokenizer::tokenize('filename', "<?php \n\n function hello()\n{\n    print 'hello world';\n} \n ?>");
 
         $pattern = new Pattern();
-        $pattern->token(T_FUNCTION)
-                ->token(T_WHITESPACE)
-                ->token(T_STRING)
-                ->token(T_OPEN_BRACKET)
-                ->oneOf(array(new Pattern(T_VARIABLE), new Pattern(T_COMMA)))
-                ->token(T_CLOSE_BRACKET)
-                ->atleastOnce(new Pattern(T_WHITESPACE))
-                ->oneOrMore(new Pattern(T_WHITESPACE))
-                ->token(T_ANY)
-                ->token(T_WHITESPACE)
-                ->token(T_OPEN_CURLY);
+        $pattern->token(T_FUNCTION);
 
         $result = Finder::findPattern($file, $pattern);
 
         // Since there is only one match, the result array must contain one element
         $this->assertEquals(1, sizeof($result));
 
-        // Since we've matched for seven tokens, the match must contain seven elements
-        $this->assertEquals(7, sizeof($result[0]));
+        // Since we've matched for one token, the match must contain seven elements
+        $this->assertEquals(1, sizeof($result[0]));
 
         // The first element must be T_FUNCTION
         $this->assertEquals('T_FUNCTION', $result[0][0]->getName());
-
-        // The last element must be T_OPEN_CURLY
-        $this->assertEquals('T_OPEN_CURLY', $result[0][6]->getName());
     }
-
-
-    public function testFindRegExWithOptionalTokens()
-    {
-        $file = Tokenizer::tokenize('filename', "<?php \n\n function hello(\$a, \$b)\n{\n    print 'hello world';\n} \n ?>");
-
-        $pattern = new Pattern();
-        $pattern->token(T_FUNCTION)
-                ->token(T_WHITESPACE)
-                ->token(T_STRING)
-                ->token(T_OPEN_BRACKET)
-                ->token(T_CLOSE_BRACKET)
-                ->token(T_WHITESPACE)
-                ->token(T_OPEN_CURLY);
-
-        T_ANY
-     *  $pattern->oneOf(patterns)
-     *  $pattern->oneOrMoreTimes(...)
-     *  $pattern->zeroOrMoreTimes(...)
-
-        $result = Finder::findPattern($file, $pattern);
-
-        // Since there is only one match, the result array must contain one element
-        $this->assertEquals(1, sizeof($result));
-
-        // We've matched for seven tokens, but the also contains the tokens for "$a, $b"
-        $this->assertEquals(11, sizeof($result[0]));
-
-        // The first element must be T_FUNCTION
-        $this->assertEquals('T_FUNCTION', $result[0][0]->getName());
-
-        // The last element must be T_OPEN_CURLY
-        $this->assertEquals('T_OPEN_CURLY', $result[0][6]->getName());
-    }
-    */
 }
 ?>
