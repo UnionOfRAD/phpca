@@ -45,11 +45,22 @@ namespace spriebsch\PHPca;
  */
 abstract class Rule
 {
+    /**
+     * @var string
+     */
     protected $file;
+
+    /**
+     * @var Result
+     */
     protected $result;
 
     /**
      * Disallow a token pattern.
+     *
+     * @param string $pattern Token pattern
+     * @param string $message Error message text if pattern exists
+     * @return void
      */
     protected function disallow($pattern, $message)
     {
@@ -59,7 +70,15 @@ abstract class Rule
         }
     }
 
-
+    /**
+     * Convenience method to add a Message to the result.
+     * Adds given error message for all given $tokens.
+     *
+     * @param string $type Message type (Message::ERROR or Message::WARNING)
+     * @param string $message Message text
+     * @param mixed $tokens Token or array of tokens
+     * @return void
+     */
     protected function addMessage($type, $message, $tokens)
     {
         if (!is_array($tokens)) {
@@ -79,6 +98,11 @@ abstract class Rule
         }
     }
 
+    /**
+     * @param File $file
+     * @param Result $result
+     * @return void
+     */
     public function check(File $file, Result $result)
     {
         $this->file   = $file;
@@ -87,5 +111,13 @@ abstract class Rule
         $this->doCheck();
     }
 
+    /**
+     * Abstract method to implement the check.
+     * Should set Message on fail.
+     *
+     * @return void
+     */
     abstract protected function doCheck();
 }
+
+?>

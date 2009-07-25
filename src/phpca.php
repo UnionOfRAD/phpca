@@ -18,7 +18,7 @@
  *     without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT  * NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER ORCONTRIBUTORS
  * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -36,20 +36,13 @@
  */
 
 // @codeCoverageIgnoreStart
-$_classMap = array(
-    'spriebsch\PHPca\Constants'             => 'Constants.php',
-    'spriebsch\PHPca\Token'                 => 'Token.php',
-    'spriebsch\PHPca\Tokenizer'             => 'Tokenizer.php',
-    'spriebsch\PHPca\File'                  => 'File.php',
-    'spriebsch\PHPca\Finder'                => 'Finder.php',
-    'spriebsch\PHPca\Pattern'               => 'Pattern.php',
-    'spriebsch\PHPca\TokenFilterIterator'   => 'TokenFilterIterator.php',
-    'spriebsch\PHPca\Result'                => 'Result.php',
-    'spriebsch\PHPca\Message'               => 'Message.php',
-    'spriebsch\PHPca\Warning'               => 'Warning.php',
-    'spriebsch\PHPca\Error'                 => 'Error.php',
-    'spriebsch\PHPca\LintError'             => 'LintError.php',
-    'spriebsch\PHPca\UnknownTokenException' => 'UnknownTokenException.php',
-);
+require_once __DIR__ . '/Exceptions.php';
+require_once __DIR__ . '/Loader.php';
+
+spriebsch\PHPca\Loader::init();
+spriebsch\PHPca\Loader::registerPath(__DIR__);
+
+// $app = new spriebsch\PHPca\Command();
+// $app->run($argv);
 // @codeCoverageIgnoreEnd
 ?>

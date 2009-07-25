@@ -47,9 +47,44 @@ class Pattern
 {
     protected $items = array();
 
+    protected function ensureType(array $patterns)
+    {
+        foreach($patterns as $pattern) {
+            if (!$pattern instanceOf Pattern) {
+                throw new Exception('Pattern expected');
+            }
+        }
+    }
+
+    public function add(Pattern $pattern)
+    {
+        $this->items[] = $pattern;
+        return $this;
+    }
+
     public function token($tokenId)
     {
-        $this->items[] = new PatternToken($tokenId);
+        $this->items[] = new SingleToken($tokenId);
+        return $this;
+    }
+
+    public function oneOf(array $patterns)
+    {
+        $this->ensureType($patterns);
+
+        $this->items[] = new OneOfPattern($patterns);
+        return $this;
+    }
+
+    public function atLeastOnce(Pattern $pattern)
+    {
+        $this->items[] = new AtLeastOncePattern($pattern);
+        return $this;
+    }
+
+    public function oneOrMore(Pattern $pattern)
+    {
+        $this->items[] = new OneOrMorePattern($pattern);
         return $this;
     }
 
@@ -58,14 +93,14 @@ class Pattern
         $result = '';
 
         foreach ($this->items as $item) {
-            $result .= $item->getRegEx();
+            $result .= $item->getRegEx() . ' ';
         }
 
         return trim($result);
     }
 }
 
-class PatternToken
+class SingleToken extends Pattern
 {
     protected $id;
 
@@ -76,7 +111,62 @@ class PatternToken
 
     public function getRegEx()
     {
-        return Constants::getTokenName($this->id) . ' ';
+        if ($this->id == T_ANY) {
+            return '(\bT_.*\b )';
+        }
+
+        return '(\b' . Constants::getTokenName($this->id) . '\b)';
+    }
+}
+
+class OneOfPattern extends Pattern
+{
+    public function __construct(array $patterns)
+    {
+        $this->ensureType($patterns);
+        $this->items = $patterns;
+    }
+
+    public function getRegEx()
+    {
+        $result = array();
+
+        foreach ($this->items as $item) {
+            $result[] = $item->getRegEx();
+        }
+
+        return '(' . implode('|', $result) . ') ';
+    }
+}
+
+class AtLeastOncePattern extends Pattern
+{
+    protected $innerPattern;
+    
+    public function __construct(Pattern $pattern)
+    {
+        $this->innerPattern = $pattern;
+    }
+
+    public function getRegEx()
+    {
+        return $this->innerPattern->getRegEx() . '+ ';
+    }
+}
+
+class OneOrMorePattern extends Pattern
+{
+    protected $innerPattern;
+
+    public function __construct(Pattern $pattern)
+    {
+        $this->innerPattern = $pattern;
+    }
+
+
+    public function getRegEx()
+    {
+        return $this->innerPattern->getRegEx() . '* ';
     }
 }
 ?>

@@ -81,6 +81,11 @@ class Constants
                 define($value[1], $value[0]);
             }
         }
+
+        // Special constant "any token" used to build search patterns
+        if (!defined('T_ANY')) {
+            define('T_ANY', 999);
+        }
     }
 
     /**

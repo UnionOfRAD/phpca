@@ -39,7 +39,8 @@ namespace spriebsch\PHPca;
 
 /**
  * The Linter executes a lint check (php -l) on a given file.
- * This is necessary because files with syntax errors cannot be tokenized correctly.
+ * Files with syntax errors cannot be tokenized correctly,
+ * thus only files without lint errors should be tokenized.
  *
  * @author     Stefan Priebsch <stefan@priebsch.de>
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
@@ -47,12 +48,21 @@ namespace spriebsch\PHPca;
 class Linter
 {
     /**
+     * Path to PHP executable.
+     *
      * @var string
      */
     protected $phpExecutable;
 
     /**
-     * Constructs the object
+     * The lint output.
+     *
+     * @var string
+     */
+    protected $output;
+
+    /**
+     * Constructs the object.
      *
      * @param string $phpExecutable Path to PHP executable
      * @return void
@@ -63,15 +73,24 @@ class Linter
     }
 
     /**
+     * Returns the lint output.
+     *
+     * @return string
+     */
+    public function getOutput()
+    {
+        return $this->output;
+    }
+
+    /**
      * Make sure given path points to an executable PHP binary.
      * Throws an exception when the check fails.
-     * This is so done that we can display the error message in the GUI.
      *
      * @return void
      *
      * @throws Exception PHP excutable ... not found
      * @throws Exception PHP excutable ... not executable
-     * @throws Exception ... is not a PHP executable
+     * @throws Exception PHP excutable ... is not a PHP executable
      */
     public function checkPhpBinary()
     {
@@ -87,7 +106,7 @@ class Linter
         $output = trim(shell_exec($cmd));
 
         if (substr($output, 0, 5) != 'PHP 5') {
-            throw new Exception($this->phpExecutable . ' is not a PHP executable');
+            throw new Exception('PHP executable ' . $this->phpExecutable . ' is not a PHP executable');
         }
     }
 
@@ -99,21 +118,21 @@ class Linter
      *
      * @throws Exception File ... not found
      */
-    public function check($file)
+    public function runLintCheck($file)
     {
         if (!file_exists($file)) {
             throw new Exception('File ' . $file . ' not found');
         }
 
         $cmd = $this->phpExecutable . ' -l ' . escapeshellarg($file) . ' 2>/dev/null';
-        $output = trim(shell_exec($cmd));
+        $this->output = trim(shell_exec($cmd));
 
         $cmp = 'No syntax errors';
-        if (substr($output, 0, strlen($cmp)) == $cmp) {
-            return '';
+        if (substr($this->output, 0, strlen($cmp)) == $cmp) {
+            return true;
         }
 
-        return $output;
+        return false;
     }
 }
 ?>

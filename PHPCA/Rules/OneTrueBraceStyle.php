@@ -37,6 +37,9 @@
 
 namespace spriebsch\PHPca;
 
+/**
+ * @todo make sure that closing curly braces are always alone on the next line.
+ */
 class OneTrueBraceStyle extends Rule
 {
     protected function doCheck()

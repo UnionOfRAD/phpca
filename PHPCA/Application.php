@@ -157,9 +157,7 @@ class Application
 
             $result->addFile($file);
 
-            $lintResult = $linter->check($file);
-
-            if ($lintResult == '') {
+            if ($linter->runLintCheck($file)) {
                 $tokenizedFile = Tokenizer::tokenize($file, file_get_contents($file));
 
                 foreach ($rules as $rule) {
@@ -174,7 +172,7 @@ class Application
                 }
 
             } else {
-                $result->addMessage(new LintError($file, strstr($lintResult, PHP_EOL, true)));
+                $result->addMessage(new LintError($file, strstr($linter->getOutput(), PHP_EOL, true)));
             }
 
             $this->progressPrinter->showProgress($file, $result);

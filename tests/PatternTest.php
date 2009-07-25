@@ -37,72 +37,75 @@
 
 namespace spriebsch\PHPca;
 
+require_once 'PHPUnit/Framework.php';
+require_once __DIR__ . '/../src/Exceptions.php';
+require_once __DIR__ . '/../src/Loader.php';
+
 /**
- * Finds tokens in a File.
+ * Tests for the Pattern class.
  *
  * @author     Stefan Priebsch <stefan@priebsch.de>
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
-class Finder
+class PatternTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * Convert the space-separated T_* string representation to
-     * an array of Token objects. Since these link back to File,
-     * they can be used as a basis for traversing file.
-     *
-     * @param <type> $file
-     * @param <type> $matches
-     * @return <type>
-     */
-    static protected function toTokens(File $file, $matches)
+    protected function setUp()
     {
-        $tokens = (string) $file;
-        $result = array();
+        Loader::init();
+        Loader::registerPath(__DIR__ . '/../src');
 
-        foreach ($matches as $match) {
-
-            // To relate the string representation back to the token stream,
-            // we find the position of the match in the string representation
-            // of file, and count the spaces to find at which token in the
-            // sequence the match starts.
-            $tokenPos = substr_count(substr($tokens, 0, strpos($tokens, $match)), ' ');
-
-            // The numnber of tokens the match contains is the number of spaces
-            // plus one.
-            $length = substr_count($match, ' ') + 1;
-
-            $sequence = array();
-
-            for ($i = $tokenPos; $i < $tokenPos + $length; $i++) {
-                $sequence[] = $file[$i];
-            }
-
-            $result[] = $sequence;
-        }
-
-        return $result;
+        Constants::init();
     }
 
-    static public function findToken(File $file, $tokenId)
+    protected function tearDown()
     {
-        $result = array();
-
-        foreach(new TokenFilterIterator($file, $tokenId) as $item) {
-            $result[] = $item;
-        }
-
-        return $result;
+        Loader::reset();
     }
 
-    static public function containsToken(File $file, $tokenId)
+    public function testRegularToken()
     {
-        return sizeof(self::findToken($file, $tokenId)) > 0;
+        $pattern = new Pattern();
+        $pattern->token(T_WHITESPACE);
+
+        $this->assertEquals('(\bT_WHITESPACE\b)', $pattern->getRegEx());
     }
 
-    static public function findPattern(File $file, Pattern $pattern)
+    public function testAnyToken()
     {
-        preg_match_all('/' . $pattern->getRegex() . '/U', (string) $file, $matches);
-        return self::toTokens($file, $matches[0]);
+        $pattern = new Pattern();
+        $pattern->token(T_ANY);
+
+        $this->assertEquals('(\bT_.*\b )', $pattern->getRegEx());
+    }
+
+    public function testTwoTokens()
+    {
+        $pattern = new Pattern();
+        $pattern->token(T_OPEN_TAG)
+                ->token(T_FUNCTION);
+
+        $this->assertEquals('(\bT_OPEN_TAG\b) (\bT_FUNCTION\b)', $pattern->getRegEx());
+    }
+
+    public function testOneOf()
+    {
+        $pattern = new OneOfPattern(array(new SingleToken(T_OPEN_TAG), new SingleToken(T_FUNCTION)));
+
+        $this->assertEquals('((\bT_OPEN_TAG\b)|(\bT_FUNCTION\b)) ', $pattern->getRegEx());
+    }
+
+    public function testOneOrMorePattern()
+    {
+        $pattern = new OneOrMorePattern(new SingleToken(T_OPEN_TAG));
+
+        $this->assertEquals('(\bT_OPEN_TAG\b)* ', $pattern->getRegEx());
+    }
+
+    public function testAtLeastOncePattern()
+    {
+        $pattern = new AtLeastOncePattern(new SingleToken(T_OPEN_TAG));
+
+        $this->assertEquals('(\bT_OPEN_TAG\b)+ ', $pattern->getRegEx());
     }
 }
 ?>

@@ -38,7 +38,10 @@
 namespace spriebsch\PHPca;
 
 /**
- * Create a list of files to check.
+ * Represents a list of files to check.
+ *
+ * @author     Stefan Priebsch <stefan@priebsch.de>
+ * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
 class FileList
 {
@@ -64,10 +67,12 @@ class FileList
         $it = new \RecursiveDirectoryIterator($path);
 
         foreach (new \RecursiveIteratorIterator($it) as $file) {
+            // Skip directories
             if (!$file->isFile()) {
                 continue;
             }
 
+            // Skip non .php files
             if (substr($file->getPathname(), -4) != '.php') {
                 continue;
             }

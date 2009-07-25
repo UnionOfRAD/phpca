@@ -38,7 +38,7 @@
 namespace spriebsch\PHPca;
 
 /**
- * Command to run phpcs from the command line.
+ * Command to run phpca from the command line.
  *
  * @author     Stefan Priebsch <stefan@priebsch.de>
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
@@ -87,15 +87,15 @@ class Command
      */
     protected function getProgressLetter($file, Result $result)
     {
-        if (!$result->hasErrors($file)) {
-            return '.';
-        }
-
         if ($result->hasLintError($file)) {
             return 'E';
         }
 
-        return 'F';
+        if ($result->hasErrors($file)) {
+            return 'F';
+        }
+
+        return '.';
     }
 
     /**
@@ -124,11 +124,12 @@ class Command
      */
     protected function parseCommandLine($arguments)
     {
-        // Remove phpca's file name
+        // Remove $argv[0], phpca's file name
         array_shift($arguments);
 
         $argument = array_shift($arguments);
 
+        // parse command line parameters starting with - (which implies --)
         while (substr($argument, 0, 1) == '-') {
 
             switch ($argument) {
@@ -149,12 +150,12 @@ class Command
             $argument = array_shift($arguments);
         }
 
-        // the last argument is the file or directory name
+        // Last argument is the file or directory name of the files to check
         $this->path = $argument;
     }
 
     /**
-     * Check settings before checking files.
+     * Check configuration settings.
      *
      * @return void
      * @throws Exception
@@ -182,14 +183,15 @@ class Command
         if (!$this->result->hasErrors()) {
             echo 'OK';
         } else {
-
             foreach($this->result->getFiles() as $file) {
                 if ($this->result->hasErrors($file)) {
                     echo $file . ':' . PHP_EOL;
                     foreach ($this->result->getErrors($file) as $error) {
                         if ($error instanceOf LintError) {
+                            // For lint errors, display the original error message
                             echo $error->getMessage() . PHP_EOL;
                         } else {
+                            // A "line number | column number | message" line
                             echo sprintf('%4u', $error->getLine()) . '|' . sprintf('%3u', $error->getColumn()) . '| ' . $error->getMessage() . PHP_EOL;
                         }
                     }

@@ -44,13 +44,20 @@ class RuleLoader
    */
   protected $rulePath = 'PHPCA/Rules';
 
-
+  /**
+   * Set the path to load rules from.
+   *
+   * @param string $path
+   * @return void
+   */
   public function setRulePath($path)
   {
        $this->rulePath = $path;
   }
 
   /**
+   * Load all rules located in given path.
+   *
    * @return array list of rule classnames
    */
   public function loadRules()
