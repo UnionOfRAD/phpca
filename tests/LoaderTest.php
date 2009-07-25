@@ -106,6 +106,24 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     /**
      * @covers Loader::autoload
      */
+    public function testLoadLoadsExistingClassFromSubdirectory()
+    {
+        Loader::registerPath(__DIR__ . '/_testdata/Loader/ClassE');
+        $this->assertTrue(class_exists('spriebsch\PHPca\Tests\E'));
+    }
+
+    /**
+     * @covers Loader::autoload
+     */
+    public function testLoadLoadsExistingClassInAnotherNamespace()
+    {
+        Loader::registerPath(__DIR__ . '/_testdata/Loader/ClassF');
+        $this->assertTrue(class_exists('some\other\F'));
+    }
+
+    /**
+     * @covers Loader::autoload
+     */
     public function testLoadWorksForMultipleClassPaths()
     {
         Loader::registerPath(__DIR__ . '/_testdata/Loader/ClassD');
