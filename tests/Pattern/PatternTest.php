@@ -65,6 +65,9 @@ class PatternTest extends \PHPUnit_Framework_TestCase
         Loader::reset();
     }
 
+    /**
+     * @covers \spriebsch\PHPca\Pattern\Pattern
+     */
     public function testRegularTokenMapToRegEx()
     {
         $pattern = new Pattern();
@@ -73,6 +76,9 @@ class PatternTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('(\bT_WHITESPACE\b)', $pattern->getRegEx());
     }
 
+    /**
+     * @covers \spriebsch\PHPca\Pattern\Pattern
+     */
     public function testAnyTokenMapToRegEx()
     {
         $pattern = new Pattern();
@@ -81,6 +87,9 @@ class PatternTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('(\bT_.*\b )', $pattern->getRegEx());
     }
 
+    /**
+     * @covers \spriebsch\PHPca\Pattern\Pattern
+     */
     public function testTwoTokensMapToRegEx()
     {
         $pattern = new Pattern();
