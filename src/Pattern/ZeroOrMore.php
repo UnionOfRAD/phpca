@@ -56,7 +56,7 @@ class ZeroOrMore implements PatternInterface
 
     public function getRegEx()
     {
-        return $this->innerPattern->getRegEx() . '* ';
+        return $this->innerPattern->getRegEx() . '*';
     }
 }
 ?>

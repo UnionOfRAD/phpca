@@ -56,6 +56,11 @@ class Pattern implements PatternInterface
         }
     }
 
+    public function isEmpty()
+    {
+        return sizeof($this->items) == 0;
+    }
+
     public function add(PatternInterface $pattern)
     {
         $this->items[] = $pattern;
@@ -86,13 +91,13 @@ class Pattern implements PatternInterface
 
     public function getRegEx()
     {
-        $result = '';
+        $result = array();
 
         foreach ($this->items as $item) {
-            $result .= $item->getRegEx() . ' ';
+            $result[] = $item->getRegEx();
         }
 
-        return trim($result);
+        return implode(' ', $result);
     }
 }
 ?>

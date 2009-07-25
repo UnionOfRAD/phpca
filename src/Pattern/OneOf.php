@@ -60,7 +60,7 @@ class OneOf extends Pattern
             $result[] = $item->getRegEx();
         }
 
-        return '(' . implode('|', $result) . ') ';
+        return '(' . implode('|', $result) . ')';
     }
 }
 ?>

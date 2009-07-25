@@ -72,7 +72,7 @@ class OneOfTest extends \PHPUnit_Framework_TestCase
     {
         $pattern = new OneOf(array(new Token(T_OPEN_TAG), new Token(T_FUNCTION)));
 
-        $this->assertEquals('((\bT_OPEN_TAG\b)|(\bT_FUNCTION\b)) ', $pattern->getRegEx());
+        $this->assertEquals('((\bT_OPEN_TAG\b)|(\bT_FUNCTION\b))', $pattern->getRegEx());
     }
 }
 ?>

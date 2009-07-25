@@ -100,6 +100,27 @@ class PatternTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers \spriebsch\PHPca\Pattern\Pattern::isEmpty
+     */
+    public function testIsEmptyReturnsTrueForEmptyPattern()
+    {
+        $pattern = new Pattern();
+
+        $this->assertTrue($pattern->isEmpty());
+    }
+
+    /**
+     * @covers \spriebsch\PHPca\Pattern\Pattern::isEmpty
+     */
+    public function testIsEmptyReturnsFalseForNonEmptyPattern()
+    {
+        $pattern = new Pattern();
+        $pattern->add(new Pattern());
+
+        $this->assertFalse($pattern->isEmpty());
+    }
+
+    /**
      * @covers \spriebsch\PHPca\Pattern\Pattern::oneOf
      * @expectedException \Exception
      */

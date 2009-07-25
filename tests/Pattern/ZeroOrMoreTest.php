@@ -72,7 +72,7 @@ class ZeroOrMoreTest extends \PHPUnit_Framework_TestCase
     {
         $pattern = new ZeroOrMore(new Token(T_OPEN_TAG));
 
-        $this->assertEquals('(\bT_OPEN_TAG\b)* ', $pattern->getRegEx());
+        $this->assertEquals('(\bT_OPEN_TAG\b)*', $pattern->getRegEx());
     }
 }
 ?>
