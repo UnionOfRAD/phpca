@@ -105,11 +105,17 @@ class NoTabulatorsRuleTest extends \PHPUnit_Framework_TestCase
         $errors = $this->result->getErrors('test.php');
 
         $this->assertEquals(5, $errors[0]->getLine());
+        $this->assertEquals(1, $errors[0]->getColumn());
         $this->assertEquals(6, $errors[1]->getLine());
+        $this->assertEquals(1, $errors[1]->getColumn());
         $this->assertEquals(14, $errors[2]->getLine());
+        $this->assertEquals(1, $errors[2]->getColumn());
         $this->assertEquals(15, $errors[3]->getLine());
+        $this->assertEquals(1, $errors[3]->getColumn());
         $this->assertEquals(16, $errors[4]->getLine());
+        $this->assertEquals(1, $errors[4]->getColumn());
         $this->assertEquals(17, $errors[5]->getLine());
+        $this->assertEquals(1, $errors[5]->getColumn());
     }
 }
 ?>

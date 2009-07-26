@@ -102,11 +102,47 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\Token::getLine
+     */
+    public function testGetLineReturnsNextLineWhenWhitespaceTokenHasLeadingNewline()
+    {
+        $t = new Token(T_WHITESPACE, "\n ", 3, 7);
+        $this->assertEquals(4, $t->getLine());
+    }
+
+    /**
+     * @covers spriebsch\PHPca\Token::getLine
+     */
+    public function testGetLineReturnsCorrectLineWhenWhitespaceTokenHasNoLeadingNewline()
+    {
+        $t = new Token(T_WHITESPACE, " ", 3, 7);
+        $this->assertEquals(3, $t->getLine());
+    }
+
+    /**
      * @covers spriebsch\PHPca\Token::getColumn
      */
     public function testGetColumn()
     {
         $t = new Token(T_OPEN_TAG, '<?php', 0, 7);
+        $this->assertEquals(7, $t->getColumn());
+    }
+
+    /**
+     * @covers spriebsch\PHPca\Token::getColumn
+     */
+    public function testGetColumnReturnsOneWhenWhitespaceTokenHasLeadingNewline()
+    {
+        $t = new Token(T_WHITESPACE, "\n\n ", 3, 7);
+        $this->assertEquals(1, $t->getColumn());
+    }
+
+    /**
+     * @covers spriebsch\PHPca\Token::getColumn
+     */
+    public function testGetColumnReturnsRealValueWhenWhitespaceTokenHasNoLeadingNewLine()
+    {
+        $t = new Token(T_WHITESPACE, " ", 3, 7);
         $this->assertEquals(7, $t->getColumn());
     }
 

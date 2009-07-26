@@ -168,10 +168,9 @@ class Token
      */
     public function getColumn()
     {
-        // If whitespace starts with newlines, we claim to be on colum 1 of the "next" line
+        // If whitespace starts with newlines, we claim to be on column 1 of the "next" line
         if ($this->id == T_WHITESPACE) {
-            preg_match("/^\\n*/m", $this->text, $matches);
-            if (strlen($matches[0]) > 0) {
+            if ($this->getLine() != $this->line) {
                 return 1;
             }
         }
@@ -232,13 +231,16 @@ class Token
      */
     public function getTrailingWhitespace()
     {
+        // no newline: count number of trailing whitespace characters
         if (!$this->hasNewLine()) {
             preg_match('/\s*$/', $this->text, $matches);
             return $matches[0];
         }
 
+        // find last newline character
         $pos = strrpos($this->text, "\n");
 
+        // no trailing whitespace if newline is the last character
         if ($pos >= strlen($this->text) - 1) {
             return '';
         }
