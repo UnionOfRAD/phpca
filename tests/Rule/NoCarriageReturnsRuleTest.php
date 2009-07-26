@@ -35,34 +35,52 @@
  * @license    BSD License
  */
 
-// @codeCoverageIgnoreStart
-$_classMap = array(
-    'spriebsch\PHPca\Constants'                  => 'Constants.php',
-    'spriebsch\PHPca\Helper'                     => 'Helper.php',
-    'spriebsch\PHPca\Token'                      => 'Token.php',
-    'spriebsch\PHPca\Tokenizer'                  => 'Tokenizer.php',
-    'spriebsch\PHPca\File'                       => 'File.php',
-    'spriebsch\PHPca\Finder'                     => 'Finder.php',
-    'spriebsch\PHPca\TokenFilterIterator'        => 'TokenFilterIterator.php',
-    'spriebsch\PHPca\Result'                     => 'Result.php',
-    'spriebsch\PHPca\Message'                    => 'Message.php',
-    'spriebsch\PHPca\Warning'                    => 'Warning.php',
-    'spriebsch\PHPca\Error'                      => 'Error.php',
-    'spriebsch\PHPca\LintError'                  => 'LintError.php',
-    'spriebsch\PHPca\UnknownTokenException'      => 'UnknownTokenException.php',
+namespace spriebsch\PHPca\Rule;
 
-    'spriebsch\PHPca\Rule\Rule'                  => 'Rule/Rule.php',
-    'spriebsch\PHPca\Rule\NoTabulatorsRule'      => 'Rule/NoTabulatorsRule.php',
-    'spriebsch\PHPca\Rule\NoCarriageReturnsRule' => 'Rule/NoCarriageReturnsRule.php',
+use spriebsch\PHPca\Loader;
+use spriebsch\PHPca\Constants;
+use spriebsch\PHPca\Tokenizer;
+use spriebsch\PHPca\Result;
 
-    'spriebsch\PHPca\Helper'                     => 'Helper.php',
+require_once 'PHPUnit/Framework.php';
+require_once __DIR__ . '/RuleTest.php';
+require_once __DIR__ . '/../../src/Exceptions.php';
+require_once __DIR__ . '/../../src/Loader.php';
 
-    'spriebsch\PHPca\Pattern\PatternInterface'   => 'Pattern/PatternInterface.php',
-    'spriebsch\PHPca\Pattern\Pattern'            => 'Pattern/Pattern.php',
-    'spriebsch\PHPca\Pattern\Token'              => 'Pattern/Token.php',
-    'spriebsch\PHPca\Pattern\OneOf'              => 'Pattern/OneOf.php',
-    'spriebsch\PHPca\Pattern\ZeroOrMore'         => 'Pattern/ZeroOrMore.php',
-    'spriebsch\PHPca\Pattern\OneOrMore'          => 'Pattern/OneOrMore.php',
-);
-// @codeCoverageIgnoreEnd
+/**
+ * Tests for the No Carriage Returns rule.
+ *
+ * @author     Stefan Priebsch <stefan@priebsch.de>
+ * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
+ */
+class NoCarriageReturnsRuleTest extends RuleTest
+{
+    /**
+     * @covers \spriebsch\PHPca\Rule\NoCarriageReturnsRule
+     */
+    public function testNoCarriageReturns()
+    {
+        $this->init(__DIR__ . '/../_testdata/NoCarriageReturnsRule/linefeeds.php');
+
+        $rule = new NoCarriageReturnsRule();
+        $rule->check($this->file, $this->result);
+
+        $this->assertFalse($this->result->hasWarnings());
+        $this->assertFalse($this->result->hasErrors());
+    }
+
+    /**
+     * @covers \spriebsch\PHPca\Rule\NoCarriageReturnsRule
+     */
+    public function testCarriageReturns()
+    {
+        $this->init(__DIR__ . '/../_testdata/NoCarriageReturnsRule/carriagereturns.php');
+
+        $rule = new NoCarriageReturnsRule();
+        $rule->check($this->file, $this->result);
+
+        $this->assertFalse($this->result->hasWarnings());
+        $this->assertEquals(26, $this->result->getNumberOfErrors());
+    }
+}
 ?>
