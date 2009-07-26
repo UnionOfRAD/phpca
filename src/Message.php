@@ -77,15 +77,6 @@ class Message
         $this->token    = $token;
     }
 
-    public function __toString()
-    {
-        $result = '';
-        $result .= $this->token->getName();
-        $result .= '(' . $this->token->getText() . ')';
-
-        return $result;
-    }
-
     /**
     * Returns the file name.
     *
