@@ -35,107 +35,64 @@
  * @license    BSD License
  */
 
-namespace spriebsch\PHPca;
+namespace spriebsch\PHPca\Rule;
+
+use spriebsch\PHPca\File;
+use spriebsch\PHPca\Result;
+use spriebsch\PHPca\Message;
+use spriebsch\PHPca\Error;
+use spriebsch\PHPca\Warning;
 
 /**
- * Generic result message base class.
+ * Base class for a Rule that is enforced on a token stream.
  *
  * @author     Stefan Priebsch <stefan@priebsch.de>
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
-class Message
+abstract class Rule
 {
-    const ERROR = 0;
-    const WARNING = 1;
+    protected $file;
+    protected $result;
 
     /**
-     * @var string
+     * Checks the rule.
+     * 
+     * @param File   $file   Tokenized file to apply rule to
+     * @param Result $result Result object
+     * @return void
      */
-    protected $fileName;
-
-    /**
-     * @var Token
-     */
-    protected $token;
-
-    /**
-     * @var string
-     */
-    protected $message;
-
-    /**
-    * Creates the Message object.
-    *
-    * @param string $fileName
-    * @param string $message
-    * @param Token $token
-    */
-    public function __construct($fileName, $message, Token $token = null)
+    public function check(File $file, Result $result)
     {
-        $this->fileName = $fileName;
-        $this->message  = $message;
-        $this->token    = $token;
+        $this->file = $file;
+        $this->result = $result;
+
+        $this->file->rewind();
+
+        $this->doCheck();
     }
 
-    public function __toString()
+    protected function addError($message, $tokens)
     {
-        $result = '';
-        $result .= $this->token->getName();
-        $result .= '(' . $this->token->getText() . ')';
-
-        return $result;
-    }
-
-    /**
-    * Returns the file name.
-    *
-    * @returns string
-    */
-    public function getFileName()
-    {
-        return $this->fileName;
-    }
-
-    /**
-    * Returns the message text
-    *
-    * @returns string
-    */
-    public function getMessage()
-    {
-        return $this->message;
-    }
-
-    /**
-     * Returns the line in the source file the message refers to.
-     * If this error message does not refer to a token (lint error),
-     * the line number is 0.
-     *
-     * @returns integer
-     */
-    public function getLine()
-    {
-        if (!$this->token instanceOf Token) {
-            return 0;
-        }
-    
-        return $this->token->getLine();
-    }
-
-    /**
-     * Returns the column in the source file the message refers to.
-     * If this error message does not refer to a token (lint error),
-     * the column number is 0.
-     *
-     * @returns integer
-     */
-    public function getColumn()
-    {
-        if (!$this->token instanceOf Token) {
-            return 0;
+        if (!is_array($tokens)) {
+            $tokens = array($tokens);
         }
 
-       return $this->token->getColumn();
+        foreach ($tokens as $token) {
+            $this->result->addMessage(new Error($this->file->getFileName(), $message, $token));
+        }
     }
+
+    protected function addWarning($message, $tokens)
+    {
+        if (!is_array($tokens)) {
+            $tokens = array($tokens);
+        }
+
+        foreach ($tokens as $token) {
+            $this->result->addMessage(new Warning($this->file->getFileName(), $message, $token));
+        }
+    }
+
+    abstract protected function doCheck();
 }
 ?>

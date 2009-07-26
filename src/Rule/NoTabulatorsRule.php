@@ -35,107 +35,27 @@
  * @license    BSD License
  */
 
-namespace spriebsch\PHPca;
+namespace spriebsch\PHPca\Rule;
+
+use spriebsch\PHPca\Finder;
+use spriebsch\PHPca\Error;
+use spriebsch\PHPca\Warning;
 
 /**
- * Generic result message base class.
+ * No tabulator rule. Makes sure that only blanks are used for indentation.
  *
  * @author     Stefan Priebsch <stefan@priebsch.de>
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
-class Message
+class NoTabulatorsRule extends Rule
 {
-    const ERROR = 0;
-    const WARNING = 1;
-
-    /**
-     * @var string
-     */
-    protected $fileName;
-
-    /**
-     * @var Token
-     */
-    protected $token;
-
-    /**
-     * @var string
-     */
-    protected $message;
-
-    /**
-    * Creates the Message object.
-    *
-    * @param string $fileName
-    * @param string $message
-    * @param Token $token
-    */
-    public function __construct($fileName, $message, Token $token = null)
+    protected function doCheck()
     {
-        $this->fileName = $fileName;
-        $this->message  = $message;
-        $this->token    = $token;
-    }
-
-    public function __toString()
-    {
-        $result = '';
-        $result .= $this->token->getName();
-        $result .= '(' . $this->token->getText() . ')';
-
-        return $result;
-    }
-
-    /**
-    * Returns the file name.
-    *
-    * @returns string
-    */
-    public function getFileName()
-    {
-        return $this->fileName;
-    }
-
-    /**
-    * Returns the message text
-    *
-    * @returns string
-    */
-    public function getMessage()
-    {
-        return $this->message;
-    }
-
-    /**
-     * Returns the line in the source file the message refers to.
-     * If this error message does not refer to a token (lint error),
-     * the line number is 0.
-     *
-     * @returns integer
-     */
-    public function getLine()
-    {
-        if (!$this->token instanceOf Token) {
-            return 0;
+        foreach (Finder::findToken($this->file, T_WHITESPACE) as $token) {
+            if (false !== strstr($token->getText(), "\t")) {
+                $this->addError('Tabulator used for indentation', $token);
+            }
         }
-    
-        return $this->token->getLine();
-    }
-
-    /**
-     * Returns the column in the source file the message refers to.
-     * If this error message does not refer to a token (lint error),
-     * the column number is 0.
-     *
-     * @returns integer
-     */
-    public function getColumn()
-    {
-        if (!$this->token instanceOf Token) {
-            return 0;
-        }
-
-       return $this->token->getColumn();
     }
 }
 ?>

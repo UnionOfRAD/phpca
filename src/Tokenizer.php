@@ -68,7 +68,7 @@ class Tokenizer
                 $id   = $token[0];
                 $text = $token[1];
                 $line = $token[2];
-            } else {
+           } else {
             
                 try {
                     // it's not a PHP token, so we use one we have defined

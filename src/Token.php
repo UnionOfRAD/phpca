@@ -151,7 +151,14 @@ class Token
      */
     public function getLine()
     {
-       return $this->line;
+        // For whitespace with leading line breaks, we display
+        // the "next" line number instead of the actual line number where the whitespace token starts
+        if ($this->id == T_WHITESPACE) {
+            preg_match("/^\\n*/m", $this->text, $matches);
+            return $this->line + strlen($matches[0]);
+        }
+
+        return $this->line;
     }
 
     /**
@@ -161,7 +168,15 @@ class Token
      */
     public function getColumn()
     {
-       return $this->column;
+        // If whitespace starts with newlines, we claim to be on colum 1 of the "next" line
+        if ($this->id == T_WHITESPACE) {
+            preg_match("/^\\n*/m", $this->text, $matches);
+            if (strlen($matches[0]) > 0) {
+                return 1;
+            }
+        }
+
+        return $this->column;
     }
 
     /**

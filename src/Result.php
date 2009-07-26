@@ -79,6 +79,36 @@ class Result
     protected $globalWarningCount = 0;
 
     /**
+     * Helper function for sorting results by line number.
+     * Compares line numbers of two Message objects. If they
+     * are equal, compares column numbers.
+     *
+     * @param Message $t1
+     * @param Message $t2
+     * @return int
+     */
+    protected function sortByLine($t1, $t2)
+    {
+        $l1 = $t1->getLine();
+        $l2 = $t2->getLine();
+
+        // When line numbers match, sort by column
+        if ($l1 == $l2)
+        {
+            $c1 = $t1->getColumn();
+            $c2 = $t2->getColumn();
+
+            if ($c1 == $c2) {
+                return 0;
+            }
+
+            return ($c1 > $c2) ? 1 : -1;
+        }
+
+        return ($l1 > $l2) ? 1 : -1;
+    }
+
+    /**
      * Add a processed file.
      * We just use the file name here to reduce coupling to the File class,
      * and also because there is no File instance when a LintError has occured.
@@ -256,36 +286,6 @@ class Result
         usort($result, array($this, 'sortByLine'));
 
         return $result;
-    }
-
-    /**
-     * Helper function for sorting results by line number.
-     * Compares line numbers of two Message objects. If they
-     * are equal, compares column numbers.
-     *
-     * @param Message $t1
-     * @param Message $t2
-     * @return int
-     */    
-    protected function sortByLine($t1, $t2)
-    {
-        $l1 = $t1->getLine();
-        $l2 = $t2->getLine();
-
-        // When line numbers match, sort by column
-        if ($l1 == $l2)
-        {
-            $c1 = $t1->getColumn();
-            $c2 = $t2->getColumn();
-
-            if ($c1 == $c2) {
-                return 0;
-            }
-
-            return ($c1 > $c2) ? 1 : -1;
-        }
-
-        return ($l1 > $l2) ? 1 : -1;
     }
 }
 ?>

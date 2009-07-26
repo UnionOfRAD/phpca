@@ -51,6 +51,11 @@ $_classMap = array(
     'spriebsch\PHPca\LintError'                => 'LintError.php',
     'spriebsch\PHPca\UnknownTokenException'    => 'UnknownTokenException.php',
 
+    'spriebsch\PHPca\Rule\Rule'                => 'Rule/Rule.php',
+    'spriebsch\PHPca\Rule\NoTabulatorsRule'    => 'Rule/NoTabulatorsRule.php',
+
+    'spriebsch\PHPca\Helper'                   => 'Helper.php',
+
     'spriebsch\PHPca\Pattern\PatternInterface' => 'Pattern/PatternInterface.php',
     'spriebsch\PHPca\Pattern\Pattern'          => 'Pattern/Pattern.php',
     'spriebsch\PHPca\Pattern\Token'            => 'Pattern/Token.php',
