@@ -47,6 +47,8 @@ namespace spriebsch\PHPca
 
     class UnknownVariableException extends Exception {}
 
+    class LinterException extends Exception {}
+
     class TokenizerException extends Exception {}
 
     class EmptyPatternException extends Exception {}

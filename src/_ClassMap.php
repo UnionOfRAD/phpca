@@ -40,6 +40,7 @@ $_classMap = array(
     'spriebsch\PHPca\Constants'                  => 'Constants.php',
     'spriebsch\PHPca\Helper'                     => 'Helper.php',
     'spriebsch\PHPca\Token'                      => 'Token.php',
+    'spriebsch\PHPca\Linter'                     => 'Linter.php',
     'spriebsch\PHPca\Tokenizer'                  => 'Tokenizer.php',
     'spriebsch\PHPca\File'                       => 'File.php',
     'spriebsch\PHPca\Finder'                     => 'Finder.php',

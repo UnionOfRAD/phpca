@@ -70,14 +70,15 @@ class Linter
     public function __construct($phpExecutable)
     {
         $this->phpExecutable = $phpExecutable;
+        $this->init();
     }
 
     /**
-     * Returns the lint output.
+     * Returns the error messages lint has output.
      *
      * @return string
      */
-    public function getOutput()
+    public function getErrorMessages()
     {
         return $this->output;
     }
@@ -88,25 +89,25 @@ class Linter
      *
      * @return void
      *
-     * @throws Exception PHP excutable ... not found
-     * @throws Exception PHP excutable ... not executable
-     * @throws Exception PHP excutable ... is not a PHP executable
+     * @throws spriebsch\MVC\Exception PHP excutable ... not found
+     * @throws spriebsch\MVC\Exception PHP excutable ... not executable
+     * @throws spriebsch\MVC\Exception PHP excutable ... is not a PHP executable
      */
-    public function checkPhpBinary()
+    public function init()
     {
         if (!file_exists($this->phpExecutable)) {
-            throw new Exception('PHP executable ' . $this->phpExecutable . ' not found');
+            throw new LinterException('PHP executable ' . $this->phpExecutable . ' not found');
         }
 
         if (!is_executable($this->phpExecutable)) {
-            throw new Exception('PHP executable ' . $this->phpExecutable . ' not executable');
+            throw new LinterException('PHP executable ' . $this->phpExecutable . ' not executable');
         }
 
         $cmd = $this->phpExecutable . ' -v 2>/dev/null';
         $output = trim(shell_exec($cmd));
 
         if (substr($output, 0, 5) != 'PHP 5') {
-            throw new Exception('PHP executable ' . $this->phpExecutable . ' is not a PHP executable');
+            throw new LinterException('PHP executable ' . $this->phpExecutable . ' is not a PHP executable');
         }
     }
 
@@ -116,15 +117,15 @@ class Linter
      * @param string $file Path to the file to lint
      * @return string Empty string on success, or error message on failure
      *
-     * @throws Exception File ... not found
+     * @throws spriebsch\MVC\LinterException File ... not found
      */
-    public function runLintCheck($file)
+    public function runLintCheck($fileName)
     {
-        if (!file_exists($file)) {
-            throw new Exception('File ' . $file . ' not found');
+        if (!file_exists($fileName)) {
+            throw new LinterException('File ' . $fileName . ' not found');
         }
 
-        $cmd = $this->phpExecutable . ' -l ' . escapeshellarg($file) . ' 2>/dev/null';
+        $cmd = $this->phpExecutable . ' -l ' . escapeshellarg($fileName) . ' 2>/dev/null';
         $this->output = trim(shell_exec($cmd));
 
         $cmp = 'No syntax errors';
