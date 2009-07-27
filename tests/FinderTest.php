@@ -111,6 +111,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\Finder::findPattern
      * @expectedException spriebsch\PHPca\EmptyPatternException
      */
     public function testFindPatternThrowsExceptionOnEmptyPattern()
@@ -120,6 +121,9 @@ class FinderTest extends \PHPUnit_Framework_TestCase
         $result = Finder::findPattern($file, $pattern);
     }
 
+    /**
+     * @covers spriebsch\PHPca\Finder::findPattern
+     */
     public function testFindPatternFindsSingleToken()
     {
         $file = Tokenizer::tokenize('filename', "<?php \n\n function hello()\n{\n    print 'hello world';\n} \n ?>");
@@ -139,6 +143,9 @@ class FinderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('T_FUNCTION', $result[0][0]->getName());
     }
 
+    /**
+     * @covers spriebsch\PHPca\Finder::findPattern
+     */
     public function testFindPatternFindsChainedTokens()
     {
         $file = Tokenizer::tokenize('filename', "<?php \n\n function hello()\n{\n    print 'hello world';\n} \n ?>");
@@ -166,6 +173,9 @@ class FinderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('T_STRING', $result[0][2]->getName());
     }
 
+    /**
+     * @covers spriebsch\PHPca\Finder::findPattern
+     */
     public function testFindPatternWithZeroOrMore()
     {
         $file = Tokenizer::tokenize('filename', "<?php \n\n function hello(\$a, \$b)\n{\n    print 'hello world';\n} \n ?>");
@@ -193,6 +203,9 @@ class FinderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('T_CLOSE_BRACKET', $result[0][8]->getName());
     }
 
+    /**
+     * @covers spriebsch\PHPca\Finder::findPattern
+     */
     public function testFindPatternWithOneOrMore()
     {
         $file = Tokenizer::tokenize('filename', "<?php \n\n function hello(\$a, \$b)\n{\n    print 'hello world';\n} \n ?>");
@@ -217,6 +230,9 @@ class FinderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('T_CLOSE_BRACKET', $result[0][5]->getName());
     }
 
+    /**
+     * @covers spriebsch\PHPca\Finder::findPattern
+     */
     public function testFindPatternWithOneOf()
     {
         $file = Tokenizer::tokenize('filename', "<?php \n\n class Test { public function hello(\$a, \$b)\n{\n    print 'hello world';\n}\n} \n ?>");
@@ -240,6 +256,9 @@ class FinderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('T_FUNCTION', $result[0][2]->getName());
     }
 
+    /**
+     * @covers spriebsch\PHPca\Finder::findPattern
+     */
     public function testFindPatternWithTwoMatches()
     {
         $file = Tokenizer::tokenize('filename', "<?php \n\n class Test { public function hello(\$a, \$b) {}\n protected function sayHello(\$a, \$b) {}} \n ?>");

@@ -60,18 +60,27 @@ class FileTest extends \PHPUnit_Framework_TestCase
         Loader::reset();
     }
 
+    /**
+     * @covers spriebsch\PHPca\File::getFilename
+     */
     public function testGetFileName()
     {
         $file = new File('filename', 'sourcecode');
         $this->assertEquals('filename', $file->getFileName());
     }
 
+    /**
+     * @covers spriebsch\PHPca\File::getSourceCode
+     */
     public function testGetSourceCode()
     {
         $file = new File('filename', 'sourcecode');
         $this->assertEquals('sourcecode', $file->getSourceCode());
     }
 
+    /**
+     * @covers spriebsch\PHPca\File::__toString
+     */
     public function testToString()
     {
         $file = new File('filename', 'sourcecode');
@@ -100,7 +109,6 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('T_FUNCTION', $file->current()->getName());
     }
-
 
     /**
      * @covers spriebsch\PHPca\File::seek

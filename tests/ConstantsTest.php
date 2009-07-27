@@ -61,8 +61,8 @@ class ConstantsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-    * @covers spriebsch\PHPca\Constants::init
-    */
+     * @covers spriebsch\PHPca\Constants::init
+     */
     public function testInitDefinesConstants()
     {
         Constants::init();
@@ -70,8 +70,8 @@ class ConstantsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-    * @covers spriebsch\PHPca\Constants::getTokenId
-    */
+     * @covers spriebsch\PHPca\Constants::getTokenId
+     */
     public function testGetTokenId()
     {
         Constants::init();
@@ -79,9 +79,9 @@ class ConstantsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-    * @covers spriebsch\PHPca\Constants::getTokenId
-    * @expectedException \RuntimeException
-    */
+     * @covers spriebsch\PHPca\Constants::getTokenId
+     * @expectedException \RuntimeException
+     */
     public function testGetTokenIdThrowsExceptionOnUnknownToken()
     {
         Constants::init();
@@ -89,8 +89,8 @@ class ConstantsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-    * @covers spriebsch\PHPca\Constants::getTokenName
-    */
+     * @covers spriebsch\PHPca\Constants::getTokenName
+     */
     public function testGetTokenName()
     {
         Constants::init();
@@ -98,8 +98,8 @@ class ConstantsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-    * @covers spriebsch\PHPca\Constants::getTokenName
-    */
+     * @covers spriebsch\PHPca\Constants::getTokenName
+     */
     public function testGetTokenNameReturnsTokenizerToken()
     {
         Constants::init();
@@ -107,9 +107,9 @@ class ConstantsTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-    * @covers spriebsch\PHPca\Constants::getTokenName
-    * @expectedException \RuntimeException
-    */
+     * @covers spriebsch\PHPca\Constants::getTokenName
+     * @expectedException \RuntimeException
+     */
     public function testGetTokenNameThrowsExceptionOnUnknownToken()
     {
         Constants::init();

@@ -60,7 +60,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Loader::__construct
+     * @covers spriebsch\MVC\Loader::__construct
      * @expectedException spriebsch\PHPca\CannotInstantiateLoaderException
      */
     public function testConstructorThrowsException()
@@ -69,7 +69,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Loader::init
+     * @covers spriebsch\MVC\Loader::init
      */
     public function testInitRegistersSplAutoloadFunction()
     {
@@ -77,7 +77,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Loader::registerPath
+     * @covers spriebsch\MVC\Loader::registerPath
      * @expectedException spriebsch\PHPca\ClassMapNotFoundException
      */
     public function testRegisterPathThrowsExceptionWhenClassMapDoesNotExist()
@@ -86,7 +86,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Loader::registerPath
+     * @covers spriebsch\MVC\Loader::registerPath
      * @expectedException spriebsch\PHPca\InvalidClassMapException
      */
     public function testRegisterPathThrowsExceptionWhenClassMapIsNoArray()
@@ -95,7 +95,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Loader::autoload
+     * @covers spriebsch\MVC\Loader::autoload
      */
     public function testLoadLoadsExistingClass()
     {
@@ -104,7 +104,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Loader::autoload
+     * @covers spriebsch\MVC\Loader::autoload
      */
     public function testLoadLoadsExistingClassFromSubdirectory()
     {
@@ -113,7 +113,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Loader::autoload
+     * @covers spriebsch\MVC\Loader::autoload
      */
     public function testLoadLoadsExistingClassInAnotherNamespace()
     {
@@ -122,7 +122,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Loader::autoload
+     * @covers spriebsch\MVC\Loader::autoload
      */
     public function testLoadWorksForMultipleClassPaths()
     {
