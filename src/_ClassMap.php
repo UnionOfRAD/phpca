@@ -55,6 +55,7 @@ $_classMap = array(
     'spriebsch\PHPca\Rule\NoTabulatorsRule'       => 'Rule/NoTabulatorsRule.php',
     'spriebsch\PHPca\Rule\NoCarriageReturnsRule'  => 'Rule/NoCarriageReturnsRule.php',
     'spriebsch\PHPca\Rule\OpenTagAtBeginningRule' => 'Rule/OpenTagAtBeginningRule.php',
+    'spriebsch\PHPca\Rule\CloseTagAtEndRule'      => 'Rule/CloseTagAtEndRule.php',
 
     'spriebsch\PHPca\Helper'                     => 'Helper.php',
 
