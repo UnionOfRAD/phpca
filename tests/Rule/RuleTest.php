@@ -53,7 +53,7 @@ require_once __DIR__ . '/../../src/Loader.php';
  * @author     Stefan Priebsch <stefan@priebsch.de>
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
-class RuleTest extends \PHPUnit_Framework_TestCase
+abstract class RuleTest extends \PHPUnit_Framework_TestCase
 {
     protected function setUp()
     {
@@ -73,15 +73,6 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         $this->file = Tokenizer::tokenize('test.php', file_get_contents($filename));
         $this->result = new Result();
         $this->result->addFile('test.php');
-
-    }
-
-    /**
-     * @todo This is a dummy test to avoid the "no tests in this class" warning
-     */
-    public function testRule()
-    {
-        $this->assertTrue(true);
     }
 }
 ?>
