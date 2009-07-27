@@ -44,7 +44,7 @@ namespace spriebsch\PHPca;
  * @author     Stefan Priebsch <stefan@priebsch.de>
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
-class File extends \SplQueue
+class File extends \SplQueue implements \SeekableIterator
 {
     /**
      * @var string
@@ -116,6 +116,19 @@ class File extends \SplQueue
     {
         $token->setFile($this);
         parent::enqueue($token);
+    }
+
+    public function seek($index)
+    {
+        $this->rewind();
+        $position = 0;
+        while($position < $index && $this->valid()) {
+            $this->next();
+            $position++;
+        }
+        if (!$this->valid()) {
+            throw new \OutOfBoundsException('Invalid seek position');
+        }
     }
 }
 ?>

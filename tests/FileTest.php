@@ -84,5 +84,32 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('T_OPEN_TAG T_CLOSE_TAG', (string) $file);
     }
+
+    /**
+     * @covers spriebsch\PHPca\File::seek
+     */
+    public function testSeek()
+    {
+        $file = new File('filename', 'sourcecode');
+        $file->add(new Token(T_OPEN_TAG, '<?php'));
+        $file->add(new Token(T_CLASS, 'class'));
+        $file->add(new Token(T_FUNCTION, 'function'));
+        $file->add(new Token(T_CLOSE_TAG, '?>'));
+
+        $file->seek(2);
+
+        $this->assertEquals('T_FUNCTION', $file->current()->getName());
+    }
+
+
+    /**
+     * @covers spriebsch\PHPca\File::seek
+     * @expectedException \OutOfBoundsException
+     */
+    public function testSeekThrowsExceptionOnInvalidPosition()
+    {
+        $file = new File('filename', 'sourcecode');
+        $file->seek(1);
+    }
 }
 ?>
