@@ -33,6 +33,8 @@
             <fileset dir="tests">
                 <include name="*.php"/>
                 <include name="**/*.php"/>
+                <exclude name="_testdata/*.php"/>
+                <exclude name="_testdata/**/*.php"/>
             </fileset>
         </phplint>
     </target>
