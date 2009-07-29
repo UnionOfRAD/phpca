@@ -298,6 +298,21 @@ class Result
         return false;
     }
 
+    public function hasRuleError($file)
+    {
+        if (!isset($this->messages[$file])) {
+            return false;
+        }
+
+        foreach ($this->messages[$file] as $message) {
+            if ($message instanceOf RuleError) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Return array with all errors, or all errors for given filename.
      *

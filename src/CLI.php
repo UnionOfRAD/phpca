@@ -73,11 +73,33 @@ class CLI implements ProgressPrinterInterface
      */
     protected $fileCount = 0;
 
+    /**
+     * Start time of the analysis
+     *
+     * @var float
+     */
     protected $startTime = 0;
+
+    /**
+     * End time of the analysis
+     *
+     * @var float
+     */
     protected $endTime = 0;
 
+    /**
+     * Number of files that will be analyzed.
+     * See Application::getNumberOfFiles().
+     *
+     * @var int
+     */
     protected $numberOfFiles = 0;
 
+    /**
+     * Whether to exit on errors during file analysis.
+     *
+     * @var bool
+     */
     protected $exitOnError = true;
 
     /**
@@ -98,7 +120,7 @@ class CLI implements ProgressPrinterInterface
     }
 
     /**
-     * Prints version number and returns a dummy Result object.
+     * Prints version number.
      *
      * @return Result
      */
@@ -109,7 +131,7 @@ class CLI implements ProgressPrinterInterface
     }
 
     /**
-     * Prints usage message and returns a dummy Result object.
+     * Prints usage message.
      *
      * @return Result
      */
@@ -120,7 +142,7 @@ class CLI implements ProgressPrinterInterface
     }
 
     /**
-     * Anaylzes PHP files by calling run() in Application.
+     * Anaylzes PHP files by calling Application::run().
      *
      * @return void
      */
@@ -136,18 +158,27 @@ class CLI implements ProgressPrinterInterface
      * Get letter to display progress (having analyzed one file),
      * E on lint error, F for failed checks, . for successful check
      *
-     * @param string $file File that was checked
+     * @param string $file File that was analyzed
      * @param Result $result Result object
      * @return string
      */
     protected function getProgressLetter($file, Result $result)
     {
         if ($result->hasLintError($file)) {
-            return 'E';
+            return 'L';
+        }
+
+        if ($result->hasRuleError($file)) {
+            return 'R';
         }
 
         if ($result->hasErrors($file)) {
-            return 'F';
+            return 'E';
+        }
+
+        // a warning does not count as error, thus display a dot
+        if ($result->hasWarnings($file)) {
+            return '.';
         }
 
         return '.';
@@ -157,7 +188,7 @@ class CLI implements ProgressPrinterInterface
      * Parse the command line and determine which command method to run.
      * Returns the name of the method to run.
      *
-     * @param array $arguments $argv
+     * @param array $arguments Command line arguments
      * @return string
      */
     protected function parseCommandLine($arguments)
@@ -224,7 +255,7 @@ class CLI implements ProgressPrinterInterface
 
     /**
      * Prepend spaces to file counter to align it with its maximum possible
-     * value which equals $this->numberOfFiles. Helper method for printSummary().
+     * value which equals $this->numberOfFiles. Used by showProgress().
      *
      * @param string $fileCount
      */
@@ -301,15 +332,17 @@ class CLI implements ProgressPrinterInterface
         echo ' (';
         echo $this->result->getNumberOfFiles() . ' files, ';
 
+        // only display lint errors in statistics if they occured
         if ($this->result->getNumberOfLintErrors() > 0) {
-            echo $this->result->getNumberOfLintErrors() . ' lint errors, ';
+            echo $this->result->getNumberOfLintErrors() . ' lint errors [L], ';
         }
 
+        // only display rule errors in statistics if they occured
         if ($this->result->getNumberOfRuleErrors() > 0) {
-            echo $this->result->getNumberOfRuleErrors() . ' rule errors, ';
+            echo $this->result->getNumberOfRuleErrors() . ' rule errors [R], ';
         }
 
-        echo $this->result->getNumberOfErrors() . ' errors, ';
+        echo $this->result->getNumberOfErrors() . ' errors [E], ';
         echo $this->result->getNumberOfWarnings() . ' warnings';
         echo ')';
 
@@ -329,7 +362,6 @@ class CLI implements ProgressPrinterInterface
             $this->startTimer();
 
             $method = $this->parseCommandLine($arguments);
-
             $this->result = $this->$method();
 
             $this->endTimer();
@@ -353,6 +385,9 @@ class CLI implements ProgressPrinterInterface
 
     /**
      * Print one character representing a checked file. Defaults to dot.
+     * When a multiple of 60 files has been analyzed, the number of
+     * files that have already been analyzed and the total number of files
+     * to analyze plus a line break will be output.
      *
      * @param string $file File that was checked
      * @param Result $result Result object
