@@ -103,36 +103,6 @@ class Application
     protected $numberOfFiles = 0;
 
     /**
-     * Returns array of all .php filenames in given directory.
-     * If $path points to a single file, we do not iterate.
-     *
-     * @param string $path
-     * @return array
-     */
-    protected function listFiles($path)
-    {
-        if (!file_exists($path)) {
-            throw new Exception($path . ' not found');
-        }
-
-        // If $path is a regular file, we are done.
-        if (is_file($path)) {
-            return array($path);
-        }
-
-        $result = array();
-
-        // Recursively collect all .php files from given directory.
-        $it = new PhpFileFilterIterator(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path)));
-
-        foreach ($it as $file) {
-            $result[] = $file->getPathname();
-        }
-
-        return $result;
-    }
-
-    /**
      * Converts a rule filename to a rule classname
      * by removing the .php extension and prepending the namespace.
      *
@@ -210,6 +180,36 @@ class Application
                 $this->result->addMessage(new RuleError($fileName, 'Rule ' . get_class($rule) . ': ' . $e->getMessage()));
             }
         }
+    }
+
+    /**
+     * Returns array of all .php filenames in given directory.
+     * If $path points to a single file, we do not iterate.
+     *
+     * @param string $path
+     * @return array
+     */
+    public function listFiles($path)
+    {
+        if (!file_exists($path)) {
+            throw new Exception($path . ' not found');
+        }
+
+        // If $path is a regular file, we are done.
+        if (is_file($path)) {
+            return array($path);
+        }
+
+        $result = array();
+
+        // Recursively collect all .php files from given directory.
+        $it = new PhpFileFilterIterator(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path)));
+
+        foreach ($it as $file) {
+            $result[] = $file->getPathname();
+        }
+
+        return $result;
     }
 
     /**

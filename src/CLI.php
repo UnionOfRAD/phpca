@@ -113,10 +113,51 @@ class CLI implements ProgressPrinterInterface
              '       php phpca.phar -p <file> <directory to analyze>' . PHP_EOL . PHP_EOL .
              '  -p <file>' . PHP_EOL .
              '  --php <file>      Specify path to PHP executable (required).' . PHP_EOL . PHP_EOL .
+             '  -l' . PHP_EOL .
+             '  --list            List all built-in rules.' . PHP_EOL . PHP_EOL .
              '  -h' . PHP_EOL .
              '  --help            Prints this usage information.' . PHP_EOL . PHP_EOL .
              '  -v' . PHP_EOL .
              '  --version         Prints the version number.' . PHP_EOL . PHP_EOL;
+    }
+
+    /**
+     * Converts rule file name to display rule name.
+     *
+     * @param string $fileName
+     * @return string
+     */
+    protected function toRuleName($fileName)
+    {
+        $result = basename($fileName);
+        $result = substr($result, 0, -4);
+        $result = str_replace('Rule', '', $result);
+
+        $result = preg_replace('/([A-Z])/', ' $0', $result);
+
+        return $result;
+    }
+
+    /**
+     * Lists all built-in rules.
+     *
+     * @return Result
+     */
+    protected function printBuiltInRulesCommand()
+    {
+        $application = new Application();
+        $rules = $application->listFiles(__DIR__ . '/Rule');
+        sort($rules);
+
+        echo 'Built-in rules: ' . PHP_EOL . PHP_EOL;
+
+        foreach ($rules as $rule) {
+            echo '  -' . $this->toRuleName($rule) . ' (' . basename($rule) . ')'. PHP_EOL;
+        }
+
+        echo PHP_EOL;
+
+        return new Result();
     }
 
     /**
@@ -210,15 +251,21 @@ class CLI implements ProgressPrinterInterface
                     $method = 'printUsageCommand';
                     break;
 
-                case '-v':
-                case '--version':
-                    $method = 'printVersionCommand';
+                case '-l':
+                case '--list':
+                    $method = 'printBuiltInRulesCommand';
                     break;
 
                 case '-p':
                 case '--php':
                     $this->phpExecutable = array_shift($arguments);
                     break;
+
+                case '-v':
+                case '--version':
+                    $method = 'printVersionCommand';
+                    break;
+
 
                 default:
                     throw new Exception('Unknown option: ' . $argument);
