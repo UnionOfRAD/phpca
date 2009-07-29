@@ -205,7 +205,7 @@ class Application
                 $rule->check($file, $this->result);
             }
 
-            catch (Exception $e) {
+            catch (\Exception $e) {
                 // Convert any exceptions inside a rule to a RuleError
                 $this->result->addMessage(new RuleError($fileName, 'Rule ' . get_class($rule) . ': ' . $e->getMessage()));
             }
