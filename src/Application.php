@@ -46,41 +46,58 @@ namespace spriebsch\PHPca;
 class Application
 {
     /**
+     * Version number.
+     *
      * @var string
      */
     static public $version = '0.3.0';
 
     /**
+     * Additional paths to load rules from.
+     *
      * @var array of string
      */
     protected $rulePaths = array();
 
     /**
+     * All Rule class instances.
+     *
      * @var array of Rule
      */
     protected $rules = array();
 
     /**
+     * List of Rule classes not to enforce
+     *
      * @var array of string
      */
     protected $disabledRuleNames = array();
 
     /**
+     * Result object
+     *
      * @var Result
      */
     protected $result;
 
     /**
+     * Observer that is notified whenever one file was analyzed
+     *
      * @var ProgressPrinterInterface
      */
     protected $progressPrinter;
 
     /**
+     * Whether to ignore all built-in rules.
+     * Useful for unit testing.
+     *
      * @var bool
      */
     protected $enableBuiltInRules = true;
 
     /**
+     * Number of files that will be analyzed.
+     *
      * @var int
      */
     protected $numberOfFiles = 0;
@@ -94,16 +111,18 @@ class Application
      */
     protected function listFiles($path)
     {
+        if (!file_exists($path)) {
+            throw new Exception($path . ' not found');
+        }
+
+        // If $path is a regular file, we are done.
         if (is_file($path)) {
             return array($path);
         }
 
         $result = array();
 
-        if (!file_exists($path)) {
-            throw new Exception($path . ' not found');
-        }
-
+        // Recursively collect all .php files from given directory.
         $it = new PhpFileFilterIterator(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path)));
 
         foreach ($it as $file) {
@@ -114,7 +133,8 @@ class Application
     }
 
     /**
-     * Converts a rule filename to a rule classname by removing .php
+     * Converts a rule filename to a rule classname
+     * by removing the .php extension and prepending the namespace.
      *
      * @param string $fileName The file name
      * @return string The rule name
@@ -125,11 +145,11 @@ class Application
     }
 
     /**
-     * Load all rules from given directories
+     * Loads all rules from given directories
      * Note: built-in rules are listed in the $_ClassMap.
      * Returns an array of Rule object instances.
      *
-     * @return array
+     * @return array of Rule
      * @todo handle potential class name conflicts between built-in and custom rules
      */
     protected function loadRules()
@@ -167,10 +187,10 @@ class Application
     }
 
     /**
-     * Enforce all rules
+     * Enforce all rules on a given file.
      *
-     * @param string $fileName Filename
-     * @param File $file
+     * @param string $fileName Name of the file to analyze
+     * @param File   $file     Tokenized representation of the file to analyze
      * @return void
      */
     protected function enforceRules($fileName, File $file)
@@ -181,19 +201,23 @@ class Application
 
         foreach ($this->rules as $rule) {
             try {
+                // Note: each rule will rewind() $file.
                 $rule->check($file, $this->result);
             }
 
             catch (Exception $e) {
+                // Convert any exceptions inside a rule to a RuleError
                 $this->result->addMessage(new RuleError($fileName, 'Rule ' . get_class($rule) . ': ' . $e->getMessage()));
             }
         }
     }
 
     /**
-     * Disable a rule
+     * Disable a rule by class name.
+     * Requires fully qualified class name starting with a backslash.
      *
      * @param string $name Rule Name
+     * @return void
      */
     public function disableRule($name)
     {
@@ -203,6 +227,7 @@ class Application
     /**
      * Toggle use of built-in rules.
      * Default value is true.
+     * Especially useful for unit testing.
      *
      * @param bool $flag Flag
      * @return void
@@ -218,9 +243,12 @@ class Application
 
     /**
      * Add a path to load rules from.
+     * No $_ClassMap is required in that directory since additional rules
+     * are not autoloaded.
+     * Note: All additional rules must be in spriebsch\PHPca\Rule namespace.
      *
      * @param string $path
-     * @return array
+     * @return void
      */
     public function addRulePath($path)
     {
@@ -235,7 +263,7 @@ class Application
     }
 
     /**
-     * Return an array of Rule types.
+     * Return the array of paths where additional rules are loaded from.
      *
      * @return array
      */
@@ -246,9 +274,9 @@ class Application
 
     /**
      * Register a callback that is notified whenever a file has been processed.
-     * Can be used to display a dot, E of F for each processed file in console mode.
+     * Can be used to display a dot, E of F for each processed file in CLI mode.
      *
-     * @param object
+     * @param ProgressPrinterInterface
      * @return void
      */
     public function registerProgressPrinter(ProgressPrinterInterface $progressPrinter)
