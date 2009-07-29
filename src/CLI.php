@@ -78,15 +78,58 @@ class CLI implements ProgressPrinterInterface
 
     protected $numberOfFiles = 0;
 
+    protected $exitOnError = true;
+
     /**
-     * Print usage message
+     * Prints the usage message.
      *
      * @return void
      */
-    protected function printUsage()
+    protected function printUsageMessage()
     {
-        print 'Usage: phpca -p path_to_php <file to analyze>' . PHP_EOL .
-              '       phpca -p path_to_php <directory to analyze>' . PHP_EOL . PHP_EOL;
+        echo 'Usage: php phpca.phar -p <file> <file to analyze>' . PHP_EOL .
+             '       php phpca.phar -p <file> <directory to analyze>' . PHP_EOL . PHP_EOL .
+             '  -p <file>' . PHP_EOL .
+             '  --php <file>      Specify path to PHP executable (required).' . PHP_EOL . PHP_EOL .
+             '  -h' . PHP_EOL .
+             '  --help            Prints this usage information.' . PHP_EOL . PHP_EOL .
+             '  -v' . PHP_EOL .
+             '  --version         Prints the version number.' . PHP_EOL . PHP_EOL;
+    }
+
+    /**
+     * Prints version number and returns a dummy Result object.
+     *
+     * @return Result
+     */
+    protected function printVersionCommand()
+    {
+        echo 'Version: ' . Application::$version . PHP_EOL . PHP_EOL;
+        return new Result();
+    }
+
+    /**
+     * Prints usage message and returns a dummy Result object.
+     *
+     * @return Result
+     */
+    protected function printUsageCommand()
+    {
+        $this->printUsageMessage();
+        return new Result();
+    }
+
+    /**
+     * Anaylzes PHP files by calling run() in Application.
+     *
+     * @return void
+     */
+    protected function analyzeFilesCommand()
+    {
+        $application = new Application();
+        $application->registerProgressPrinter($this);
+
+        return call_user_func_array(array($application, 'run'), array($this->phpExecutable, $this->path));
     }
 
     /**
@@ -111,13 +154,16 @@ class CLI implements ProgressPrinterInterface
     }
 
     /**
-     * Parse the command line.
+     * Parse the command line and determine which command method to run.
+     * Returns the name of the method to run.
      *
      * @param array $arguments $argv
-     * @return void
+     * @return string
      */
     protected function parseCommandLine($arguments)
     {
+        $method = 'analyzeFilesCommand';
+
         // Remove $argv[0], phpca's file name
         array_shift($arguments);
 
@@ -130,10 +176,16 @@ class CLI implements ProgressPrinterInterface
 
                 case '-h':
                 case '--help':
-                    $this->printUsage();
-                    exit();
+                    $method = 'printUsageCommand';
+                    break;
+
+                case '-v':
+                case '--version':
+                    $method = 'printVersionCommand';
+                    break;
 
                 case '-p':
+                case '--php':
                     $this->phpExecutable = array_shift($arguments);
                     break;
 
@@ -146,16 +198,63 @@ class CLI implements ProgressPrinterInterface
 
         // Last argument is the file or directory name of the files to check
         $this->path = $argument;
+
+        return $method;
     }
 
+    /**
+     * Starts the timer.
+     *
+     * @return void
+     */
     protected function startTimer()
     {
         $this->startTime = microtime(true);
     }
 
+    /**
+     * Stops the timer.
+     *
+     * @return void
+     */
     protected function endTimer()
     {
         $this->endTime = microtime(true);
+    }
+
+    /**
+     * Prepend spaces to file counter to align it with its maximum possible
+     * value which equals $this->numberOfFiles. Helper method for printSummary().
+     *
+     * @param string $fileCount
+     */
+    protected function formatFileCount($fileCount)
+    {
+        $numberOfFilesLength = strlen($this->numberOfFiles);
+        $fileCountLength = strlen($this->fileCount);
+
+        if ($numberOfFilesLength > $fileCountLength) {
+            $fileCount = str_pad($fileCount, $numberOfFilesLength, ' ', STR_PAD_LEFT);
+        }
+
+        return $fileCount;
+    }
+
+    /**
+     * Wrapper method to exit() with a given exit code.
+     * Will only exit when $exitOnError is true.
+     * This function makes it possible to unit test the CLI class,
+     * since exit'ing will also exit from PHPUnit.
+     *
+     * @param int $exitCode
+     */
+    protected function doExit($exitCode)
+    {
+        // @codeCoverageIgnoreStart
+        if ($this->exitOnError) {
+            exit($exitCode);
+        }
+        // @codeCoverageIgnoreEnd
     }
 
     /**
@@ -201,6 +300,15 @@ class CLI implements ProgressPrinterInterface
 
         echo ' (';
         echo $this->result->getNumberOfFiles() . ' files, ';
+
+        if ($this->result->getNumberOfLintErrors() > 0) {
+            echo $this->result->getNumberOfLintErrors() . ' lint errors, ';
+        }
+
+        if ($this->result->getNumberOfRuleErrors() > 0) {
+            echo $this->result->getNumberOfRuleErrors() . ' rule errors, ';
+        }
+
         echo $this->result->getNumberOfErrors() . ' errors, ';
         echo $this->result->getNumberOfWarnings() . ' warnings';
         echo ')';
@@ -209,7 +317,7 @@ class CLI implements ProgressPrinterInterface
     }
 
     /**
-     * Run PHPCA
+     * Run PHPCA. Parses the command line and executes the selected command.
      *
      * @param array $arguments $argv
      */
@@ -220,41 +328,27 @@ class CLI implements ProgressPrinterInterface
         try {
             $this->startTimer();
 
-            $this->parseCommandLine($arguments);
+            $method = $this->parseCommandLine($arguments);
 
-            $application = new Application();
-            $application->registerProgressPrinter($this);
-
-            $this->result = $application->run($this->phpExecutable, $this->path);
+            $this->result = $this->$method();
 
             $this->endTimer();
 
-            $this->printSummary();
+            // Only print the summary when we actually analyzed files
+            if ($method == 'analyzeFilesCommand') {
+                $this->printSummary();
+            }
+
+            if ($this->result->hasErrors()) {
+                $this->doExit(-1);
+            }
         }
 
         catch (Exception $e) {
             echo 'Error: ' . $e->getMessage() . PHP_EOL . PHP_EOL;
-            $this->printUsage();
-            exit(-1);
+            $this->printUsageMessage();
+            $this->doExit(-1);
         }
-    }
-
-    /**
-     * Prepend spaces to file counter to align it with its maximum possible
-     * value which equals $this->numberOfFiles
-     *
-     * @param string $fileCount
-     */
-    protected function formatFileCount($fileCount)
-    {
-        $numberOfFilesLength = strlen($this->numberOfFiles);
-        $fileCountLength = strlen($this->fileCount);
-
-        if ($numberOfFilesLength > $fileCountLength) {
-            $fileCount = str_pad($fileCount, $numberOfFilesLength, ' ', STR_PAD_LEFT);
-        }
-
-        return $fileCount;
     }
 
     /**

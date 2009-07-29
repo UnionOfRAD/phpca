@@ -101,7 +101,7 @@ class Application
         $result = array();
 
         if (!file_exists($path)) {
-            throw new Exception($path . ' does not exist');
+            throw new Exception($path . ' not found');
         }
 
         $it = new PhpFileFilterIterator(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path)));

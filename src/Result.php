@@ -76,6 +76,16 @@ class Result
     /**
      * @var int
      */
+    protected $globalLintErrorCount = 0;
+
+    /**
+     * @var int
+     */
+    protected $globalRuleErrorCount = 0;
+
+    /**
+     * @var int
+     */
     protected $globalWarningCount = 0;
 
     /**
@@ -148,11 +158,26 @@ class Result
      */
     public function addMessage(Message $message)
     {
+        // Flag to make sure that each error is only counted once globally
+        $counted = false;
+
         $filename = $message->getFileName();
         $this->messages[$filename][] = $message;
 
+        if ($message instanceOf RuleError) {
+            $this->globalRuleErrorCount++;
+            $counted = true;
+        }
+
+        if ($message instanceOf LintError) {
+            $this->globalLintErrorCount++;
+            $counted = true;
+        }
+
         if ($message instanceOf Error) {
-            $this->globalErrorCount++;
+            if (!$counted) {
+                $this->globalErrorCount++;
+            }
 
             if (!isset($this->errorCount[$filename])) {
                 $this->errorCount[$filename] = 1;
@@ -233,7 +258,7 @@ class Result
     public function hasErrors($file = null)
     {
         if (is_null($file)) {
-            return $this->globalErrorCount > 0;
+            return $this->globalErrorCount > 0 || $this->globalLintErrorCount > 0 || $this->globalRuleErrorCount > 0;
         }
 
         if (!isset($this->errorCount[$file])) {
@@ -246,6 +271,16 @@ class Result
     public function getNumberOfErrors()
     {
         return $this->globalErrorCount;
+    }
+
+    public function getNumberOfLintErrors()
+    {
+        return $this->globalLintErrorCount;
+    }
+
+    public function getNumberOfRuleErrors()
+    {
+        return $this->globalRuleErrorCount;
     }
 
     public function hasLintError($file)
