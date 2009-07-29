@@ -56,12 +56,13 @@ $_classMap = array(
     'spriebsch\PHPca\Application'                 => 'Application.php',
     'spriebsch\PHPca\CLI'                         => 'CLI.php',
 
-    'spriebsch\PHPca\RuleError'                   => 'RuleError.php',
-    'spriebsch\PHPca\Rule\Rule'                   => 'Rule.php',
-    'spriebsch\PHPca\Rule\NoTabulatorsRule'       => 'Rule/NoTabulatorsRule.php',
-    'spriebsch\PHPca\Rule\NoCarriageReturnsRule'  => 'Rule/NoCarriageReturnsRule.php',
-    'spriebsch\PHPca\Rule\OpenTagAtBeginningRule' => 'Rule/OpenTagAtBeginningRule.php',
-    'spriebsch\PHPca\Rule\CloseTagAtEndRule'      => 'Rule/CloseTagAtEndRule.php',
+    'spriebsch\PHPca\RuleError'                                 => 'RuleError.php',
+    'spriebsch\PHPca\Rule\Rule'                                 => 'Rule.php',
+    'spriebsch\PHPca\Rule\NoTabulatorsRule'                     => 'Rule/NoTabulatorsRule.php',
+    'spriebsch\PHPca\Rule\NoCarriageReturnsRule'                => 'Rule/NoCarriageReturnsRule.php',
+    'spriebsch\PHPca\Rule\OpenTagAtBeginningRule'               => 'Rule/OpenTagAtBeginningRule.php',
+    'spriebsch\PHPca\Rule\CloseTagAtEndRule'                    => 'Rule/CloseTagAtEndRule.php',
+    'spriebsch\PHPca\Rule\IncludeAndRequireWithoutBracketsRule' => 'Rule/IncludeAndRequireWithoutBracketsRule.php',
 
     'spriebsch\PHPca\Helper'                      => 'Helper.php',
 
