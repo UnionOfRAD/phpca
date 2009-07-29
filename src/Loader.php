@@ -144,6 +144,10 @@ final class Loader
      */
     static public function autoload($class)
     {
+        if (substr($class, 0, 1) == '\\') {
+            $class = substr($class, 1);
+        }
+
         $count = count(self::$classMaps);
 
         for ($i = 0; $i < $count; $i++) {

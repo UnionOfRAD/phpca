@@ -53,7 +53,7 @@ class NoTabulatorsRule extends Rule
     {
         foreach (Finder::findToken($this->file, T_WHITESPACE) as $token) {
             if (false !== strstr($token->getText(), "\t")) {
-                $this->addError('Tabulator used for indentation', $token);
+                $this->addError('Tabulator (\t) found', $token);
             }
         }
     }

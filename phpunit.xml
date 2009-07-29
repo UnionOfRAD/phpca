@@ -12,6 +12,9 @@
         <whitelist addUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">src</directory>
         </whitelist>
+        <blacklist>
+            <file>src/phpca.php</file>
+        </blacklist>
     </filter>
 
     <logging>

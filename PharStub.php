@@ -2,7 +2,7 @@
 
 Phar::mapPhar('phpca.phar');
 
-print 'Welcome to PHPca' . PHP_EOL;
+require_once 'src/phpca.php';
 
 __HALT_COMPILER();
 

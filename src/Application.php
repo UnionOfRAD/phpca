@@ -79,7 +79,12 @@ class Application
      * @var bool
      */
     protected $enableBuiltInRules = true;
-    
+
+    /**
+     * @var int
+     */
+    protected $numberOfFiles = 0;
+
     /**
      * Returns array of all .php filenames in given directory.
      * If $path points to a single file, we do not iterate.
@@ -252,6 +257,18 @@ class Application
     }
 
     /**
+     * Returns the number of files to analyze.
+     * The value will not be available before run() has been called
+     * and should only be used by the progress printer.
+     *
+     * @return int
+     */
+    public function getNumberOfFiles()
+    {
+        return $this->numberOfFiles;
+    }
+
+    /**
      * PHPca's main method. Returns a result object holding
      * error and warning messages for all the files that have been analyzed.
      *
@@ -288,6 +305,8 @@ class Application
             throw new Exception('No PHP files to analyze');
         }
 
+        $this->numberOfFiles = sizeof($phpFiles);
+
         foreach ($phpFiles as $phpFile) {
 
             // Remember that we have processed this file,
@@ -302,7 +321,7 @@ class Application
 
             // Notify the progress printer that we have analyzed a file
             if (is_object($this->progressPrinter)) {
-                $this->progressPrinter->showProgress($phpFile, $this->result);
+                $this->progressPrinter->showProgress($phpFile, $this->result, $this);
             }
         }
 

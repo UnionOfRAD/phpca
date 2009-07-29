@@ -46,6 +46,20 @@ namespace spriebsch\PHPca;
 class LintError extends Error
 {
     /**
+     * Returns the lint error message, leaving out the
+     * "Errors parsing: <filename>" summary line and the file names.
+     *
+     * @return string
+     */
+    public function getMessage()
+    {
+        $result = trim(substr($this->message, 0, strpos($this->message, 'Errors parsing')));
+        $result = str_replace('in ' . $this->fileName . ' ', '', $result);
+
+        return $result;
+    }
+
+    /**
      * By definition, lint errors always occur on line 0, though the lint error message itself contains a different line number.
      */
     public function getLine()

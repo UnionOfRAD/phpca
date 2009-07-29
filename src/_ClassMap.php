@@ -54,6 +54,7 @@ $_classMap = array(
     'spriebsch\PHPca\UnknownTokenException'       => 'UnknownTokenException.php',
     'spriebsch\PHPca\ProgressPrinterInterface'    => 'ProgressPrinterInterface.php',
     'spriebsch\PHPca\Application'                 => 'Application.php',
+    'spriebsch\PHPca\CLI'                         => 'CLI.php',
 
     'spriebsch\PHPca\RuleError'                   => 'RuleError.php',
     'spriebsch\PHPca\Rule\Rule'                   => 'Rule.php',

@@ -122,6 +122,19 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Make sure the loader also finds a class if the name is prepended
+     * with a backslash. This is necessary so that autoloading and instantiating
+     * classes from within a namespace also works when the classname is a string.
+     *
+     * @covers spriebsch\MVC\Loader::autoload
+     */
+    public function testLoadLoadsExistingClassWhenNamePrependedWithBackslash()
+    {
+        Loader::registerPath(__DIR__ . '/_testdata/Loader/ClassG');
+        $this->assertTrue(class_exists('\spriebsch\PHPca\Tests\G'));
+    }
+
+    /**
      * @covers spriebsch\MVC\Loader::autoload
      */
     public function testLoadWorksForMultipleClassPaths()

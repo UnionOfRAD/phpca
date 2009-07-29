@@ -61,6 +61,15 @@ class LintErrorTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\LintError::getMessage
+     */
+    public function testGetMessageStripsOriginalErrorMessage()
+    {
+        $error = new LintError('./PHPCA/Tests/_files/testdata/lint_fail/003.php', "Parse error: syntax error, unexpected T_FUNCTION, expecting T_STRING or '(' in ./PHPCA/Tests/_files/testdata/lint_fail/003.php on line 3\nErrors parsing ./PHPCA/Tests/_files/testdata/lint_fail/003.php");
+        $this->assertEquals("Parse error: syntax error, unexpected T_FUNCTION, expecting T_STRING or '(' on line 3", $error->getMessage());
+    }
+
+    /**
      * @covers spriebsch\PHPca\LintError::getLine
      */
     public function testGetLineReturnsZero()

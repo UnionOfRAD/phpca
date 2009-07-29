@@ -64,6 +64,15 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\Application::getNumberOfFiles
+     */
+    public function testGetNumberOfFilesIsInitiallyZero()
+    {
+        $application = new Application();
+        $this->assertEquals(0, $application->getNumberOfFiles());
+    }
+
+    /**
      * Does not specify a PHP executable
      * (which is required to run the lint checks).
      *

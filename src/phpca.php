@@ -42,7 +42,7 @@ require_once __DIR__ . '/Loader.php';
 spriebsch\PHPca\Loader::init();
 spriebsch\PHPca\Loader::registerPath(__DIR__);
 
-// $app = new spriebsch\PHPca\Command();
-// $app->run($argv);
+$cli = new spriebsch\PHPca\CLI();
+$cli->run($argv);
 // @codeCoverageIgnoreEnd
 ?>

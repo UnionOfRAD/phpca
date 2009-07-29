@@ -45,6 +45,6 @@ namespace spriebsch\PHPca;
  */
 interface ProgressPrinterInterface
 {
-    public function showProgress($file, Result $result);
+    public function showProgress($file, Result $result, Application $application);
 }
 ?>
