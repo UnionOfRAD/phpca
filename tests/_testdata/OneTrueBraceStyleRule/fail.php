@@ -39,4 +39,12 @@ switch ($a)
 {
 }
 
+while (true)
+{
+}
+
+do
+{
+} while (true)
+
 ?>

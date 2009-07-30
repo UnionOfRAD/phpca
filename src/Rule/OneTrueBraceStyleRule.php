@@ -91,6 +91,8 @@ class OneTrueBraceStyleRule extends Rule
         $this->checkBraceLine(T_IF, 'if: curly brace on different line', false);
         $this->checkBraceLine(T_ELSE, 'else: curly brace on different line', false);
         $this->checkBraceLine(T_ELSEIF, 'elseif: curly brace on different line', false);
+        $this->checkBraceLine(T_WHILE, 'while: curly brace on different line', false);
+        $this->checkBraceLine(T_DO, 'do: curly brace on different line', false);
 
         // Namespaces have a dual syntax, either "namespace name;" or
         // "namespace name {}", so we need a different search pattern

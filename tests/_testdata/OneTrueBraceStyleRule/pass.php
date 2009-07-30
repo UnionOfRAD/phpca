@@ -36,4 +36,10 @@ if ($a) {
 switch ($a) {
 }
 
+while (true) {
+}
+
+do {
+} while (true)
+
 ?>

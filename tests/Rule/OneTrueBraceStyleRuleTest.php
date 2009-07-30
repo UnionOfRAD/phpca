@@ -83,8 +83,8 @@ class OneTrueBraceStyleRuleTest extends RuleTest
         $this->assertTrue($this->result->hasErrors());
 
         // expected errors:
-        // namespace, class, 2 function, foreach, for, 3 if, 2 else, elseif, switch
-        $this->assertEquals(13, $this->result->getNumberOfErrors());
+        // namespace, class, 2 function, foreach, for, 3 if, 2 else, elseif, switch, while, do
+        $this->assertEquals(15, $this->result->getNumberOfErrors());
     }
 }
 ?>
