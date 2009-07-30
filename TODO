@@ -11,9 +11,7 @@ Roadmap (tasks listed in decreasing priority)
 
 Rules to add (in no particular order, just a collection of ideas)
 
-* no eval statement
 * no shutup operator
-* no var keyword
 * No inline if
 * Correct indentation
 * no trailing whitespace
