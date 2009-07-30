@@ -40,7 +40,7 @@
     </target>
 
     <target name="test" description="Runs all unit tests.">
-        <exec command="phpunit --configuration phpunit.xml tests" passthru="true" checkReturn="true" />
+        <exec command="phpunit --configuration phpunit.xml" passthru="true" checkReturn="true" />
     </target>
 
 </project>

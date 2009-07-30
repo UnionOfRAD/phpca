@@ -4,9 +4,11 @@
          backupStaticAttributes="false"
          syntaxCheck="false">
 
-    <testsuite name="PHPca">
-        <directory>tests</directory>
-    </testsuite>
+    <testsuites>
+        <testsuite name="PHPca">
+            <directory suffix="Test.php">tests</directory>
+        </testsuite>
+    </testsuites>
 
     <filter>
         <whitelist addUncoveredFilesFromWhitelist="true">
