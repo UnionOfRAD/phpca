@@ -2,19 +2,25 @@ Roadmap (tasks listed in decreasing priority)
 
 * improve API documentation of existing code
 * Add some more useful rules
-* Make the CLI frontend work with the new code
 * Make error/warning know which rule has caused them
 * Make token know in which namespace/class/function it is
 * Allow adding custom rules (by specifying additional Rule directories)
 * Make phpca configurable (see sample phpca.ini for a collection of ideas)
-* Add XML output to comply with phpcs
+* Add XML output to comply with phpcs for ci integration
 * Port "interesting" rules from phpcs
 
 Rules to add (in no particular order, just a collection of ideas)
 
-* One true brace style
-* no brackets around return value
 * no eval statement
+* no shutup operator
+* no var keyword
+* No inline if
+* Correct indentation
+* no trailing whitespace
+* no elseif (warning?)
+* no brackets around return value
 * no deprecated PHPDoc tags (@access, ...)
 * one blank after comma in argument lists
 * no alternative control structures like if ... endif etc.
+* consistently use echo or print
+* no output (echo, print) in certain classes/directories
