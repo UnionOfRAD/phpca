@@ -3,7 +3,7 @@ phpca
 
 When running from the source tree, use:
 
-`php src/phpca.php -p <path> <file or directory>`
+php src/phpca.php -p <path> <file or directory>
 
 where <path> is the bath to the PHP binary (required for the lint check
 that is done before tokenizing the file) and <file or directory> is either
@@ -12,7 +12,7 @@ in that directory and its subdirectories will be analyzed.
 
 To run from Phar archive (to create a Phar archive, run "phing phar"), use:
 
-`php phpca.phar -p <path> <file or directory>`
+php phpca.phar -p <path> <file or directory>
 
 The other command line switches phpca currently supports are:
 
