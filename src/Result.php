@@ -103,8 +103,7 @@ class Result
         $l2 = $t2->getLine();
 
         // When line numbers match, sort by column
-        if ($l1 == $l2)
-        {
+        if ($l1 == $l2) {
             $c1 = $t1->getColumn();
             $c2 = $t2->getColumn();
 
