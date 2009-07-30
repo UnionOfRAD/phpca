@@ -63,6 +63,7 @@ $_classMap = array(
     'spriebsch\PHPca\Rule\OpenTagAtBeginningRule'               => 'Rule/OpenTagAtBeginningRule.php',
     'spriebsch\PHPca\Rule\CloseTagAtEndRule'                    => 'Rule/CloseTagAtEndRule.php',
     'spriebsch\PHPca\Rule\IncludeAndRequireWithoutBracketsRule' => 'Rule/IncludeAndRequireWithoutBracketsRule.php',
+    'spriebsch\PHPca\Rule\OneTrueBraceStyleRule'                => 'Rule/OneTrueBraceStyleRule.php',
 
     'spriebsch\PHPca\Helper'                      => 'Helper.php',
 
