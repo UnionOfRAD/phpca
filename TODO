@@ -13,6 +13,7 @@ Roadmap (tasks listed in decreasing priority)
 Rules to add (in no particular order, just a collection of ideas)
 
 * One true brace style
+* no brackets around return value
 * no eval statement
 * no deprecated PHPDoc tags (@access, ...)
 * one blank after comma in argument lists
