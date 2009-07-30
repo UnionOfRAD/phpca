@@ -108,7 +108,10 @@ class Finder
             throw new EmptyPatternException('Pattern is empty');
         }
 
+        // Match against the T_X ... T_Z token stream that File::__toString() returns.
         preg_match_all('/' . $pattern->getRegEx() . '/U', (string) $file, $matches);
+
+        // Convert T_A ... T_B match back to array of Token objects.
         return self::toTokens($file, $matches[0]);
     }
 }
