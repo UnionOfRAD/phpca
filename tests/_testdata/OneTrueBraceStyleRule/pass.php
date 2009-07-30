@@ -1,7 +1,5 @@
 <?php
 
-namespace A;
-
 namespace B
 {
     class Test
@@ -10,36 +8,36 @@ namespace B
         {
         }
     }
-}
 
-function test()
-{
-}
-
-foreach ($a as $b) {
-}
-
-for ($i = 0; $i < 3; $i++) {
-}
-
-if ($a) {
-} else {
-}
-
-if ($a) {
-} else {
-    if ($b) {
-    } elseif ($c) {
+    function test()
+    {
     }
-}
 
-switch ($a) {
-}
+    foreach ($a as $b) {
+    }
 
-while (true) {
-}
+    for ($i = 0; $i < 3; $i++) {
+    }
 
-do {
-} while (true)
+    if ($a) {
+    } else {
+    }
+
+    if ($a) {
+    } else {
+        if ($b) {
+        } elseif ($c) {
+        }
+    }
+
+    switch ($a) {
+    }
+
+    while (true) {
+    }
+
+    do {
+    } while (true);
+}
 
 ?>

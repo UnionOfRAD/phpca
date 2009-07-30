@@ -5,46 +5,46 @@ namespace A {
         public function something() {
         }
     }
-}
 
-function test() {
-}
+    function test() {
+    }
 
-foreach ($a as $b)
-{
-}
-
-for ($i = 0; $i < 3; $i++)
-{
-}
-
-if ($a)
-{
-} else
-{
-}
-
-if ($a)
-{
-} else
-{
-    if ($b)
-    {
-    } elseif ($c)
+    foreach ($a as $b)
     {
     }
-}
 
-switch ($a)
-{
-}
+    for ($i = 0; $i < 3; $i++)
+    {
+    }
 
-while (true)
-{
-}
+    if ($a)
+    {
+    } else
+    {
+    }
 
-do
-{
-} while (true)
+    if ($a)
+    {
+    } else
+    {
+        if ($b)
+        {
+        } elseif ($c)
+        {
+        }
+    }
+
+    switch ($a)
+    {
+    }
+
+    while (true)
+    {
+    }
+
+    do
+    {
+    } while (true);
+}
 
 ?>

@@ -86,5 +86,19 @@ class OneTrueBraceStyleRuleTest extends RuleTest
         // namespace, class, 2 function, foreach, for, 3 if, 2 else, elseif, switch, while, do
         $this->assertEquals(15, $this->result->getNumberOfErrors());
     }
+
+    /**
+     * @covers \spriebsch\PHPca\Rule\OneTrueBraceStyleRule
+     */
+    public function testDoesNotComplainAboutAlternativeNamespaceSyntax()
+    {
+        $this->init(__DIR__ . '/../_testdata/OneTrueBraceStyleRule/namespace.php');
+
+        $rule = new OneTrueBraceStyleRule();
+        $rule->check($this->file, $this->result);
+
+        $this->assertFalse($this->result->hasWarnings());
+        $this->assertFalse($this->result->hasErrors());
+    }
 }
 ?>
