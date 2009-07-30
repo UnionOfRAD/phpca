@@ -69,6 +69,9 @@ class Constants
         ':'  => array(519, 'T_COLON'),
         '"'  => array(520, 'T_DOUBLE_QUOTES'),
         '@'  => array(521, 'T_AT'),
+        '&'  => array(522, 'T_AMPERSAND'),
+        '%'  => array(523, 'T_PERCENT'),
+        '|'  => array(523, 'T_PIPE'),
     );
 
     /**
