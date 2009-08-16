@@ -61,6 +61,15 @@ class UnknownTokenExceptionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\UnknownTokenException::__construct
+     */
+    public function testConstructSetsMessage()
+    {
+        $exception = new UnknownTokenException('text');
+        $this->assertEquals('Unknown token "text"', $exception->getMessage());
+    }
+
+    /**
      * @covers spriebsch\PHPca\UnknownTokenException::getTokenName
      */
     public function testGetTokenName()
