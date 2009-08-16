@@ -192,8 +192,10 @@ class ResultTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(array(), $result->getErrors('testfile'));
 
-        $error1 = new Error('testfile', 'error message');
-        $error2 = new Error('testfile', 'another error message');
+        $t1 = new Token(T_OPEN_TAG, '<?php', 5, 4);
+        $error1 = new Error('testfile', 'error message', $t1);
+        $t2 = new Token(T_OPEN_TAG, '<?php', 5, 9);
+        $error2 = new Error('testfile', 'another error message', $t2);
 
         $warning = new Warning('testfile', 'a warning');
 
@@ -207,6 +209,7 @@ class ResultTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers spriebsch\PHPca\Result::getErrors
+     * @covers spriebsch\PHPca\Result::sortByLine
      */
     public function testGetErrorsSortsByLine()
     {
@@ -228,6 +231,7 @@ class ResultTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers spriebsch\PHPca\Result::getErrors
+     * @covers spriebsch\PHPca\Result::sortByLine
      */
     public function testGetErrorsSortsByColumn()
     {

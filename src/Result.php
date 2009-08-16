@@ -107,9 +107,12 @@ class Result
             $c1 = $t1->getColumn();
             $c2 = $t2->getColumn();
 
+            // Two tokens can't be on the same line AND column.
+            // @codeCoverageIgnoreStart
             if ($c1 == $c2) {
-                return 0;
+                throw new Exception('Cannot sort two tokens that are on the same column');
             }
+            // @codeCoverageIgnoreEnd
 
             return ($c1 > $c2) ? 1 : -1;
         }
