@@ -138,6 +138,7 @@ class ResultTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\Result::addMessage
      * @covers spriebsch\PHPca\Result::getNumberOfWarnings
      */
     public function testGetNumberOfWarnings()
@@ -153,6 +154,7 @@ class ResultTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\Result::addMessage
      * @covers spriebsch\PHPca\Result::hasErrors
      */
     public function testHasErrors()
@@ -163,6 +165,7 @@ class ResultTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($result->hasErrors());
 
         $result->addMessage(new Error('testfile', 'error message'));
+        $result->addMessage(new Error('testfile', 'another error message'));
 
         $this->assertTrue($result->hasErrors());
     }
@@ -252,7 +255,7 @@ class ResultTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers spriebsch\PHPca\Result::getLintError
+     * @covers spriebsch\PHPca\Result::hasLintError
      */
     public function testHasLintErrorReturnsFalseWhenNoLintError()
     {
@@ -277,7 +280,7 @@ class ResultTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers spriebsch\PHPca\Result::getLintError
+     * @covers spriebsch\PHPca\Result::hasLintError
      */
     public function testHasLintErrorReturnsFalseForOtherError()
     {
@@ -291,9 +294,49 @@ class ResultTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\Result::hasRuleError
+     */
+    public function testHasRuleErrorReturnsFalseWhenNoRuleError()
+    {
+        $result = new Result();
+        $result->addFile('testfile');
+
+        $this->assertFalse($result->hasRuleError('testfile'));
+    }
+
+    /**
+     * @covers spriebsch\PHPca\Result::getRuleError
+     */
+    public function testHasRuleErrorReturnsTrueForRuleError()
+    {
+        $result = new Result();
+        $result->addFile('testfile');
+
+        $error = new RuleError('testfile', 'error message');
+        $result->addMessage($error);
+
+        $this->assertTrue($result->hasRuleError('testfile'));
+    }
+
+    /**
+     * @covers spriebsch\PHPca\Result::hasRuleError
+     */
+    public function testHasRuleErrorReturnsFalseForOtherError()
+    {
+        $result = new Result();
+        $result->addFile('testfile');
+
+        $error = new Error('testfile', 'error message');
+        $result->addMessage($error);
+
+        $this->assertFalse($result->hasRuleError('testfile'));
+    }
+
+    /**
+     * @covers spriebsch\PHPca\Result::addMessage
      * @covers spriebsch\PHPca\Result::getNumberOfErrors
      */
-    public function testGetNumberOfErrors()
+    public function testGetNumberOfErrorsReturnsErrorCount()
     {
         $result = new Result();
         $result->addFile('testfile');
@@ -301,8 +344,39 @@ class ResultTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0, $result->getNumberOfErrors());
 
         $result->addMessage(new Error('testfile', 'error message'));
+        $result->addMessage(new Error('testfile', 'another error message'));
 
-        $this->assertEquals(1, $result->getNumberOfErrors());
+        $this->assertEquals(2, $result->getNumberOfErrors());
+    }
+
+    /**
+     * @covers spriebsch\PHPca\Result::addMessage
+     * @covers spriebsch\PHPca\Result::getNumberOfLintErrors
+     */
+    public function testGetNumberOfLintErrors()
+    {
+        $result = new Result();
+        $result->addFile('testfile');
+
+        $error = new LintError('testfile', 'error message');
+        $result->addMessage($error);
+
+        $this->assertEquals(1, $result->getNumberOfLintErrors('testfile'));
+    }
+
+    /**
+     * @covers spriebsch\PHPca\Result::addMessage
+     * @covers spriebsch\PHPca\Result::getNumberOfRuleErrors
+     */
+    public function testGetNumberOfRuleErrors()
+    {
+        $result = new Result();
+        $result->addFile('testfile');
+
+        $error = new RuleError('testfile', 'error message');
+        $result->addMessage($error);
+
+        $this->assertEquals(1, $result->getNumberOfRuleErrors('testfile'));
     }
 }
 ?>
