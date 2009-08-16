@@ -73,6 +73,7 @@ class CLITest extends \PHPUnit_Framework_TestCase
      *
      * @param array $argv The command line arguments for CLI
      * @return string
+     * @todo use output buffering annotation of PHPUnit?
      */
     protected function runCLI($argv)
     {
@@ -207,6 +208,18 @@ class CLITest extends \PHPUnit_Framework_TestCase
         $this->assertContains("\nL\n", $result);
         $this->assertContains('Parse error:', $result);
         $this->assertContains('FAIL', $result);
+    }
+
+    /**
+     * @covers spriebsch\PHPca\CLI::parseCommandLine
+     * @covers spriebsch\PHPca\CLI::printBuiltInRulesCommand
+     * @covers spriebsch\PHPca\CLI::totRuleName
+     */
+    public function testRunShowsUsageMessageWhenInvokedWithLongListSwitch()
+    {
+        $result = $this->runCLI(array('cli.php', '--list'));
+
+        $this->assertContains('Built-in rules:', $result);
     }
 }
 ?>
