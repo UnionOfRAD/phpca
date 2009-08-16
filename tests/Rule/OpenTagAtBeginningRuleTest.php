@@ -70,7 +70,12 @@ class OpenTagAtBeginningRuleTest extends RuleTest
     }
 
     /**
+     * This test depends on the php.ini setting short_open_tag.
+     * If short_open_tag is set to On in php.ini, short open tags
+     * will be tokenized as PHP_OPEN_TAG.
+     *
      * @covers \spriebsch\PHPca\Rule\OpenTagAtBeginningRule
+     * @todo this test should be skipped when short_open_tags = On
      */
     public function testShortOpenTagAtBeginning()
     {
@@ -79,7 +84,9 @@ class OpenTagAtBeginningRuleTest extends RuleTest
         $rule = new OpenTagAtBeginningRule();
         $rule->check($this->file, $this->result);
 
-        $this->assertEquals(1, $this->result->getNumberOfErrors());
+        if (!ini_get('short_open_tag')) {
+            $this->assertEquals(1, $this->result->getNumberOfErrors());
+        }
     }
 
     /**
