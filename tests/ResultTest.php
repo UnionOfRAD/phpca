@@ -266,7 +266,7 @@ class ResultTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers spriebsch\PHPca\Result::getLintError
+     * @covers spriebsch\PHPca\Result::hasLintError
      */
     public function testHasLintErrorReturnsTrueForLintError()
     {
