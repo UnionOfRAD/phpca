@@ -284,7 +284,7 @@ class Result
     {
         return $this->globalRuleErrorCount;
     }
-
+    
     public function hasLintError($file)
     {
         if (!isset($this->messages[$file])) {

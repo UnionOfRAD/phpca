@@ -43,26 +43,26 @@ use spriebsch\PHPca\Tokenizer;
 use spriebsch\PHPca\Result;
 
 require_once 'PHPUnit/Framework.php';
-require_once __DIR__ . '/AbstractRuleTest.php';
+require_once __DIR__ . '/RuleTest.php';
 require_once __DIR__ . '/../../src/Exceptions.php';
 require_once __DIR__ . '/../../src/Loader.php';
 
 /**
- * Tests for the No tabulators rule.
+ * Tests for the OpenTagArBeginning rule.
  *
  * @author     Stefan Priebsch <stefan@priebsch.de>
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
-class NoTabulatorsRuleTest extends AbstractRuleTest
+class CloseTagAtEndRuleTest extends RuleTest
 {
     /**
-     * @covers \spriebsch\PHPca\Rule\NoTabulatorsRule
+     * @covers \spriebsch\PHPca\Rule\CloseTagAtEndRule
      */
-    public function testNoTabulators()
+    public function testCloseTagAtEnd()
     {
-        $this->init(__DIR__ . '/../_testdata/NoTabulatorsRule/blanks.php');
+        $this->init(__DIR__ . '/../_testdata/CloseTagAtEndRule/closetag.php');
 
-        $rule = new NoTabulatorsRule();
+        $rule = new CloseTagAtEndRule();
         $rule->check($this->file, $this->result);
 
         $this->assertFalse($this->result->hasWarnings());
@@ -70,37 +70,16 @@ class NoTabulatorsRuleTest extends AbstractRuleTest
     }
 
     /**
-     * @covers \spriebsch\PHPca\Rule\NoTabulatorsRule
+     * @covers \spriebsch\PHPca\Rule\CloseTagAtEndRule
      */
-    public function testTabulators()
+    public function testNoCloseTagAtEnd()
     {
-        $this->init(__DIR__ . '/../_testdata/NoTabulatorsRule/tabulators.php');
+        $this->init(__DIR__ . '/../_testdata/CloseTagAtEndRule/no_closetag.php');
 
-        $rule = new NoTabulatorsRule();
+        $rule = new CloseTagAtEndRule();
         $rule->check($this->file, $this->result);
 
-        $this->assertFalse($this->result->hasWarnings());
-        $this->assertEquals(6, $this->result->getNumberOfErrors());
-
-        $errors = $this->result->getErrors('test.php');
-
-        $this->assertEquals(5, $errors[0]->getLine());
-        $this->assertEquals(1, $errors[0]->getColumn());
-
-        $this->assertEquals(6, $errors[1]->getLine());
-        $this->assertEquals(1, $errors[1]->getColumn());
-
-        $this->assertEquals(14, $errors[2]->getLine());
-        $this->assertEquals(1, $errors[2]->getColumn());
-
-        $this->assertEquals(15, $errors[3]->getLine());
-        $this->assertEquals(1, $errors[3]->getColumn());
-
-        $this->assertEquals(16, $errors[4]->getLine());
-        $this->assertEquals(1, $errors[4]->getColumn());
-
-        $this->assertEquals(17, $errors[5]->getLine());
-        $this->assertEquals(1, $errors[5]->getColumn());
+        $this->assertEquals(1, $this->result->getNumberOfErrors());
     }
 }
 ?>

@@ -128,5 +128,10 @@ class Message
 
        return $this->token->getColumn();
     }
+
+    public function getToken()
+    {
+        return $this->token;
+    }
 }
 ?>

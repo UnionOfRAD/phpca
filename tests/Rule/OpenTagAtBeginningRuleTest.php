@@ -43,7 +43,7 @@ use spriebsch\PHPca\Tokenizer;
 use spriebsch\PHPca\Result;
 
 require_once 'PHPUnit/Framework.php';
-require_once __DIR__ . '/RuleTest.php';
+require_once __DIR__ . '/AbstractRuleTest.php';
 require_once __DIR__ . '/../../src/Exceptions.php';
 require_once __DIR__ . '/../../src/Loader.php';
 
@@ -53,7 +53,7 @@ require_once __DIR__ . '/../../src/Loader.php';
  * @author     Stefan Priebsch <stefan@priebsch.de>
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
-class OpenTagAtBeginningRuleTest extends RuleTest
+class OpenTagAtBeginningRuleTest extends AbstractRuleTest
 {
     /**
      * @covers \spriebsch\PHPca\Rule\OpenTagAtBeginningRule
@@ -84,9 +84,11 @@ class OpenTagAtBeginningRuleTest extends RuleTest
         $rule = new OpenTagAtBeginningRule();
         $rule->check($this->file, $this->result);
 
-        if (!ini_get('short_open_tag')) {
-            $this->assertEquals(1, $this->result->getNumberOfErrors());
+        if (ini_get('short_open_tag')) {
+            $this->markTestSkipped('short_open_tags enabled in php.ini');
         }
+
+        $this->assertEquals(1, $this->result->getNumberOfErrors());
     }
 
     /**

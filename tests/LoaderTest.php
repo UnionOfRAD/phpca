@@ -60,7 +60,6 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers spriebsch\MVC\Loader::__construct
      * @expectedException spriebsch\PHPca\CannotInstantiateLoaderException
      */
     public function testConstructorThrowsException()
@@ -69,7 +68,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers spriebsch\MVC\Loader::init
+     * @covers spriebsch\PHPca\Loader::init
      */
     public function testInitRegistersSplAutoloadFunction()
     {
@@ -77,7 +76,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers spriebsch\MVC\Loader::registerPath
+     * @covers spriebsch\PHPca\Loader::registerPath
      * @expectedException spriebsch\PHPca\ClassMapNotFoundException
      */
     public function testRegisterPathThrowsExceptionWhenClassMapDoesNotExist()
@@ -86,7 +85,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers spriebsch\MVC\Loader::registerPath
+     * @covers spriebsch\PHPca\Loader::registerPath
      * @expectedException spriebsch\PHPca\InvalidClassMapException
      */
     public function testRegisterPathThrowsExceptionWhenClassMapIsNoArray()
@@ -95,7 +94,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers spriebsch\MVC\Loader::autoload
+     * @covers spriebsch\PHPca\Loader::autoload
      */
     public function testLoadLoadsExistingClass()
     {
@@ -104,7 +103,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers spriebsch\MVC\Loader::autoload
+     * @covers spriebsch\PHPca\Loader::autoload
      */
     public function testLoadLoadsExistingClassFromSubdirectory()
     {
@@ -113,7 +112,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers spriebsch\MVC\Loader::autoload
+     * @covers spriebsch\PHPca\Loader::autoload
      */
     public function testLoadLoadsExistingClassInAnotherNamespace()
     {
@@ -126,7 +125,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
      * with a backslash. This is necessary so that autoloading and instantiating
      * classes from within a namespace also works when the classname is a string.
      *
-     * @covers spriebsch\MVC\Loader::autoload
+     * @covers spriebsch\PHPca\Loader::autoload
      */
     public function testLoadLoadsExistingClassWhenNamePrependedWithBackslash()
     {
@@ -135,7 +134,7 @@ class LoaderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers spriebsch\MVC\Loader::autoload
+     * @covers spriebsch\PHPca\Loader::autoload
      */
     public function testLoadWorksForMultipleClassPaths()
     {

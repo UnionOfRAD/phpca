@@ -43,64 +43,36 @@ use spriebsch\PHPca\Tokenizer;
 use spriebsch\PHPca\Result;
 
 require_once 'PHPUnit/Framework.php';
-require_once __DIR__ . '/AbstractRuleTest.php';
 require_once __DIR__ . '/../../src/Exceptions.php';
 require_once __DIR__ . '/../../src/Loader.php';
 
 /**
- * Tests for the No tabulators rule.
+ * Abstract base class for Rule tests.
+ * Does not test Rule itself, since that is also an abstract class.
  *
  * @author     Stefan Priebsch <stefan@priebsch.de>
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
-class NoTabulatorsRuleTest extends AbstractRuleTest
+abstract class AbstractRuleTest extends \PHPUnit_Framework_TestCase
 {
-    /**
-     * @covers \spriebsch\PHPca\Rule\NoTabulatorsRule
-     */
-    public function testNoTabulators()
+    protected function setUp()
     {
-        $this->init(__DIR__ . '/../_testdata/NoTabulatorsRule/blanks.php');
+        Loader::init();
+        Loader::registerPath(__DIR__ . '/../../src');
 
-        $rule = new NoTabulatorsRule();
-        $rule->check($this->file, $this->result);
-
-        $this->assertFalse($this->result->hasWarnings());
-        $this->assertFalse($this->result->hasErrors());
+        Constants::init();
     }
 
-    /**
-     * @covers \spriebsch\PHPca\Rule\NoTabulatorsRule
-     */
-    public function testTabulators()
+    protected function tearDown()
     {
-        $this->init(__DIR__ . '/../_testdata/NoTabulatorsRule/tabulators.php');
+        Loader::reset();
+    }
 
-        $rule = new NoTabulatorsRule();
-        $rule->check($this->file, $this->result);
-
-        $this->assertFalse($this->result->hasWarnings());
-        $this->assertEquals(6, $this->result->getNumberOfErrors());
-
-        $errors = $this->result->getErrors('test.php');
-
-        $this->assertEquals(5, $errors[0]->getLine());
-        $this->assertEquals(1, $errors[0]->getColumn());
-
-        $this->assertEquals(6, $errors[1]->getLine());
-        $this->assertEquals(1, $errors[1]->getColumn());
-
-        $this->assertEquals(14, $errors[2]->getLine());
-        $this->assertEquals(1, $errors[2]->getColumn());
-
-        $this->assertEquals(15, $errors[3]->getLine());
-        $this->assertEquals(1, $errors[3]->getColumn());
-
-        $this->assertEquals(16, $errors[4]->getLine());
-        $this->assertEquals(1, $errors[4]->getColumn());
-
-        $this->assertEquals(17, $errors[5]->getLine());
-        $this->assertEquals(1, $errors[5]->getColumn());
+    protected function init($filename)
+    {
+        $this->file = Tokenizer::tokenize('test.php', file_get_contents($filename));
+        $this->result = new Result();
+        $this->result->addFile('test.php');
     }
 }
 ?>
