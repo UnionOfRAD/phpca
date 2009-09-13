@@ -22,3 +22,9 @@ Rules to add (in no particular order, just a collection of ideas)
 * no alternative control structures like if ... endif etc.
 * consistently use echo or print
 * no output (echo, print) in certain classes/directories
+* test method has @covers tag
+* all thrown exceptions are documented in docblocks
+* all parameters are documented in docblocks
+* there is a @return in every docblock, @return void or @return null
+* type hints and docblock parameter types match
+* test method must either have at least one assertion or @expects annotation
