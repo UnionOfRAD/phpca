@@ -305,7 +305,7 @@ class ResultTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers spriebsch\PHPca\Result::getRuleError
+     * @covers spriebsch\PHPca\Result::hasRuleError
      */
     public function testHasRuleErrorReturnsTrueForRuleError()
     {

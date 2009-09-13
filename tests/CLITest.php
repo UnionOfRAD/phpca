@@ -213,7 +213,7 @@ class CLITest extends \PHPUnit_Framework_TestCase
     /**
      * @covers spriebsch\PHPca\CLI::parseCommandLine
      * @covers spriebsch\PHPca\CLI::printBuiltInRulesCommand
-     * @covers spriebsch\PHPca\CLI::totRuleName
+     * @covers spriebsch\PHPca\CLI::toRuleName
      */
     public function testRunShowsUsageMessageWhenInvokedWithLongListSwitch()
     {

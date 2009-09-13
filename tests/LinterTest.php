@@ -136,7 +136,7 @@ class LinterTest extends \PHPUnit_Framework_TestCase
     /**
      * This test assumes that the PHP binary can be found by running "which php".
      *
-     * @covers spriebsch\PHPca\Linter::getOutput
+     * @covers spriebsch\PHPca\Linter::getErrorMessages
      */
     public function testGetErrorMessagesReturnsLintErrors()
     {

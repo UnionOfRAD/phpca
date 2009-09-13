@@ -99,7 +99,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     /**
      * Calls setEnableBuiltInRules with a non-boolean parameter.
      *
-     * @covers spriebsch\PHPca\Application::enableBuiltInRules
+     * @covers spriebsch\PHPca\Application::setEnableBuiltInRules
      * @expectedException spriebsch\PHPca\Exception
      */
     public function testSetEnableBuiltInRulesThrowsExceptionWhenParameterIsNotBoolean()
@@ -112,7 +112,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      * additional rule directories, thus there are no rules to enforce.
      *
      * @covers spriebsch\PHPca\Application::run
-     * @covers spriebsch\PHPca\Application::enableBuiltInRules
+     * @covers spriebsch\PHPca\Application::setEnableBuiltInRules
      * @expectedException spriebsch\PHPca\Exception
      */
     public function testRunThrowsExceptionWhenNoRulesToEnforce()
