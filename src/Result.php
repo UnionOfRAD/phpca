@@ -96,6 +96,7 @@ class Result
      * @param Message $t1
      * @param Message $t2
      * @return int
+     * @todo fix the two tokens in one column problem
      */
     protected function sortByLine($t1, $t2)
     {
@@ -110,7 +111,8 @@ class Result
             // Two tokens can't be on the same line AND column.
             // @codeCoverageIgnoreStart
             if ($c1 == $c2) {
-                throw new Exception('Cannot sort two tokens that are on the same column');
+                return 1;
+//                 throw new Exception('Cannot sort two tokens that are on the same column');
             }
             // @codeCoverageIgnoreEnd
 
