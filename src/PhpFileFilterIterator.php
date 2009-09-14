@@ -45,19 +45,45 @@ namespace spriebsch\PHPca;
  */
 class PhpFileFilterIterator extends \FilterIterator
 {
+    /**
+     * @var array
+     */
+    protected $extensions = array('php');
+
+    /**
+     * Set the extensions to accept
+     *
+     * @param array $extensions 
+     */
+    public function setExtensions(array $extensions)
+    {
+        $this->extensions = $extensions;
+    }
+
+    /**
+     * Decides wheter to accept the current element.
+     * Will accept regular files (no directories, . or ..) that have
+     * one of the given extensions.
+     *
+     * @return bool
+     */
     public function accept()
     {
         $current = $this->getInnerIterator()->current();
 
+        // Do not accept directories
         if (!$current->isFile()) {
             return false;
         }
 
-        if (substr($current->getPathname(), -4) != '.php') {
-            return false;
+        // Accept the file if it has one of the listed extensions
+        foreach ($this->extensions as $extension) {
+            if (substr($current->getPathname(), -(strlen($extension) + 1)) == '.' . $extension) {
+                return true;
+            }
         }
 
-        return true;
+        return false;
     }
 }
 ?>

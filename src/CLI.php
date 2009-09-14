@@ -60,6 +60,13 @@ class CLI implements ProgressPrinterInterface
     protected $phpExecutable;
 
     /**
+     * File extensions to analyze
+     *
+     * @var string
+     */
+    protected $extensions = array('php');
+
+    /**
      * Position counter for dot output of progress printer
      *
      * @var integer
@@ -111,14 +118,19 @@ class CLI implements ProgressPrinterInterface
     {
         echo 'Usage: php phpca.phar -p <file> <file to analyze>' . PHP_EOL .
              '       php phpca.phar -p <file> <directory to analyze>' . PHP_EOL . PHP_EOL .
+             '  -e <extensions>' . PHP_EOL .
+             '  --ext <extensions>  Specify file extensions to analyze, without dot.' . PHP_EOL .
+             '                      Separate multiple entries by comma, without whitespace.' . PHP_EOL .
+             '                      To analyze .inc files as well, use -e php,inc' . PHP_EOL .
+             '                      Defaults to \'php\'.' . PHP_EOL . PHP_EOL .
              '  -p <file>' . PHP_EOL .
-             '  --php <file>      Specify path to PHP executable (required).' . PHP_EOL . PHP_EOL .
+             '  --php <file>        Specify path to PHP executable (required).' . PHP_EOL . PHP_EOL .
              '  -l' . PHP_EOL .
-             '  --list            List all built-in rules.' . PHP_EOL . PHP_EOL .
+             '  --list              List all built-in rules.' . PHP_EOL . PHP_EOL .
              '  -h' . PHP_EOL .
-             '  --help            Prints this usage information.' . PHP_EOL . PHP_EOL .
+             '  --help              Prints this usage information.' . PHP_EOL . PHP_EOL .
              '  -v' . PHP_EOL .
-             '  --version         Prints the version number.' . PHP_EOL . PHP_EOL;
+             '  --version           Prints the version number.' . PHP_EOL . PHP_EOL;
     }
 
     /**
@@ -192,7 +204,7 @@ class CLI implements ProgressPrinterInterface
         $application = new Application();
         $application->registerProgressPrinter($this);
 
-        return call_user_func_array(array($application, 'run'), array($this->phpExecutable, $this->path));
+        return call_user_func_array(array($application, 'run'), array($this->phpExecutable, $this->path, $this->extensions));
     }
 
     /**
@@ -245,6 +257,11 @@ class CLI implements ProgressPrinterInterface
         while (substr($argument, 0, 1) == '-') {
 
             switch ($argument) {
+
+                case '-e':
+                case '--ext':
+                    $this->extensions = explode(',', array_shift($arguments));
+                    break;
 
                 case '-h':
                 case '--help':

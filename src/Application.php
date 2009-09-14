@@ -189,21 +189,35 @@ class Application
      * @param string $path
      * @return array
      */
-    public function listFiles($path)
+    public function listFiles($path, array $extensions = array('php'))
     {
         if (!file_exists($path)) {
             throw new Exception($path . ' not found');
         }
 
+        if (sizeof($extensions) == 0) {
+            throw new Exception('No file extensions specified');
+        }
+
         // If $path is a regular file, we are done.
         if (is_file($path)) {
-            return array($path);
+
+            foreach ($extensions as $extension) {
+                if (substr($path, -(strlen($extension) + 1)) == '.' . $extension) {
+                    return array($path);
+                }
+            }
+
+            // File does not have one of the given extensions.
+            return array();
         }
 
         $result = array();
 
-        // Recursively collect all .php files from given directory.
+        // Recursively collect all files with given extensions from given directory.
         $it = new PhpFileFilterIterator(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path)));
+
+        $it->setExtensions($extensions);
 
         foreach ($it as $file) {
             $result[] = $file->getPathname();
@@ -304,7 +318,7 @@ class Application
      * @param string $fileOrDirectory     path to file or directory to check
      * @return object
      */
-    public function run($pathToPhpExecutable, $fileOrDirectory)
+    public function run($pathToPhpExecutable, $fileOrDirectory, array $extensions = array('php'))
     {
         if ($pathToPhpExecutable == '') {
             throw new Exception('No path to PHP executable specified');
@@ -312,6 +326,10 @@ class Application
 
         if ($fileOrDirectory == '') {
             throw new Exception('No file or directory to analyze');
+        }
+
+        if (sizeof($extensions) == 0) {
+            throw new Exception('No file extension(s) specified');
         }
 
         // Define our own additionl T_* token constants
@@ -327,7 +345,7 @@ class Application
         $this->rules = $this->loadRules();
 
         // List all PHP files in given path
-        $phpFiles = $this->listFiles($fileOrDirectory);
+        $phpFiles = $this->listFiles($fileOrDirectory, $extensions);
 
         if (sizeof($phpFiles) == 0) {
             throw new Exception('No PHP files to analyze');
