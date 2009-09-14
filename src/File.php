@@ -114,7 +114,6 @@ class File extends \SplQueue implements \SeekableIterator
      */
     public function add(Token $token)
     {
-        $token->setFile($this);
         parent::enqueue($token);
     }
 

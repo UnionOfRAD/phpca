@@ -72,6 +72,9 @@ class Constants
         '&'  => array(522, 'T_AMPERSAND'),
         '%'  => array(523, 'T_PERCENT'),
         '|'  => array(523, 'T_PIPE'),
+        '$'  => array(524, 'T_DOLLAR'),
+        '^'  => array(525, 'T_CARET'),
+        '~'  => array(526, 'T_TILDE'),
     );
 
     /**

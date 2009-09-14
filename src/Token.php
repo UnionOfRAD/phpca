@@ -57,11 +57,6 @@ class Token
     protected $id;
 
     /**
-     * @var File
-     */
-    protected $file;
-
-    /**
      * @var string
      */
     protected $text;
@@ -75,6 +70,31 @@ class Token
      * @var int
      */
     protected $column;
+
+    /**
+     * @var string
+     */
+    protected $file;
+
+    /**
+     * @var string
+     */
+    protected $namespace;
+
+    /**
+     * @var string
+     */
+    protected $class;
+
+    /**
+     * @var string
+     */
+    protected $function;
+
+    /**
+     * @var int
+     */
+    protected $level;
 
     /**
      * Constructs the object
@@ -94,24 +114,53 @@ class Token
     }
 
     /**
-     * Sets the file this token is part of.
+     * Set the file name the token is part of.
      *
-     * @param File $file The file the token is part of
-     * @return void
+     * @param string $file
      */
-    public function setFile(File $file)
+    public function setFile($file)
     {
         $this->file = $file;
     }
 
     /**
-     * Returns the file this token is part of.
+     * Set the namespace the token is part of.
      *
-     * @return File
+     * @param string $file
      */
-    public function getFile()
+    public function setNamespace($namespace)
     {
-        return $this->file;
+        $this->namespace = $namespace;
+    }
+
+    /**
+     * Set the class the token is part of.
+     *
+     * @param string $file
+     */
+    public function setClass($class)
+    {
+        $this->class = $class;
+    }
+
+    /**
+     * Set the function the token is part of.
+     *
+     * @param string $function
+     */
+    public function setFunction($function)
+    {
+        $this->function = $function;
+    }
+
+    /**
+     * Set the block level (number of open {'s) the token is in.
+     *
+     * @param string $level
+     */
+    public function setBlockLevel($level)
+    {
+        $this->level = $level;
     }
 
     /**
@@ -176,6 +225,20 @@ class Token
         }
 
         return $this->column;
+    }
+
+    public function getEndLine()
+    {
+        return $this->line + $this->getNewLineCount();
+    }
+
+    public function getEndColumn()
+    {
+        if ($this->hasNewline()) {
+            return 1 + $this->getTrailingWhitespaceCount();
+        }
+
+        return $this->column + $this->getLength();
     }
 
     /**

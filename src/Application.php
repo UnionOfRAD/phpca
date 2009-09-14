@@ -351,6 +351,8 @@ class Application
             if (is_object($this->progressPrinter)) {
                 $this->progressPrinter->showProgress($phpFile, $this->result, $this);
             }
+
+            unset($phpFile);
         }
 
         // Return the result object containing all error and warning messages

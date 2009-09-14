@@ -70,20 +70,6 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers spriebsch\PHPca\Token::setFile
-     * @covers spriebsch\PHPca\Token::getFile
-     */
-    public function testSetAndGetFile()
-    {
-        $file = new File('filename', 'sourcecode');
-
-        $t = new Token(T_OPEN_TAG, '<?php');
-        $t->setFile($file);
-
-        $this->assertEquals($file, $t->getFile());
-    }
-
-    /**
      * @covers spriebsch\PHPca\Token::getText
      */
     public function testGetText()
