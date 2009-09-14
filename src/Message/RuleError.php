@@ -38,12 +38,31 @@
 namespace spriebsch\PHPca;
 
 /**
- * Warning message.
+ * Rule error is an error/exception that occured when processing a rule.
  *
  * @author     Stefan Priebsch <stefan@priebsch.de>
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
-class Warning extends Message
+class RuleError extends Message
 {
+    /**
+     * Returns the line number. By definition, rule errors occur on line 0.
+     *
+     * @return int
+     */
+    public function getLine()
+    {
+       return 0;
+    }
+
+    /**
+     * Returns the column number. By definition, rule errors occur on column 0.
+     *
+     * @return int
+     */
+    public function getColumn()
+    {
+       return 0;
+    }
 }
 ?>

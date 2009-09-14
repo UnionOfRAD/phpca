@@ -47,16 +47,17 @@ $_classMap = array(
     'spriebsch\PHPca\Finder'                      => 'Finder.php',
     'spriebsch\PHPca\TokenFilterIterator'         => 'TokenFilterIterator.php',
     'spriebsch\PHPca\Result'                      => 'Result.php',
-    'spriebsch\PHPca\Message'                     => 'Message.php',
-    'spriebsch\PHPca\Warning'                     => 'Warning.php',
-    'spriebsch\PHPca\Error'                       => 'Error.php',
-    'spriebsch\PHPca\LintError'                   => 'LintError.php',
+
+    'spriebsch\PHPca\Message'                     => 'Message/Message.php',
+    'spriebsch\PHPca\Violation'                   => 'Message/Violation.php',
+    'spriebsch\PHPca\LintError'                   => 'Message/LintError.php',
+    'spriebsch\PHPca\RuleError'                   => 'Message/RuleError.php',
+
     'spriebsch\PHPca\UnknownTokenException'       => 'UnknownTokenException.php',
     'spriebsch\PHPca\ProgressPrinterInterface'    => 'ProgressPrinterInterface.php',
     'spriebsch\PHPca\Application'                 => 'Application.php',
     'spriebsch\PHPca\CLI'                         => 'CLI.php',
 
-    'spriebsch\PHPca\RuleError'                                 => 'RuleError.php',
     'spriebsch\PHPca\Rule\Rule'                                 => 'Rule.php',
     'spriebsch\PHPca\Rule\NoTabulatorsRule'                     => 'Rule/NoTabulatorsRule.php',
     'spriebsch\PHPca\Rule\NoCarriageReturnsRule'                => 'Rule/NoCarriageReturnsRule.php',

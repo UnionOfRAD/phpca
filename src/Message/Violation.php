@@ -38,12 +38,14 @@
 namespace spriebsch\PHPca;
 
 /**
- * Error Message
+ * Error Message indicating a rule violation.
+ * It is up to the front end to decide whether that violation is an error
+ * or just a warning.
  *
  * @author     Stefan Priebsch <stefan@priebsch.de>
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
-class Error extends Message
+class Violation extends Message
 {
 }
 ?>

@@ -225,13 +225,8 @@ class CLI implements ProgressPrinterInterface
             return 'R';
         }
 
-        if ($result->hasErrors($file)) {
-            return 'E';
-        }
-
-        // a warning does not count as error, thus display a dot
-        if ($result->hasWarnings($file)) {
-            return '.';
+        if ($result->hasViolations($file)) {
+            return 'V';
         }
 
         return '.';
@@ -377,14 +372,14 @@ class CLI implements ProgressPrinterInterface
             foreach($this->result->getFiles() as $file) {
                 if ($this->result->hasErrors($file)) {
                     echo $file . ':' . PHP_EOL;
-                    foreach ($this->result->getErrors($file) as $error) {
-                        if ($error instanceOf LintError) {
-                            // For lint errors, display the original error message
-                            echo $error->getMessage() . PHP_EOL;
-                        } else {
-                            // A "line number | column number | message" line
-                            echo sprintf('%4u', $error->getLine()) . '|' . sprintf('%3u', $error->getColumn()) . '| ' . $error->getMessage() . PHP_EOL;
-                        }
+                    if ($this->result->hasLintError($file)) {
+                        // For lint errors, display original error message
+                        echo $this->result->getLintError($file)->getMessage() . PHP_EOL;
+                    }
+
+                    foreach ($this->result->getViolations($file) as $error) {
+                        // A "line number | column number | message" line
+                        echo sprintf('%4u', $error->getLine()) . '|' . sprintf('%3u', $error->getColumn()) . '| ' . $error->getMessage() . PHP_EOL;
                     }
                     echo PHP_EOL;
                 }
@@ -406,8 +401,7 @@ class CLI implements ProgressPrinterInterface
             echo $this->result->getNumberOfRuleErrors() . ' rule errors [R], ';
         }
 
-        echo $this->result->getNumberOfErrors() . ' errors [E], ';
-        echo $this->result->getNumberOfWarnings() . ' warnings';
+        echo $this->result->getNumberOfViolations() . ' violations';
         echo ')';
 
         echo PHP_EOL . PHP_EOL;

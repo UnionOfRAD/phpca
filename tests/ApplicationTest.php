@@ -199,7 +199,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $this->application->setEnableBuiltInRules(true);
 
         $result = $this->application->run(trim(exec('which php')), __DIR__ . '/_testdata/Application/fail/fail.php');
-        $errors = $result->getErrors(__DIR__ . '/_testdata/Application/fail/fail.php');
+        $errors = $result->getViolations(__DIR__ . '/_testdata/Application/fail/fail.php');
 
         $this->assertContains('File does not end with PHP close tag', $errors[0]->getMessage());
     }
@@ -277,10 +277,9 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $this->application->addRulePath(__DIR__ . '/_testdata/Application/_rules/fail');
 
         $result = $this->application->run(trim(exec('which php')), __DIR__ . '/_testdata/Application/pass/pass.php');
-        $errors = $result->getErrors(__DIR__ . '/_testdata/Application/pass/pass.php');
+        // $errors = $result->getViolations(__DIR__ . '/_testdata/Application/pass/pass.php');
 
-        $this->assertTrue($result->hasErrors());
-        $this->assertTrue($errors[0] instanceOf RuleError);
+        $this->assertTrue($result->hasRuleError(__DIR__ . '/_testdata/Application/pass/pass.php'));
     }
 }
 ?>

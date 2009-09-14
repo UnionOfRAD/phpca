@@ -52,7 +52,7 @@ class NoEvalStatementsRule extends Rule
     protected function doCheck()
     {
         foreach (Finder::findToken($this->file, T_EVAL) as $token) {
-            $this->addError('eval statement', $token);
+            $this->addViolation('eval statement', $token);
         }
     }
 }

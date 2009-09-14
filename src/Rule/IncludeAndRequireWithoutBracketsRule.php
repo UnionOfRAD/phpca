@@ -58,7 +58,7 @@ class IncludeAndRequireWithoutBracketsRule extends Rule
                 ->token(T_OPEN_BRACKET);
 
         foreach (Finder::findPattern($this->file, $pattern) as $token) {
-                $this->addError('include statement with bracket', $token);
+                $this->addViolation('include statement with bracket', $token);
         }
 
         $pattern = new Pattern();
@@ -66,7 +66,7 @@ class IncludeAndRequireWithoutBracketsRule extends Rule
                 ->token(T_OPEN_BRACKET);
 
         foreach (Finder::findPattern($this->file, $pattern) as $token) {
-                $this->addError('require statement with bracket', $token);
+                $this->addViolation('require statement with bracket', $token);
         }
 
         $pattern = new Pattern();
@@ -74,7 +74,7 @@ class IncludeAndRequireWithoutBracketsRule extends Rule
                 ->token(T_OPEN_BRACKET);
 
         foreach (Finder::findPattern($this->file, $pattern) as $token) {
-                $this->addError('include_once statement with bracket', $token);
+                $this->addViolation('include_once statement with bracket', $token);
         }
 
         $pattern = new Pattern();
@@ -82,7 +82,7 @@ class IncludeAndRequireWithoutBracketsRule extends Rule
                 ->token(T_OPEN_BRACKET);
 
         foreach (Finder::findPattern($this->file, $pattern) as $token) {
-                $this->addError('require_once statement with bracket', $token);
+                $this->addViolation('require_once statement with bracket', $token);
         }
     }
 }

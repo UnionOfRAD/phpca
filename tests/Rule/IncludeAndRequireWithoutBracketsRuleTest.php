@@ -65,10 +65,9 @@ class IncludeAndRequireWithoutBracketsRuleTest extends AbstractRuleTest
         $rule = new IncludeAndRequireWithoutBracketsRule();
         $rule->check($this->file, $this->result);
 
-        $this->assertFalse($this->result->hasWarnings());
-        $this->assertTrue($this->result->hasErrors());
+        $this->assertTrue($this->result->hasViolations());
 
-        $this->assertEquals(8, $this->result->getNumberOfErrors());
+        $this->assertEquals(8, $this->result->getNumberOfViolations());
     }
 
     /**
@@ -81,8 +80,7 @@ class IncludeAndRequireWithoutBracketsRuleTest extends AbstractRuleTest
         $rule = new IncludeAndRequireWithoutBracketsRule();
         $rule->check($this->file, $this->result);
 
-        $this->assertFalse($this->result->hasWarnings());
-        $this->assertFalse($this->result->hasErrors());
+        $this->assertFalse($this->result->hasViolations());
     }
 }
 ?>

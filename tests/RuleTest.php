@@ -77,13 +77,13 @@ class RuleTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers spriebsch\PHPca\Rule\Rule::check
-     * @covers spriebsch\PHPca\Rule\Rule::addWarning
+     * @covers spriebsch\PHPca\Rule\Rule::addViolation
      */
     public function testAddMessage()
     {
         $this->rule->check($this->file, $this->result);
-        $this->assertTrue($this->result->hasWarnings());
-        $messages = $this->result->getWarnings('test.php');
+        $this->assertTrue($this->result->hasViolations());
+        $messages = $this->result->getViolations('test.php');
         $this->assertEquals($this->file[0], $messages[0]->getToken());
     }
 }

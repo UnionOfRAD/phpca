@@ -40,8 +40,7 @@ namespace spriebsch\PHPca\Rule;
 use spriebsch\PHPca\File;
 use spriebsch\PHPca\Result;
 use spriebsch\PHPca\Message;
-use spriebsch\PHPca\Error;
-use spriebsch\PHPca\Warning;
+use spriebsch\PHPca\Violation;
 
 /**
  * Base class for a Rule that is enforced on a token stream.
@@ -71,25 +70,14 @@ abstract class Rule
         $this->doCheck();
     }
 
-    protected function addError($message, $tokens)
+    protected function addViolation($message, $tokens)
     {
         if (!is_array($tokens)) {
             $tokens = array($tokens);
         }
 
         foreach ($tokens as $token) {
-            $this->result->addMessage(new Error($this->file->getFileName(), $message, $token));
-        }
-    }
-
-    protected function addWarning($message, $tokens)
-    {
-        if (!is_array($tokens)) {
-            $tokens = array($tokens);
-        }
-
-        foreach ($tokens as $token) {
-            $this->result->addMessage(new Warning($this->file->getFileName(), $message, $token));
+            $this->result->addMessage(new Violation($this->file->getFileName(), $message, $token));
         }
     }
 

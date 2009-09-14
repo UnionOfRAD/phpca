@@ -65,8 +65,7 @@ class NoTabulatorsRuleTest extends AbstractRuleTest
         $rule = new NoTabulatorsRule();
         $rule->check($this->file, $this->result);
 
-        $this->assertFalse($this->result->hasWarnings());
-        $this->assertFalse($this->result->hasErrors());
+        $this->assertFalse($this->result->hasViolations());
     }
 
     /**
@@ -79,10 +78,9 @@ class NoTabulatorsRuleTest extends AbstractRuleTest
         $rule = new NoTabulatorsRule();
         $rule->check($this->file, $this->result);
 
-        $this->assertFalse($this->result->hasWarnings());
-        $this->assertEquals(6, $this->result->getNumberOfErrors());
+        $this->assertEquals(6, $this->result->getNumberOfViolations());
 
-        $errors = $this->result->getErrors('test.php');
+        $errors = $this->result->getViolations('test.php');
 
         $this->assertEquals(5, $errors[0]->getLine());
         $this->assertEquals(1, $errors[0]->getColumn());

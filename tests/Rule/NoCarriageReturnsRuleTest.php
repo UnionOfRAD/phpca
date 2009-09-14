@@ -65,8 +65,7 @@ class NoCarriageReturnsRuleTest extends AbstractRuleTest
         $rule = new NoCarriageReturnsRule();
         $rule->check($this->file, $this->result);
 
-        $this->assertFalse($this->result->hasWarnings());
-        $this->assertFalse($this->result->hasErrors());
+        $this->assertFalse($this->result->hasViolations());
     }
 
     /**
@@ -79,8 +78,7 @@ class NoCarriageReturnsRuleTest extends AbstractRuleTest
         $rule = new NoCarriageReturnsRule();
         $rule->check($this->file, $this->result);
 
-        $this->assertFalse($this->result->hasWarnings());
-        $this->assertEquals(26, $this->result->getNumberOfErrors());
+        $this->assertEquals(26, $this->result->getNumberOfViolations());
     }
 }
 ?>

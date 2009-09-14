@@ -183,7 +183,7 @@ class CLITest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->runCLI(array('cli.php', '-p', trim(exec('which php')), __DIR__ . '/_testdata/Application/fail'));
 
-        $this->assertContains("\nE\n", $result);
+        $this->assertContains("\nV\n", $result);
         $this->assertContains('FAIL', $result);
     }
 

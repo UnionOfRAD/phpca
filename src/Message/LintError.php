@@ -38,27 +38,38 @@
 namespace spriebsch\PHPca;
 
 /**
- * Rule error is an error/exception that occured when processing a rule.
+ * Represents a syntax error in a file, i.e. a failed lint check.
  *
  * @author     Stefan Priebsch <stefan@priebsch.de>
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
-class RuleError extends Error
+class LintError extends Message
 {
     /**
-     * Returns the line number. By definition, rule errors occur on line 0.
+     * Returns the lint error message, leaving out the
+     * "Errors parsing: <filename>" summary line and the file names.
      *
-     * @return int
+     * @return string
+     */
+    public function getMessage()
+    {
+        $result = trim(substr($this->message, 0, strpos($this->message, 'Errors parsing')));
+        $result = str_replace('in ' . $this->fileName . ' ', '', $result);
+
+        return $result;
+    }
+
+    /**
+     * By definition, lint errors always occur on line 0, though the lint error message itself contains a different line number.
      */
     public function getLine()
     {
        return 0;
     }
 
+
     /**
-     * Returns the column number. By definition, rule errors occur on column 0.
-     *
-     * @return int
+     * By definition, lint errors always occur in column 0.
      */
     public function getColumn()
     {

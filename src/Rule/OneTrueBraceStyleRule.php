@@ -70,12 +70,12 @@ class OneTrueBraceStyleRule extends Rule
 
             // Generate error if token and brace are on same line
             if ($sameLine && $line == $braceLine) {
-                $this->addError($error, $match[0]);
+                $this->addViolation($error, $match[0]);
             }
 
             // Generate error if token and brace are on different lines
             if (!$sameLine && $line != $braceLine) {
-                $this->addError($error, $match[0]);
+                $this->addViolation($error, $match[0]);
             }
         }
     }
@@ -114,7 +114,7 @@ class OneTrueBraceStyleRule extends Rule
 
             // Generate error if namespace token and brace are on same line
             if ($line == $braceLine) {
-                $this->addError('namespace: curly brace on same line', $token);
+                $this->addViolation('namespace: curly brace on same line', $token);
             }
         }
     }

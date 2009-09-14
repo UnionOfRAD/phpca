@@ -65,10 +65,9 @@ class NoEvalStatementRuleTest extends AbstractRuleTest
         $rule = new NoEvalStatementsRule();
         $rule->check($this->file, $this->result);
 
-        $this->assertFalse($this->result->hasWarnings());
-        $this->assertTrue($this->result->hasErrors());
+        $this->assertTrue($this->result->hasViolations());
 
-        $this->assertEquals(1, $this->result->getNumberOfErrors());
+        $this->assertEquals(1, $this->result->getNumberOfViolations());
     }
 }
 ?>

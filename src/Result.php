@@ -38,9 +38,8 @@
 namespace spriebsch\PHPca;
 
 /**
- * Result
- * Collects the linterror, error, and message objects that represent
- * the results of a lint check.
+ * Collects the message objects that represent rule errors, lint errors,
+ * and rule violations.
  * Also holds a list of processed files to allow counting number of checked files.
  *
  * @author     Stefan Priebsch <stefan@priebsch.de>
@@ -61,17 +60,12 @@ class Result
     /**
      * @var array
      */
-    protected $errorCount = array();
-
-    /**
-     * @var array
-     */
-    protected $warningCount = array();
+    protected $violationCount = array();
 
     /**
      * @var int
      */
-    protected $globalErrorCount = 0;
+    protected $globalViolationCount = 0;
 
     /**
      * @var int
@@ -82,11 +76,6 @@ class Result
      * @var int
      */
     protected $globalRuleErrorCount = 0;
-
-    /**
-     * @var int
-     */
-    protected $globalWarningCount = 0;
 
     /**
      * Helper function for sorting results by line number.
@@ -162,10 +151,15 @@ class Result
      */
     public function addMessage(Message $message)
     {
-        // Flag to make sure that each error is only counted once globally
+        // Flag to make sure that each message is only counted once globally
         $counted = false;
 
         $filename = $message->getFileName();
+
+        if ($this->hasLintError($filename)) {
+            throw new Exception('File ' . $filename . ' alread has a lint error');
+        }
+
         $this->messages[$filename][] = $message;
 
         if ($message instanceOf RuleError) {
@@ -178,79 +172,17 @@ class Result
             $counted = true;
         }
 
-        if ($message instanceOf Error) {
+        if ($message instanceOf Violation) {
             if (!$counted) {
-                $this->globalErrorCount++;
+                $this->globalViolationCount++;
             }
 
-            if (!isset($this->errorCount[$filename])) {
-                $this->errorCount[$filename] = 1;
+            if (!isset($this->violationCount[$filename])) {
+                $this->violationCount[$filename] = 1;
             } else {
-                $this->errorCount[$filename]++;
+                $this->violationCount[$filename]++;
             }
         }
-
-        if ($message instanceOf Warning) {
-            $this->globalWarningCount++;
-
-            if (!isset($this->warningCount[$filename])) {
-                $this->warningCount[$filename] = 1;
-            } else {
-              $this->warningCount[$filename]++;
-            }
-        }
-    }
-
-    /**
-     * Checks whether there are any warnings, or warnings for given filename.
-     *
-     * @param string $file filename
-     * @return bool
-     */
-    public function hasWarnings($file = null)
-    {
-        if (is_null($file)) {
-            return $this->globalWarningCount > 0;
-        }
-
-        if (!isset($this->warningCount[$file])) {
-            return false;
-        }
-
-        return $this->warningCount[$file] > 0;
-    }
-
-    /**
-     * Return number of warnings.
-     *
-     * @return int
-     */
-    public function getNumberOfWarnings()
-    {
-        return $this->globalWarningCount;
-    }
-
-    /**
-     * Return array with all warnings, or all warnings for given filename.
-     *
-     * @param string $file
-     * @return array
-     */
-    public function getWarnings($file)
-    {
-        $result = array();
-
-        if (!isset($this->messages[$file])) {
-            return array();
-        }
-
-        foreach ($this->messages[$file] as $message) {
-            if ($message instanceOf Warning) {
-                $result[] = $message;
-            }
-        }
-
-        return $result;
     }
 
     /**
@@ -262,19 +194,34 @@ class Result
     public function hasErrors($file = null)
     {
         if (is_null($file)) {
-            return $this->globalErrorCount > 0 || $this->globalLintErrorCount > 0 || $this->globalRuleErrorCount > 0;
+            return $this->globalViolationCount > 0 || $this->globalLintErrorCount > 0 || $this->globalRuleErrorCount > 0;
         }
 
-        if (!isset($this->errorCount[$file])) {
+        return $this->hasViolations($file) || $this->hasLintError($file) || $this->hasRuleError($file);
+    }
+
+    /**
+     * Checks whether there are any violations, or violations for given filename.
+     *
+     * @param string $file filename
+     * @return bool
+     */
+    public function hasViolations($file = null)
+    {
+        if (is_null($file)) {
+            return $this->globalViolationCount > 0 || $this->globalLintErrorCount > 0 || $this->globalRuleErrorCount > 0;
+        }
+
+        if (!isset($this->violationCount[$file])) {
             return false;
         }
 
-        return $this->errorCount[$file] > 0;
+        return $this->violationCount[$file] > 0;
     }
 
-    public function getNumberOfErrors()
+    public function getNumberOfViolations()
     {
-        return $this->globalErrorCount;
+        return $this->globalViolationCount;
     }
 
     public function getNumberOfLintErrors()
@@ -318,12 +265,31 @@ class Result
     }
 
     /**
-     * Return array with all errors, or all errors for given filename.
+     * Returns the lint error for given file.
      *
      * @param string $file
      * @return array
      */
-    public function getErrors($file)
+    public function getLintError($file)
+    {
+        if (isset($this->messages[$file])) {
+            foreach ($this->messages[$file] as $message) {
+                if ($message instanceOf LintError) {
+                    return $message;
+                }
+            }
+        }
+
+        throw new Exception('File ' . $file . ' has no lint error');
+    }
+
+    /**
+     * Return array with all violations, or all violations for given filename.
+     *
+     * @param string $file
+     * @return array
+     */
+    public function getViolations($file)
     {
         $result = array();
 
@@ -332,7 +298,7 @@ class Result
         }
 
         foreach ($this->messages[$file] as $message) {
-            if ($message instanceOf Error) {
+            if ($message instanceOf Violation) {
                 $result[] = $message;
             }
         }

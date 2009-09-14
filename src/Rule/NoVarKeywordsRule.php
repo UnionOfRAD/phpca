@@ -52,7 +52,7 @@ class NoVarKeywordsRule extends Rule
     protected function doCheck()
     {
         foreach (Finder::findToken($this->file, T_VAR) as $token) {
-            $this->addError('var keyword', $token);
+            $this->addViolation('var keyword', $token);
         }
     }
 }

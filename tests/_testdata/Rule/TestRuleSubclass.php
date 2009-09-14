@@ -8,7 +8,7 @@ class TestRuleSubclass extends Rule
 {
     protected function doCheck()
     {
-        $this->addWarning('a warning', $this->file[0]);
+        $this->addViolation('a warning', $this->file[0]);
     }
 }
 ?>

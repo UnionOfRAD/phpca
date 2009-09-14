@@ -65,8 +65,7 @@ class OneTrueBraceStyleRuleTest extends AbstractRuleTest
         $rule = new OneTrueBraceStyleRule();
         $rule->check($this->file, $this->result);
 
-        $this->assertFalse($this->result->hasWarnings());
-        $this->assertFalse($this->result->hasErrors());
+        $this->assertFalse($this->result->hasViolations());
     }
 
     /**
@@ -79,12 +78,11 @@ class OneTrueBraceStyleRuleTest extends AbstractRuleTest
         $rule = new OneTrueBraceStyleRule();
         $rule->check($this->file, $this->result);
 
-        $this->assertFalse($this->result->hasWarnings());
-        $this->assertTrue($this->result->hasErrors());
+        $this->assertTrue($this->result->hasViolations());
 
         // expected errors:
         // namespace, class, 2 function, foreach, for, 3 if, 2 else, elseif, switch, while, do
-        $this->assertEquals(15, $this->result->getNumberOfErrors());
+        $this->assertEquals(15, $this->result->getNumberOfViolations());
     }
 
     /**
@@ -97,8 +95,7 @@ class OneTrueBraceStyleRuleTest extends AbstractRuleTest
         $rule = new OneTrueBraceStyleRule();
         $rule->check($this->file, $this->result);
 
-        $this->assertFalse($this->result->hasWarnings());
-        $this->assertFalse($this->result->hasErrors());
+        $this->assertFalse($this->result->hasViolations());
     }
 }
 ?>

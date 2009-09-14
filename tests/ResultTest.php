@@ -86,172 +86,129 @@ class ResultTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers spriebsch\PHPca\Result::hasWarnings
+     * @covers spriebsch\PHPca\Result::addMessage
+     * @covers spriebsch\PHPca\Result::hasViolations
      */
-    public function testHasWarnings()
+    public function testInitiallyHasNoViolations()
     {
         $result = new Result();
         $result->addFile('testfile');
 
-        $this->assertFalse($result->hasWarnings());
-
-        $result->addMessage(new Warning('testfile', 'warning message'));
-
-        $this->assertTrue($result->hasWarnings());
-    }
-
-    /**
-     * @covers spriebsch\PHPca\Result::hasWarnings
-     */
-    public function testHasWarningsForFile()
-    {
-        $result = new Result();
-        $result->addFile('testfile');
-
-        $this->assertFalse($result->hasWarnings('testfile'));
-
-        $result->addMessage(new Warning('testfile', 'warning message'));
-
-        $this->assertTrue($result->hasWarnings('testfile'));
-    }
-
-    /**
-     * @covers spriebsch\PHPca\Result::getWarnings
-     */
-    public function testGetWarnings()
-    {
-        $result = new Result();
-        $result->addFile('testfile');
-
-        $this->assertEquals(array(), $result->getWarnings('testfile'));
-
-        $error = new Error('testfile', 'error message');
-
-        $warning1 = new Warning('testfile', 'a warning');
-        $warning2 = new Warning('testfile', 'another warning');
-
-        $result->addMessage($error);
-        $result->addMessage($warning1);
-        $result->addMessage($warning2);
-
-        $this->assertEquals(array($warning1, $warning2), $result->getWarnings('testfile'));
+        $this->assertFalse($result->hasViolations());
     }
 
     /**
      * @covers spriebsch\PHPca\Result::addMessage
-     * @covers spriebsch\PHPca\Result::getNumberOfWarnings
+     * @covers spriebsch\PHPca\Result::hasViolations
      */
-    public function testGetNumberOfWarnings()
+    public function testHasViolations()
     {
         $result = new Result();
         $result->addFile('testfile');
 
-        $this->assertEquals(0, $result->getNumberOfWarnings());
+        $result->addMessage(new Violation('testfile', 'error message'));
+        $result->addMessage(new Violation('testfile', 'another error message'));
 
-        $result->addMessage(new Warning('testfile', 'warning'));
-
-        $this->assertEquals(1, $result->getNumberOfWarnings());
+        $this->assertTrue($result->hasViolations());
     }
 
     /**
-     * @covers spriebsch\PHPca\Result::addMessage
-     * @covers spriebsch\PHPca\Result::hasErrors
+     * @covers spriebsch\PHPca\Result::hasViolations
      */
-    public function testHasErrors()
+    public function testHasNoViolationsForFile()
     {
         $result = new Result();
         $result->addFile('testfile');
 
-        $this->assertFalse($result->hasErrors());
-
-        $result->addMessage(new Error('testfile', 'error message'));
-        $result->addMessage(new Error('testfile', 'another error message'));
-
-        $this->assertTrue($result->hasErrors());
+        $this->assertFalse($result->hasViolations('testfile'));
     }
 
     /**
-     * @covers spriebsch\PHPca\Result::hasErrors
+     * @covers spriebsch\PHPca\Result::hasViolations
      */
-    public function testHasErrorsForFile()
+    public function testHasViolationsForFile()
     {
         $result = new Result();
         $result->addFile('testfile');
 
-        $this->assertFalse($result->hasErrors('testfile'));
+        $result->addMessage(new Violation('testfile', 'error message'));
 
-        $result->addMessage(new Error('testfile', 'error message'));
-
-        $this->assertTrue($result->hasErrors('testfile'));
+        $this->assertTrue($result->hasViolations('testfile'));
     }
 
     /**
-     * @covers spriebsch\PHPca\Result::getErrors
+     * @covers spriebsch\PHPca\Result::getViolations
      */
-    public function testGetErrors()
+    public function testGetViolations()
     {
         $result = new Result();
         $result->addFile('testfile');
 
-        $this->assertEquals(array(), $result->getErrors('testfile'));
+        $this->assertEquals(array(), $result->getViolations('testfile'));
 
         $t1 = new Token(T_OPEN_TAG, '<?php', 5, 4);
-        $error1 = new Error('testfile', 'error message', $t1);
+        $violation1 = new Violation('testfile', 'error message', $t1);
         $t2 = new Token(T_OPEN_TAG, '<?php', 5, 9);
-        $error2 = new Error('testfile', 'another error message', $t2);
+        $violation2 = new Violation('testfile', 'another error message', $t2);
 
-        $warning = new Warning('testfile', 'a warning');
+        $result->addMessage($violation1);
+        $result->addMessage($violation2);
 
-        $result->addMessage($error1);
-        $result->addMessage($warning);
-        $result->addMessage($error2);
-
-        $this->assertContains($error1, $result->getErrors('testfile'));
-        $this->assertContains($error2, $result->getErrors('testfile'));
+        $this->assertContains($violation1, $result->getViolations('testfile'));
+        $this->assertContains($violation2, $result->getViolations('testfile'));
     }
 
     /**
-     * @covers spriebsch\PHPca\Result::getErrors
-     * @covers spriebsch\PHPca\Result::sortByLine
+     * @covers spriebsch\PHPca\Result::getViolations
      */
-    public function testGetErrorsSortsByLine()
+    public function testGetViolationsInitiallyReturnsEmptyArray()
     {
         $result = new Result();
         $result->addFile('testfile');
 
-        $this->assertEquals(array(), $result->getErrors('testfile'));
+        $this->assertEquals(array(), $result->getViolations('testfile'));
+    }
+
+    /**
+     * @covers spriebsch\PHPca\Result::getViolations
+     * @covers spriebsch\PHPca\Result::sortByLine
+     */
+    public function testGetViolationsSortsByLine()
+    {
+        $result = new Result();
+        $result->addFile('testfile');
 
         $t1 = new Token(T_OPEN_TAG, '<?php', 5);
-        $error1 = new Error('testfile', 'error message', $t1);
-        $result->addMessage($error1);
+        $violation1 = new Violation('testfile', 'error message', $t1);
+        $result->addMessage($violation1);
         
         $t2 = new Token(T_OPEN_TAG, '<?php', 3);
-        $error2 = new Error('testfile', 'another error message', $t2);
-        $result->addMessage($error2);
+        $violation2 = new Violation('testfile', 'another error message', $t2);
+        $result->addMessage($violation2);
 
-        $this->assertEquals(array($error2, $error1), $result->getErrors('testfile'));
+        $this->assertEquals(array($violation2, $violation1), $result->getViolations('testfile'));
     }
 
     /**
-     * @covers spriebsch\PHPca\Result::getErrors
+     * @covers spriebsch\PHPca\Result::getViolations
      * @covers spriebsch\PHPca\Result::sortByLine
      */
-    public function testGetErrorsSortsByColumn()
+    public function testGetViolationsSortsByColumn()
     {
         $result = new Result();
         $result->addFile('testfile');
 
-        $this->assertEquals(array(), $result->getErrors('testfile'));
+        $this->assertEquals(array(), $result->getViolations('testfile'));
 
         $t1 = new Token(T_OPEN_TAG, '<?php', 5, 9);
-        $error1 = new Error('testfile', 'error message', $t1);
-        $result->addMessage($error1);
+        $violation1 = new Violation('testfile', 'error message', $t1);
+        $result->addMessage($violation1);
         
         $t2 = new Token(T_OPEN_TAG, '<?php', 5, 4);
-        $error2 = new Error('testfile', 'another error message', $t2);
-        $result->addMessage($error2);
+        $violation2 = new Violation('testfile', 'another error message', $t2);
+        $result->addMessage($violation2);
 
-        $this->assertEquals(array($error2, $error1), $result->getErrors('testfile'));
+        $this->assertEquals(array($violation2, $violation1), $result->getViolations('testfile'));
     }
 
     /**
@@ -287,7 +244,7 @@ class ResultTest extends \PHPUnit_Framework_TestCase
         $result = new Result();
         $result->addFile('testfile');
 
-        $error = new Error('testfile', 'error message');
+        $error = new Violation('testfile', 'error message');
         $result->addMessage($error);
 
         $this->assertFalse($result->hasLintError('testfile'));
@@ -326,27 +283,47 @@ class ResultTest extends \PHPUnit_Framework_TestCase
         $result = new Result();
         $result->addFile('testfile');
 
-        $error = new Error('testfile', 'error message');
+        $error = new Violation('testfile', 'error message');
         $result->addMessage($error);
 
         $this->assertFalse($result->hasRuleError('testfile'));
     }
 
     /**
-     * @covers spriebsch\PHPca\Result::addMessage
-     * @covers spriebsch\PHPca\Result::getNumberOfErrors
+     * @covers spriebsch\PHPca\Result::getNumberOfViolations
      */
-    public function testGetNumberOfErrorsReturnsErrorCount()
+    public function testGetNumberOfViolationsInitiallyReturnsZero()
     {
         $result = new Result();
         $result->addFile('testfile');
 
-        $this->assertEquals(0, $result->getNumberOfErrors());
+        $this->assertEquals(0, $result->getNumberOfViolations());
+    }
 
-        $result->addMessage(new Error('testfile', 'error message'));
-        $result->addMessage(new Error('testfile', 'another error message'));
+    /**
+     * @covers spriebsch\PHPca\Result::addMessage
+     * @covers spriebsch\PHPca\Result::getNumberOfViolations
+     */
+    public function testGetNumberOfViolationsReturnsViolationCount()
+    {
+        $result = new Result();
+        $result->addFile('testfile');
 
-        $this->assertEquals(2, $result->getNumberOfErrors());
+        $result->addMessage(new Violation('testfile', 'error message'));
+        $result->addMessage(new Violation('testfile', 'another error message'));
+
+        $this->assertEquals(2, $result->getNumberOfViolations());
+    }
+
+    /**
+     * @covers spriebsch\PHPca\Result::getNumberOfLintErrors
+     */
+    public function testGetNumberOfLintErrorsInitiallyReturnsZero()
+    {
+        $result = new Result();
+        $result->addFile('testfile');
+
+        $this->assertEquals(0, $result->getNumberOfLintErrors('testfile'));
     }
 
     /**
@@ -358,10 +335,20 @@ class ResultTest extends \PHPUnit_Framework_TestCase
         $result = new Result();
         $result->addFile('testfile');
 
-        $error = new LintError('testfile', 'error message');
-        $result->addMessage($error);
+        $result->addMessage(new LintError('testfile', 'error message'));
 
         $this->assertEquals(1, $result->getNumberOfLintErrors('testfile'));
+    }
+
+    /**
+     * @covers spriebsch\PHPca\Result::getNumberOfRuleErrors
+     */
+    public function testGetNumberOfRuleErrorsInitiallyReturnsZero()
+    {
+        $result = new Result();
+        $result->addFile('testfile');
+
+        $this->assertEquals(0, $result->getNumberOfRuleErrors('testfile'));
     }
 
     /**

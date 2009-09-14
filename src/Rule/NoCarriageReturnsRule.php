@@ -53,7 +53,7 @@ class NoCarriageReturnsRule extends Rule
     {
         foreach (Finder::findToken($this->file, T_WHITESPACE) as $token) {
             if (false !== strstr($token->getText(), "\r")) {
-                $this->addError('Carriage return (\r) character', $token);
+                $this->addViolation('Carriage return (\r) character', $token);
             }
         }
     }

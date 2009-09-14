@@ -65,8 +65,7 @@ class OpenTagAtBeginningRuleTest extends AbstractRuleTest
         $rule = new OpenTagAtBeginningRule();
         $rule->check($this->file, $this->result);
 
-        $this->assertFalse($this->result->hasWarnings());
-        $this->assertFalse($this->result->hasErrors());
+        $this->assertFalse($this->result->hasViolations());
     }
 
     /**
@@ -88,7 +87,7 @@ class OpenTagAtBeginningRuleTest extends AbstractRuleTest
             $this->markTestSkipped('short_open_tags enabled in php.ini');
         }
 
-        $this->assertEquals(1, $this->result->getNumberOfErrors());
+        $this->assertEquals(1, $this->result->getNumberOfViolations());
     }
 
     /**
@@ -101,7 +100,7 @@ class OpenTagAtBeginningRuleTest extends AbstractRuleTest
         $rule = new OpenTagAtBeginningRule();
         $rule->check($this->file, $this->result);
 
-        $this->assertEquals(1, $this->result->getNumberOfErrors());
+        $this->assertEquals(1, $this->result->getNumberOfViolations());
     }
 }
 ?>
