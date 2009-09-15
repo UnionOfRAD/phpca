@@ -95,9 +95,6 @@ class TokenizerTest extends \PHPUnit_Framework_TestCase
     public function testLevel()
     {
         $file = Tokenizer::tokenize('test.php', file_get_contents(__DIR__ . '/_testdata/Tokenizer/level.php'));
-        $result = new Result();
-        $result->addFile('test.php');
-
         $file->rewind();
 
         $this->assertEquals('T_OPEN_TAG', $file[0]->getName());
@@ -146,9 +143,6 @@ class TokenizerTest extends \PHPUnit_Framework_TestCase
     public function testClass()
     {
         $file = Tokenizer::tokenize('test.php', file_get_contents(__DIR__ . '/_testdata/Tokenizer/class.php'));
-        $result = new Result();
-        $result->addFile('test.php');
-
         $file->rewind();
 
         $this->assertEquals('T_OPEN_TAG', $file[0]->getName());
