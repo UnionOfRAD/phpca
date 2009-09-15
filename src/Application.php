@@ -360,7 +360,13 @@ class Application
             $this->result->addFile($phpFile);
 
             if ($linter->runLintCheck($phpFile)) {
-                $this->enforceRules($phpFile, Tokenizer::tokenize($phpFile, file_get_contents($phpFile)));
+                $file = Tokenizer::tokenize($phpFile, file_get_contents($phpFile));
+
+                $this->result->addNamespaces($phpFile, $file->getNamespaces());
+                $this->result->addClasses($phpFile, $file->getClasses());
+                $this->result->addFunctions($phpFile, $file->getFunctions());
+
+                $this->enforceRules($phpFile, $file);
             } else {
                 $this->result->addMessage(new LintError($phpFile, $linter->getErrorMessages()));
             }

@@ -110,6 +110,11 @@ class CLI implements ProgressPrinterInterface
     protected $exitOnError = true;
 
     /**
+     * @var bool
+     */
+    protected $printStatistics = false;
+
+    /**
      * Prints the usage message.
      *
      * @return void
@@ -129,6 +134,8 @@ class CLI implements ProgressPrinterInterface
              '  --list              List all built-in rules.' . PHP_EOL . PHP_EOL .
              '  -h' . PHP_EOL .
              '  --help              Prints this usage information.' . PHP_EOL . PHP_EOL .
+             '  -s' . PHP_EOL .
+             '  --statistics        Prints additional statistics.' . PHP_EOL . PHP_EOL .
              '  -v' . PHP_EOL .
              '  --version           Prints the version number.' . PHP_EOL . PHP_EOL;
     }
@@ -273,6 +280,11 @@ class CLI implements ProgressPrinterInterface
                     $this->phpExecutable = array_shift($arguments);
                     break;
 
+                case '-s':
+                case '--statistics':
+                    $this->printStatistics = true;
+                    break;
+
                 case '-v':
                 case '--version':
                     $method = 'printVersionCommand';
@@ -407,6 +419,31 @@ class CLI implements ProgressPrinterInterface
         echo PHP_EOL . PHP_EOL;
     }
 
+    protected function printStatistics()
+    {
+        $statistics = array();
+
+        foreach ($this->result->getFiles() as $file) {
+
+            $namespaces = array();
+
+            foreach ($this->result->getNamespaces($file) as $namespace) {
+                $statistics[$namespace][] = $file;
+            }
+        }
+
+asort($statistics);
+var_dump($statistics);
+
+        foreach ($this->result->getFiles() as $file) {
+            foreach ($this->result->getClasses($file) as $class) {
+var_dump($class);
+            }
+        }
+
+        echo PHP_EOL . PHP_EOL;
+    }
+
     /**
      * Run PHPCA. Parses the command line and executes the selected command.
      *
@@ -427,6 +464,9 @@ class CLI implements ProgressPrinterInterface
             // Only print the summary when we actually analyzed files
             if ($method == 'analyzeFilesCommand') {
                 $this->printSummary();
+                if ($this->printStatistics) {
+                    $this->printStatistics();
+                }
             }
 
             if ($this->result->hasErrors()) {

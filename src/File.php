@@ -114,6 +114,93 @@ class File extends \SplQueue implements \SeekableIterator
     }
 
     /**
+     * Returns an array of all namespaces in the file, excluding the
+     * global namespace \ that is always present, even when the whole
+     * file has a namespace, since by PHPca convention the namespace
+     * statement is always part of the global namespace.
+     *
+     * @return array
+     */
+    public function getNamespaces()
+    {
+        $result = array();
+
+        $this->rewind();
+
+        while($this->valid()) {
+            $namespace = $this->current()->getNamespace();
+            if ($namespace != '\\' && !in_array($namespace, $result)) {
+                $result[] = $namespace;
+            }
+            $this->next();
+        }
+
+        return $result;
+    }
+
+    /**
+     * Returns an array of all classes in the file.
+     *
+     * @return array
+     */
+    public function getClasses()
+    {
+        $result = array();
+
+        $this->rewind();
+
+        while($this->valid()) {
+            $class = $this->current()->getClass();
+            if ($class != '' && !in_array($class, $result)) {
+                $result[] = $class;
+            }
+            $this->next();
+        }
+
+        return $result;
+    }
+
+    /**
+     * Returns an array of all functions in the file, or an array
+     * of all methods of the given class. We do not distinguish between
+     * static methods and instance methods.
+     *
+     * @return array
+     */
+    public function getFunctions($class = null)
+    {
+        if (is_null($class)) {
+            $result = array();
+
+            $this->rewind();
+
+            while($this->valid()) {
+                $function = $this->current()->getClass();
+                if ($function != '' && !in_array($function, $result) && $this->current()->getClass() == '') {
+                    $result[] = $function;
+                }
+                $this->next();
+            }
+
+            return $result;
+        }
+
+        $result = array();
+
+        $this->rewind();
+
+        while($this->valid()) {
+            $function = $this->current()->getClass();
+            if ($function != '' && !in_array($function, $result) && $this->current()->getClass() == $class) {
+                $result[] = $function;
+            }
+            $this->next();
+        }
+
+        return $result;
+    }
+
+    /**
      * Adds a token
      *
      * @param Token $token

@@ -60,6 +60,21 @@ class Result
     /**
      * @var array
      */
+    protected $namespaces = array();
+
+    /**
+     * @var array
+     */
+    protected $classes = array();
+
+    /**
+     * @var array
+     */
+    protected $functions = array();
+
+    /**
+     * @var array
+     */
     protected $violationCount = array();
 
     /**
@@ -132,6 +147,47 @@ class Result
     public function getFiles()
     {
         return $this->files;
+    }
+
+    public function addNamespaces($file, array $namespaces)
+    {
+        if (!isset($this->namespaces[$file])) {
+            $this->namespaces[$file] = $namespaces;
+        } else {
+            $this->namespaces[$file] = array_merge($this->namespaces[$file], $namespaces);
+        }
+    }
+
+    public function getNamespaces($file)
+    {
+        if (!isset($this->namespaces[$file])) {
+            return array();
+        }
+
+        return $this->namespaces[$file];
+    }
+
+    public function addClasses($file, array $classes)
+    {
+        if (!isset($this->classes[$file])) {
+            $this->classes[$file] = $classes;
+        } else {
+            $this->classes[$file] = array_merge($this->classes[$file], $classes);
+        }
+    }
+
+    public function getClasses($file)
+    {
+        return $this->classes[$file];
+    }
+
+    public function addFunctions($file, array $functions)
+    {
+        if (!isset($this->functions[$file])) {
+            $this->functions[$file] = $functions;
+        } else {
+            $this->functions[$file] = array_merge($this->functions[$file], $functions);
+        }
     }
 
     /**
