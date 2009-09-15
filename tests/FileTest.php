@@ -136,6 +136,95 @@ class FileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\File::seekMatchingCurlyBrace
+     * @expectedException spriebsch\PHPca\Exception
+     */
+    public function testSeekMatchingCurlyBraceThrowsExceptionOnNonCurlyBrace()
+    {
+        $file = new File('filename', 'sourcecode');
+
+        $file->seekMatchingCurlyBrace(new Token(T_OPEN_TAG, '<?php'));
+    }
+
+    /**
+     * @covers spriebsch\PHPca\File::seekMatchingCurlyBrace
+     */
+    public function testSeekMatchingCurlyBraceForFunction()
+    {
+        $file = Tokenizer::tokenize('test.php', file_get_contents(__DIR__ . '/_testdata/File/braces.php'));
+        $file->rewind();
+
+        $file->seekToken(T_FUNCTION);
+        $file->seekToken(T_OPEN_CURLY);
+        $openBrace = $file->current();
+
+        $file->seekMatchingCurlyBrace($openBrace);
+
+        $this->assertEquals('T_CLOSE_CURLY', $file->current()->getName());
+        $this->assertEquals(24, $file->current()->getLine());
+        $this->assertEquals($openBrace->getBlockLevel(), $file->current()->getBlockLevel());
+    }
+
+    /**
+     * @covers spriebsch\PHPca\File::seekMatchingCurlyBrace
+     */
+    public function testSeekMatchingCurlyBraceForFunctionReverse()
+    {
+        $file = Tokenizer::tokenize('test.php', file_get_contents(__DIR__ . '/_testdata/File/braces.php'));
+
+        $file->seek(sizeof($file) - 1);
+        $file->prev();
+        $file->prev();
+        $file->prev();
+        $file->prev();
+        $closeBrace = $file->current();
+
+        $file->seekMatchingCurlyBrace($closeBrace);
+
+        $this->assertEquals('T_OPEN_CURLY', $file->current()->getName());
+        $this->assertEquals(9, $file->current()->getLine());
+        $this->assertEquals($closeBrace->getBlockLevel(), $file->current()->getBlockLevel());
+    }
+
+    /**
+     * @covers spriebsch\PHPca\File::seekMatchingCurlyBrace
+     */
+    public function testSeekMatchingCurlyBraceForClass()
+    {
+        $file = Tokenizer::tokenize('test.php', file_get_contents(__DIR__ . '/_testdata/File/braces.php'));
+        $file->rewind();
+
+        $file->seekToken(T_CLASS);
+        $file->seekToken(T_OPEN_CURLY);
+        $openBrace = $file->current();
+
+        $file->seekMatchingCurlyBrace($openBrace);
+
+        $this->assertEquals('T_CLOSE_CURLY', $file->current()->getName());
+        $this->assertEquals(25, $file->current()->getLine());
+        $this->assertEquals($openBrace->getBlockLevel(), $file->current()->getBlockLevel());
+    }
+
+    /**
+     * @covers spriebsch\PHPca\File::seekMatchingCurlyBrace
+     */
+    public function testSeekMatchingCurlyBraceForClassReverse()
+    {
+        $file = Tokenizer::tokenize('test.php', file_get_contents(__DIR__ . '/_testdata/File/braces.php'));
+
+        $file->seek(sizeof($file) - 1);
+        $file->prev();
+        $file->prev();
+        $closeBrace = $file->current();
+
+        $file->seekMatchingCurlyBrace($closeBrace);
+
+        $this->assertEquals('T_OPEN_CURLY', $file->current()->getName());
+        $this->assertEquals(4, $file->current()->getLine());
+        $this->assertEquals($closeBrace->getBlockLevel(), $file->current()->getBlockLevel());
+    }
+
+    /**
      * @covers spriebsch\PHPca\File::__construct
      * @covers spriebsch\PHPca\File::seekToken
      * @covers spriebsch\PHPca\File::add

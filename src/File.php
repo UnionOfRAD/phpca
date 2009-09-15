@@ -143,6 +143,57 @@ class File extends \SplQueue implements \SeekableIterator
     }
 
     /**
+     * Seeks to the matching curly brace.
+     *
+     * @param Token $token
+     */
+    public function seekMatchingCurlyBrace(Token $token)
+    {
+        $id = $token->getId();
+        $level = $token->getBlockLevel();
+
+        if ($id != T_OPEN_CURLY && $id != T_CLOSE_CURLY) {
+            throw new Exception($token->getName() . ' is not a curly brace');
+        }
+
+        // Forward search
+        if ($id == T_OPEN_CURLY) {
+            $this->next();
+
+            while ($this->valid()) {
+                $token = $this->current()->getId();
+                $closeLevel = $this->current()->getBlockLevel();
+
+                if ($token == T_CLOSE_CURLY && $closeLevel == $level) {
+                    return;
+                }
+
+                $this->next();
+            }
+        }
+
+        // Backward search
+        if ($id == T_CLOSE_CURLY) {
+            $this->prev();
+
+            while ($this->valid()) {
+                $token = $this->current()->getId();
+                $openLevel = $this->current()->getBlockLevel();
+
+                if ($token == T_OPEN_CURLY && $level == $openLevel) {
+                    return;
+                }
+
+                $this->prev();
+            }
+        }
+
+        // This should be impossible since in a syntactically valid
+        // PHP file, every opened curly brace must be closed.
+        throw new Exception('No matching curly brace found');
+    }
+
+    /**
      * Seek to given index
      *
      * @param int $index

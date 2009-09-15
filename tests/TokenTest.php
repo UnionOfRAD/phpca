@@ -61,6 +61,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\Token::__construct
      * @covers spriebsch\PHPca\Token::getId
      */
     public function testGetId()
@@ -70,6 +71,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\Token::__construct
      * @covers spriebsch\PHPca\Token::getText
      */
     public function testGetText()
@@ -79,6 +81,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\Token::__construct
      * @covers spriebsch\PHPca\Token::getLine
      */
     public function testGetLine()
@@ -88,6 +91,67 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\Token::__construct
+     * @covers spriebsch\PHPca\Token::setFile
+     * @covers spriebsch\PHPca\Token::getFile
+     */
+    public function testFileAccessors()
+    {
+        $t = new Token(T_OPEN_TAG, '<?php');
+        $t->setFile('test.php');
+        $this->assertEquals('test.php', $t->getFile());
+    }
+
+    /**
+     * @covers spriebsch\PHPca\Token::__construct
+     * @covers spriebsch\PHPca\Token::setClass
+     * @covers spriebsch\PHPca\Token::getClass
+     */
+    public function testClassAccessors()
+    {
+        $t = new Token(T_OPEN_TAG, '<?php');
+        $t->setClass('Test');
+        $this->assertEquals('Test', $t->getClass());
+    }
+
+    /**
+     * @covers spriebsch\PHPca\Token::__construct
+     * @covers spriebsch\PHPca\Token::setNamespace
+     * @covers spriebsch\PHPca\Token::getNamespace
+     */
+    public function testNamespaceAccessors()
+    {
+        $t = new Token(T_OPEN_TAG, '<?php');
+        $t->setNamespace('Foo\\Bar');
+        $this->assertEquals('Foo\\Bar', $t->getNamespace());
+    }
+
+    /**
+     * @covers spriebsch\PHPca\Token::__construct
+     * @covers spriebsch\PHPca\Token::setFunction
+     * @covers spriebsch\PHPca\Token::getFunction
+     */
+    public function testFunctionAccessors()
+    {
+        $t = new Token(T_OPEN_TAG, '<?php');
+        $t->setFunction('Foo\\Bar');
+        $this->assertEquals('Foo\\Bar', $t->getFunction());
+    }
+
+    /**
+     * @covers spriebsch\PHPca\Token::__construct
+     * @covers spriebsch\PHPca\Token::setBlockLevel
+     * @covers spriebsch\PHPca\Token::getBlockLevel
+     */
+    public function testBlockLevelAccessors()
+    {
+        $t = new Token(T_OPEN_TAG, '<?php');
+        $t->setBlockLevel(3);
+        $this->assertEquals(3, $t->getBlockLevel());
+    }
+
+    /**
+     * @covers spriebsch\PHPca\Token::__construct
      * @covers spriebsch\PHPca\Token::getLine
      */
     public function testGetLineReturnsNextLineWhenWhitespaceTokenHasLeadingNewline()
@@ -97,6 +161,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\Token::__construct
      * @covers spriebsch\PHPca\Token::getLine
      */
     public function testGetLineReturnsCorrectLineWhenWhitespaceTokenHasNoLeadingNewline()
@@ -106,6 +171,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\Token::__construct
      * @covers spriebsch\PHPca\Token::getColumn
      */
     public function testGetColumn()
@@ -115,6 +181,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\Token::__construct
      * @covers spriebsch\PHPca\Token::getColumn
      */
     public function testGetColumnReturnsOneWhenWhitespaceTokenHasLeadingNewline()
@@ -124,6 +191,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\Token::__construct
      * @covers spriebsch\PHPca\Token::getColumn
      */
     public function testGetColumnReturnsRealValueWhenWhitespaceTokenHasNoLeadingNewLine()
@@ -133,6 +201,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\Token::__construct
      * @covers spriebsch\PHPca\Token::getName
      */
     public function testGetName()
@@ -142,6 +211,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\Token::__construct
      * @covers spriebsch\PHPca\Token::getLength
      */
     public function testGetLength()
@@ -151,6 +221,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\Token::__construct
      * @covers spriebsch\PHPca\Token::getLength
      */
     public function testGetLengthForTokenWithTrailingWhitespace()
@@ -160,6 +231,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\Token::__construct
      * @covers spriebsch\PHPca\Token::hasNewLine
      */
     public function testHasNewLineReturnsFalseWhenTokenContainsNoNewLine()
@@ -169,6 +241,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\Token::__construct
      * @covers spriebsch\PHPca\Token::hasNewLine
      */
     public function testHasNewLineReturnsTrueWhenTokenContainsNewLine()
@@ -178,6 +251,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\Token::__construct
      * @covers spriebsch\PHPca\Token::hasWhitespace
      */
     public function testHasWhitespaceReturnsTrueForBlank()
@@ -187,6 +261,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\Token::__construct
      * @covers spriebsch\PHPca\Token::hasWhitespace
      */
     public function testHasWhitespaceReturnsTrueForCarriageReturn()
@@ -196,6 +271,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\Token::__construct
      * @covers spriebsch\PHPca\Token::hasWhitespace
      */
     public function testHasWhitespaceReturnsTrueForNewLine()
@@ -205,6 +281,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\Token::__construct
      * @covers spriebsch\PHPca\Token::hasWhitespace
      */
     public function testHasWhitespaceReturnsFalseForTokenWithoutWhitespace()
@@ -214,6 +291,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\Token::__construct
      * @covers spriebsch\PHPca\Token::getNewLineCount
      */
     public function testNewLineCountIsZero()
@@ -223,6 +301,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\Token::__construct
      * @covers spriebsch\PHPca\Token::getNewLineCount
      */
     public function testNewLineCountIsOne()
@@ -232,6 +311,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\Token::__construct
      * @covers spriebsch\PHPca\Token::getNewLineCount
      */
     public function testNewLineCountIsTwo()
@@ -241,6 +321,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\Token::__construct
      * @covers spriebsch\PHPca\Token::getNewLineCount
      */
     public function testCRLFNewLineCountIsOne()
@@ -250,6 +331,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\Token::__construct
      * @covers spriebsch\PHPca\Token::getNewLineCount
      */
     public function testCRLFNewLineCountIsTwo()
@@ -259,6 +341,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\Token::__construct
      * @covers spriebsch\PHPca\Token::getTrailingWhitespace
      */
     public function testGetTrailingWhitespaceWithNewLine()
@@ -268,6 +351,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\Token::__construct
      * @covers spriebsch\PHPca\Token::getTrailingWhitespace
      */
     public function testGetTrailingWhitespaceWithoutNewLine()
@@ -277,6 +361,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\Token::__construct
      * @covers spriebsch\PHPca\Token::getTrailingWhitespace
      */
     public function testGetTrailingWhitespaceIsEmptyWithNewLine()
@@ -286,6 +371,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\Token::__construct
      * @covers spriebsch\PHPca\Token::getTrailingWhitespace
      */
     public function testGetTrailingWhitespaceIsEmptyWithoutNewLine()
@@ -295,6 +381,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\Token::__construct
      * @covers spriebsch\PHPca\Token::getTrailingWhitespaceCount
      */
     public function testGetTrailingWhitespaceCountIsZero()
@@ -304,6 +391,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\Token::__construct
      * @covers spriebsch\PHPca\Token::getTrailingWhitespaceCount
      */
     public function testGetTrailingWhitespaceCountIsOne()
@@ -313,6 +401,7 @@ class TokenTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\Token::__construct
      * @covers spriebsch\PHPca\Token::getTrailingWhitespaceCount
      */
     public function testGetTrailingWhitespaceCountIsTwo()

@@ -117,6 +117,7 @@ class Token
      * Set the file name the token is part of.
      *
      * @param string $file
+     * @return null
      */
     public function setFile($file)
     {
@@ -124,9 +125,20 @@ class Token
     }
 
     /**
+     * Returns the file name the token is part of.
+     *
+     * @return string
+     */
+    public function getFile()
+    {
+        return $this->file;
+    }
+
+    /**
      * Set the namespace the token is part of.
      *
      * @param string $file
+     * @return null
      */
     public function setNamespace($namespace)
     {
@@ -134,15 +146,31 @@ class Token
     }
 
     /**
+     * Returns the namespace the token is part of.
+     *
+     * @return string
+     */
+    public function getNamespace()
+    {
+        return $this->namespace;
+    }
+
+    /**
      * Set the class the token is part of.
      *
      * @param string $file
+     * @return null
      */
     public function setClass($class)
     {
         $this->class = $class;
     }
 
+    /**
+     * Returns the class the token is part of.
+     *
+     * @return string
+     */
     public function getClass()
     {
         return $this->class;
@@ -159,6 +187,16 @@ class Token
     }
 
     /**
+     * Returns the function the token is part of.
+     *
+     * @return string
+     */
+    public function getFunction()
+    {
+        return $this->function;
+    }
+
+    /**
      * Set the block level (number of open {'s) the token is in.
      *
      * @param int $level
@@ -169,9 +207,9 @@ class Token
     }
 
     /**
-     * Returns the block level.
+     * Returns the block level the token is part of.
      *
-     * @param int
+     * @return int
      */
     public function getBlockLevel()
     {
