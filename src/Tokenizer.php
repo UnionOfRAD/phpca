@@ -62,13 +62,18 @@ class Tokenizer
         $waitForClassBegin = false;
         $classCurlyLevel = 0;
 
+        $functionFound = false;
+        $waitForFunctionBegin = false;
+        $functionCurlyLevel = 0;
+
         $namespace = '\\';
         $class = '';
         $function = '';
+
         $level = 0;
 
-        $line     = 1;
-        $column   = 1;
+        $line = 1;
+        $column = 1;
 
         $file = new File($fileName, $sourceCode);
 
@@ -109,13 +114,24 @@ class Tokenizer
             // by $classFound being true, so the T_STRING contains the class
             // name (there will be T_WHITESPACE between T_CLASS and T_STRING).
             // We remember the class name, but do not set it until we have
-            // encountered the next opening brace.
-            // We set $waitForClassBegin to true so that we can wait for the
-            // next opening curly brace.
+            // encountered the next opening brace. We set $waitForClassBegin
+            // to true so that we can wait for the next opening curly brace.
             if ($classFound && $tokenObj->getId() == T_STRING) {
                 $class = $tokenObj->getText();
                 $waitForClassBegin = true;
                 $classFound = false;
+            }
+
+            // We have encountered a T_FUNCTION token before (this is indicated
+            // by $functionFound being true, so the T_STRING contains the class
+            // name (there will be T_WHITESPACE between T_FUNCTION and T_STRING).
+            // We remember the function name, but do not set it until we have
+            // encountered the next opening brace. We set $waitForFunctionBegin
+            // to true so that we can wait for the next opening curly brace.
+            if ($functionFound && $tokenObj->getId() == T_STRING) {
+                $function = $tokenObj->getText();
+                $waitForFunctionBegin = true;
+                $functionFound = false;
             }
 
             // If we encounter a T_CLASS token, we have found a class definition.
@@ -123,6 +139,13 @@ class Tokenizer
             // name (see above).
             if ($tokenObj->getId() == T_CLASS) {
                 $classFound = true;
+            }
+
+            // If we encounter a T_FUNCTION token, we have found a function.
+            // We set $functionFound to true so that we can watch out for the
+            // function name (see above).
+            if ($tokenObj->getId() == T_FUNCTION) {
+                $functionFound = true;
             }
 
             // Opening curly brace opens another block, thus increases the level.
@@ -137,6 +160,15 @@ class Tokenizer
                     $classCurlyLevel = $level;
                     $waitForClassBegin = false;
                 }
+
+                // If we encounter the opening curly brace of a class (this happens
+                // when $waitForClassBegin is true), we remember the block level of
+                // this brace so that we can end the class when we encounter the
+                // matching closing tag.
+                if ($waitForFunctionBegin) {
+                    $functionCurlyLevel = $level;
+                    $waitForFunctionBegin = false;
+                }
             }
 
             // This also sets the class when we are outside the class,
@@ -144,6 +176,12 @@ class Tokenizer
             if (!$waitForClassBegin) {
                 $tokenObj->setClass($class);
 // @todo namespace the name!
+            }
+
+            // This also sets the function when we are outside the function,
+            // which is harmless because we then just set an emtpy string.
+            if (!$waitForFunctionBegin) {
+                $tokenObj->setFunction($function);
             }
 
             $tokenObj->setBlockLevel($level);
@@ -154,10 +192,18 @@ class Tokenizer
             if ($tokenObj->getId() == T_CLOSE_CURLY) {
                 $level--;
 
-                // If we are inside a class and the closing brace matches the opening brace of that class, the class has ended.
+                // If we are inside a class and the closing brace matches the
+                // opening brace of that class, the block/class has ended.
                 if ($class != '' && $tokenObj->getBlockLevel() == $classCurlyLevel) {
                     $class = '';
                     $classCurlyLevel = 0;
+                }
+
+                // If we are inside a function and the closing brace matches the
+                // opening brace of that function, the block/function has ended.
+                if ($function != '' && $tokenObj->getBlockLevel() == $functionCurlyLevel) {
+                    $function = '';
+                    $functionCurlyLevel = 0;
                 }
             }
 

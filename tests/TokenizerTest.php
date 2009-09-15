@@ -166,5 +166,67 @@ class TokenizerTest extends \PHPUnit_Framework_TestCase
         $file->seekToken(T_OPEN_CURLY);
         $this->assertEquals('Something', $file->current()->getClass());
     }
+
+    /**
+     * @covers spriebsch\PHPca\Tokenizer::tokenize
+     */
+    public function testFunction()
+    {
+        $file = Tokenizer::tokenize('test.php', file_get_contents(__DIR__ . '/_testdata/Tokenizer/function.php'));
+        $file->rewind();
+
+        $this->assertEquals('T_OPEN_TAG', $file[0]->getName());
+        $this->assertEquals('', $file[0]->getFunction());
+
+        $file->seekToken(T_PUBLIC);
+        $this->assertEquals('', $file->current()->getFunction());
+
+        $file->seekToken(T_OPEN_CURLY);
+        $this->assertEquals('__construct', $file->current()->getFunction());
+        $this->assertEquals('Test', $file->current()->getClass());
+
+        $file->seekToken(T_EXIT);
+        $this->assertEquals('__construct', $file->current()->getFunction());
+        $this->assertEquals('Test', $file->current()->getClass());
+
+        $file->seekToken(T_CLOSE_CURLY);
+        $this->assertEquals('__construct', $file->current()->getFunction());
+        $this->assertEquals('Test', $file->current()->getClass());
+
+        $file->seekToken(T_PUBLIC);
+        $this->assertEquals('', $file->current()->getFunction());
+        $this->assertEquals('Test', $file->current()->getClass());
+
+        $file->seekToken(T_OPEN_CURLY);
+        $this->assertEquals('setA', $file->current()->getFunction());
+        $this->assertEquals('Test', $file->current()->getClass());
+
+        $file->seekToken(T_CLOSE_CURLY);
+        $this->assertEquals('setA', $file->current()->getFunction());
+        $this->assertEquals('Test', $file->current()->getClass());
+
+        $file->seekToken(T_FUNCTION);
+        $this->assertEquals('Test', $file->current()->getClass());
+
+        $file->next();
+        $file->seekToken(T_FUNCTION);
+        $this->assertEquals('', $file->current()->getFunction());
+        $this->assertEquals('', $file->current()->getClass());
+
+        $file->seekToken(T_OPEN_CURLY);
+        $this->assertEquals('run', $file->current()->getFunction());
+        $this->assertEquals('', $file->current()->getClass());
+
+        $file->seekToken(T_OPEN_BRACKET);
+        $this->assertEquals('run', $file->current()->getFunction());
+        $this->assertEquals('', $file->current()->getClass());
+
+        $file->seekToken(T_CLOSE_CURLY);
+        $this->assertEquals('run', $file->current()->getFunction());
+        $this->assertEquals('', $file->current()->getClass());
+
+        $file->seekToken(T_WHITESPACE);
+        $this->assertEquals('', $file->current()->getFunction());
+    }
 }
 ?>
