@@ -46,7 +46,8 @@ require_once __DIR__ . '/../src/Loader.php';
  *
  * @author     Stefan Priebsch <stefan@priebsch.de>
  * @copyright  Stefan Priebsch <stefan@priebsch.de>
- * @todo this test should be run in isolation.
+ *
+ * @runTestsInSeparateProcesses
  */
 class ConstantsTest extends \PHPUnit_Framework_TestCase
 {
