@@ -43,6 +43,8 @@ namespace spriebsch\PHPca;
  *
  * @author     Stefan Priebsch <stefan@priebsch.de>
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
+ * @todo clone sub-queue with tokens of a class/function/block?
+ * @todo methods to seek to namespace, class or function
  */
 class File extends \SplQueue implements \SeekableIterator
 {
@@ -210,11 +212,5 @@ class File extends \SplQueue implements \SeekableIterator
             throw new \OutOfBoundsException('Invalid seek position');
         }
     }
-
-// @todo seekto matching brace: when open brace, seek to closing brace of same block level
-// when close brace, seek back to open brace of same block level
-
-// @todo potentially offer method that clones "part" of the file (one class/block, for example) and returns a queue of them.
-
 }
 ?>
