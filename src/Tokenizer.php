@@ -225,8 +225,12 @@ class Tokenizer
             // This also sets the class when we are outside the class,
             // which is harmless because we then just set an emtpy string.
             if (!$waitForClassBegin) {
-                $tokenObj->setClass($class);
-// @todo namespace the name!
+                if (substr($class, 0, 1) == '\\' || $namespace == '\\') {
+                    $classname = $class;
+                } else {
+                    $classname = $namespace . '\\' . $class;
+                }
+                $tokenObj->setClass($classname);
             }
 
             // This also sets the function when we are outside the function,
