@@ -61,6 +61,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\File::__construct
      * @covers spriebsch\PHPca\File::getFilename
      */
     public function testGetFileName()
@@ -70,6 +71,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\File::__construct
      * @covers spriebsch\PHPca\File::getSourceCode
      */
     public function testGetSourceCode()
@@ -79,7 +81,9 @@ class FileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\File::__construct
      * @covers spriebsch\PHPca\File::__toString
+     * @covers spriebsch\PHPca\File::add
      */
     public function testToString()
     {
@@ -95,7 +99,9 @@ class FileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\File::__construct
      * @covers spriebsch\PHPca\File::seek
+     * @covers spriebsch\PHPca\File::add
      */
     public function testSeek()
     {
@@ -111,6 +117,41 @@ class FileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers spriebsch\PHPca\File::__construct
+     * @covers spriebsch\PHPca\File::seekToken
+     * @covers spriebsch\PHPca\File::add
+     */
+    public function testSeekToken()
+    {
+        $file = new File('filename', 'sourcecode');
+        $file->add(new Token(T_OPEN_TAG, '<?php'));
+        $file->add(new Token(T_FUNCTION, 'function'));
+        $file->add(new Token(T_CLASS, 'class'));
+        $file->add(new Token(T_CLOSE_TAG, '?>'));
+
+        $file->rewind();
+        $file->seekToken(T_CLASS);
+
+        $this->assertEquals('T_CLASS', $file->current()->getName());
+    }
+
+    /**
+     * @covers spriebsch\PHPca\File::__construct
+     * @covers spriebsch\PHPca\File::seekToken
+     * @covers spriebsch\PHPca\File::add
+     * @expectedException spriebsch\PHPca\Exception
+     */
+    public function testSeekTokenThrowsExceptionWhenTokenDoesNotExist()
+    {
+        $file = new File('filename', 'sourcecode');
+        $file->add(new Token(T_OPEN_TAG, '<?php'));
+
+        $file->rewind();
+        $file->seekToken(T_PUBLIC);
+    }
+
+    /**
+     * @covers spriebsch\PHPca\File::__construct
      * @covers spriebsch\PHPca\File::seek
      * @expectedException \OutOfBoundsException
      */

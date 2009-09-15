@@ -88,5 +88,89 @@ class TokenizerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(4, $file[8]->getLine());
         $this->assertEquals(1, $file[8]->getColumn());
     }
+
+    /**
+     * @covers spriebsch\PHPca\Tokenizer::tokenize
+     */
+    public function testLevel()
+    {
+        $file = Tokenizer::tokenize('test.php', file_get_contents(__DIR__ . '/_testdata/Tokenizer/level.php'));
+        $result = new Result();
+        $result->addFile('test.php');
+
+        $file->rewind();
+
+        $this->assertEquals('T_OPEN_TAG', $file[0]->getName());
+        $this->assertEquals(0, $file[0]->getBlockLevel());
+
+        $file->seekToken(T_PROTECTED);
+        $this->assertEquals(1, $file->current()->getBlockLevel());
+
+        $file->seekToken(T_IF);
+        $this->assertEquals(2, $file->current()->getBlockLevel());
+
+        $file->seekToken(T_FOREACH);
+        $this->assertEquals(3, $file->current()->getBlockLevel());
+
+        $file->seekToken(T_IF);
+        $this->assertEquals(4, $file->current()->getBlockLevel());
+
+        $file->seekToken(T_OBJECT_OPERATOR);
+        $this->assertEquals(5, $file->current()->getBlockLevel());
+
+        $file->seekToken(T_ELSE);
+        $this->assertEquals(4, $file->current()->getBlockLevel());
+
+        $file->seekToken(T_OPEN_CURLY);
+        $this->assertEquals(5, $file->current()->getBlockLevel());
+
+        $file->seekToken(T_CONTINUE);
+        $this->assertEquals(5, $file->current()->getBlockLevel());
+
+        $file->seekToken(T_CLOSE_CURLY);
+        $this->assertEquals(5, $file->current()->getBlockLevel());
+
+        $file->seekToken(T_ELSE);
+        $this->assertEquals(2, $file->current()->getBlockLevel());
+
+        $file->seekToken(T_FOR);
+        $this->assertEquals(3, $file->current()->getBlockLevel());
+
+        $file->seekToken(T_CLOSE_TAG);
+        $this->assertEquals(0, $file->current()->getBlockLevel());
+    }
+
+    /**
+     * @covers spriebsch\PHPca\Tokenizer::tokenize
+     */
+    public function testClass()
+    {
+        $file = Tokenizer::tokenize('test.php', file_get_contents(__DIR__ . '/_testdata/Tokenizer/class.php'));
+        $result = new Result();
+        $result->addFile('test.php');
+
+        $file->rewind();
+
+        $this->assertEquals('T_OPEN_TAG', $file[0]->getName());
+        $this->assertEquals('', $file[0]->getClass());
+
+        $file->seekToken(T_CLASS);
+        $this->assertEquals('', $file->current()->getClass());
+
+        $file->seekToken(T_STRING);
+        $this->assertEquals('', $file->current()->getClass());
+
+        $file->seekToken(T_OPEN_CURLY);
+        $this->assertEquals('Test', $file->current()->getClass());
+
+        $file->seekToken(T_PUBLIC);
+        $this->assertEquals('Test', $file->current()->getClass());
+
+        $file->seekToken(T_CLASS);
+        $this->assertEquals('', $file->current()->getClass());
+
+        $file->seekToken(T_OPEN_CURLY);
+        $this->assertEquals('Something', $file->current()->getClass());
+    }
 }
 ?>

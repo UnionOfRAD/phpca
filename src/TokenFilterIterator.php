@@ -45,14 +45,29 @@ namespace spriebsch\PHPca;
  */
 class TokenFilterIterator extends \FilterIterator
 {
+    /**
+     * @var int
+     */
     protected $tokenId;
 
+    /**
+     * Constructs the object.
+     *
+     * @param File $file The file to iterate over
+     * @param int $tokenId Token ID
+     */
     public function __construct(File $file, $tokenId)
     {
         $this->tokenId = $tokenId;
         parent::__construct($file);
     }
 
+    /**
+     * Decides whether the current token is accepted
+     * (when its ID matches with the ID passed to the constructor).
+     *
+     * @return bool
+     */
     public function accept()
     {
         return $this->tokenId == $this->getInnerIterator()->current()->getId();

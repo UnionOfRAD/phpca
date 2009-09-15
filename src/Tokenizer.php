@@ -58,6 +58,15 @@ class Tokenizer
     {
         Constants::init();
 
+        $classFound = false;
+        $waitForClassBegin = false;
+        $classCurlyLevel = 0;
+
+        $namespace = '\\';
+        $class = '';
+        $function = '';
+        $level = 0;
+
         $line     = 1;
         $column   = 1;
 
@@ -94,6 +103,62 @@ class Tokenizer
                 $column = 1 + $tokenObj->getTrailingWhitespaceCount();
             } else {
                 $column += $tokenObj->getLength();
+            }
+
+            // We have encountered a T_CLASS token before (this is indicated
+            // by $classFound being true, so the T_STRING contains the class
+            // name (there will be T_WHITESPACE between T_CLASS and T_STRING).
+            // We remember the class name, but do not set it until we have
+            // encountered the next opening brace.
+            // We set $waitForClassBegin to true so that we can wait for the
+            // next opening curly brace.
+            if ($classFound && $tokenObj->getId() == T_STRING) {
+                $class = $tokenObj->getText();
+                $waitForClassBegin = true;
+                $classFound = false;
+            }
+
+            // If we encounter a T_CLASS token, we have found a class definition.
+            // We set $classFound to true so that we can watch out for the class
+            // name (see above).
+            if ($tokenObj->getId() == T_CLASS) {
+                $classFound = true;
+            }
+
+            // Opening curly brace opens another block, thus increases the level.
+            if ($tokenObj->getId() == T_OPEN_CURLY) {
+                $level++;
+
+                // If we encounter the opening curly brace of a class (this happens
+                // when $waitForClassBegin is true), we remember the block level of
+                // this brace so that we can end the class when we encounter the
+                // matching closing tag.
+                if ($waitForClassBegin) {
+                    $classCurlyLevel = $level;
+                    $waitForClassBegin = false;
+                }
+            }
+
+            // This also sets the class when we are outside the class,
+            // which is harmless because we then just set an emtpy string.
+            if (!$waitForClassBegin) {
+                $tokenObj->setClass($class);
+// @todo namespace the name!
+            }
+
+            $tokenObj->setBlockLevel($level);
+
+            // Closing curly decreases the block level. We do this *after*
+            // we have set the block leven in the current token, so that
+            // the closing curly's level matches the level of its opening brace.
+            if ($tokenObj->getId() == T_CLOSE_CURLY) {
+                $level--;
+
+                // If we are inside a class and the closing brace matches the opening brace of that class, the class has ended.
+                if ($class != '' && $tokenObj->getBlockLevel() == $classCurlyLevel) {
+                    $class = '';
+                    $classCurlyLevel = 0;
+                }
             }
 
             $file->add($tokenObj);

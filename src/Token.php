@@ -94,7 +94,7 @@ class Token
     /**
      * @var int
      */
-    protected $level;
+    protected $blockLevel;
 
     /**
      * Constructs the object
@@ -143,6 +143,11 @@ class Token
         $this->class = $class;
     }
 
+    public function getClass()
+    {
+        return $this->class;
+    }
+
     /**
      * Set the function the token is part of.
      *
@@ -156,11 +161,21 @@ class Token
     /**
      * Set the block level (number of open {'s) the token is in.
      *
-     * @param string $level
+     * @param int $level
      */
-    public function setBlockLevel($level)
+    public function setBlockLevel($blockLevel)
     {
-        $this->level = $level;
+        $this->blockLevel = $blockLevel;
+    }
+
+    /**
+     * Returns the block level.
+     *
+     * @param int
+     */
+    public function getBlockLevel()
+    {
+        return $this->blockLevel;
     }
 
     /**

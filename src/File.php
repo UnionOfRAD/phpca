@@ -57,22 +57,27 @@ class File extends \SplQueue implements \SeekableIterator
     protected $sourceCode;
 
     /**
-    * Constructs the File object
-    *
-    * We set the file name and source code to keep File independent
-    * from the actual file system. Still, we'll need the file name
-    * later when we output the result.
-    *
-    * @param string $fileName   Source file name
-    * @param string $sourceCode The actual source code
-     * @return void
-    */
+     * Constructs the File object
+     *
+     * We set the file name and source code to keep File independent
+     * from the actual file system. Still, we'll need the file name
+     * later when we output the result.
+     *
+     * @param string $fileName   Source file name
+     * @param string $sourceCode The actual source code
+     * @return null
+     */
     public function __construct($fileName, $sourceCode)
     {
         $this->fileName   = $fileName;
         $this->sourceCode = $sourceCode;
     }
 
+    /**
+     * Returns string representation of the object.
+     *
+     * @return string
+     */
     public function __toString()
     {
         $result = array();
@@ -110,13 +115,38 @@ class File extends \SplQueue implements \SeekableIterator
      * Adds a token
      *
      * @param Token $token
-     * @return void
+     * @return null
      */
     public function add(Token $token)
     {
         parent::enqueue($token);
     }
 
+    /**
+     * Seek to the next token $id.
+     * If the current token has given ID, we do not seek to the next token of
+     * that ID.
+     *
+     * @param int $id
+     * @return null
+     */
+    public function seekToken($id)
+    {
+        while($this->valid()) {
+            if ($this->current()->getId() == $id) {
+                return;
+            }
+            $this->next();
+        }
+
+        throw new Exception('Invalid seek token id ' . $id);
+    }
+
+    /**
+     * Seek to given index
+     *
+     * @param int $index
+     */
     public function seek($index)
     {
         $this->rewind();
@@ -129,5 +159,11 @@ class File extends \SplQueue implements \SeekableIterator
             throw new \OutOfBoundsException('Invalid seek position');
         }
     }
+
+// @todo seekto matching brace: when open brace, seek to closing brace of same block level
+// when close brace, seek back to open brace of same block level
+
+// @todo potentially offer method that clones "part" of the file (one class/block, for example) and returns a queue of them.
+
 }
 ?>
