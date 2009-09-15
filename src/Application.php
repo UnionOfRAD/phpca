@@ -50,7 +50,7 @@ class Application
      *
      * @var string
      */
-    static public $version = '0.3.0';
+    static public $version = '0.4.0';
 
     /**
      * Additional paths to load rules from.
