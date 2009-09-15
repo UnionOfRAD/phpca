@@ -228,5 +228,56 @@ class TokenizerTest extends \PHPUnit_Framework_TestCase
         $file->seekToken(T_WHITESPACE);
         $this->assertEquals('', $file->current()->getFunction());
     }
+
+    /**
+     * @covers spriebsch\PHPca\Tokenizer::tokenize
+     */
+    public function testNamespace()
+    {
+        $file = Tokenizer::tokenize('test.php', file_get_contents(__DIR__ . '/_testdata/Tokenizer/namespace.php'));
+        $file->rewind();
+
+        $this->assertEquals('T_OPEN_TAG', $file[0]->getName());
+        $this->assertEquals('\\', $file[0]->getNamespace());
+
+        $file->seekToken(T_CLASS);
+        $this->assertEquals('Foo\\Bar', $file->current()->getNamespace());
+
+        $file->seekToken(T_FUNCTION);
+        $this->assertEquals('Foo\\Bar', $file->current()->getNamespace());
+
+        $file->seekToken(T_NAMESPACE);
+        $this->assertEquals('\\', $file->current()->getNamespace());
+
+        $file->seekToken(T_SEMICOLON);
+        $this->assertEquals('\\', $file->current()->getNamespace());
+
+        $file->next();
+        $this->assertEquals('Baz', $file->current()->getNamespace());
+
+        $file->seekToken(T_CLASS);
+        $this->assertEquals('Baz', $file->current()->getNamespace());
+    }
+
+    /**
+     * @covers spriebsch\PHPca\Tokenizer::tokenize
+     */
+    public function testNamespaceWithBraces()
+    {
+        $file = Tokenizer::tokenize('test.php', file_get_contents(__DIR__ . '/_testdata/Tokenizer/namespace_braces.php'));
+        $file->rewind();
+
+        $this->assertEquals('T_OPEN_TAG', $file[0]->getName());
+        $this->assertEquals('\\', $file[0]->getNamespace());
+
+        $file->seekToken(T_CLASS);
+        $this->assertEquals('Foo\\Bar', $file->current()->getNamespace());
+
+        $file->seekToken(T_FUNCTION);
+        $this->assertEquals('Foo\\Bar', $file->current()->getNamespace());
+
+        $file->seekToken(T_CLASS);
+        $this->assertEquals('Baz', $file->current()->getNamespace());
+    }
 }
 ?>

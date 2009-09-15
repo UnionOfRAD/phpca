@@ -58,17 +58,20 @@ class Tokenizer
     {
         Constants::init();
 
+        $class = '';
         $classFound = false;
         $waitForClassBegin = false;
         $classCurlyLevel = 0;
 
+        $function = '';
         $functionFound = false;
         $waitForFunctionBegin = false;
         $functionCurlyLevel = 0;
 
         $namespace = '\\';
-        $class = '';
-        $function = '';
+        $newNamespace = '';
+        $namespaceFound = false;
+        $namespaceStarted = false;
 
         $level = 0;
 
@@ -110,6 +113,16 @@ class Tokenizer
                 $column += $tokenObj->getLength();
             }
 
+            // We have encountered a T_NAMESPACE token before (this is indicated
+            // by $namespaceFound being true, so the T_STRING contains the class
+            // name (there will be T_WHITESPACE between T_NAMESPACE and T_STRING).
+            // We remember the namespace name, but do not set it until we have
+            // encountered the next opening brace or semicolon. We set
+            // $waitForNamespaceBegin to true so that we can wait for one of these.
+            if (($namespaceFound && $tokenObj->getId() == T_STRING) || ($namespaceFound && $tokenObj->getId() == T_NS_SEPARATOR)) {
+                $newNamespace .= $tokenObj->getText();
+            }
+
             // We have encountered a T_CLASS token before (this is indicated
             // by $classFound being true, so the T_STRING contains the class
             // name (there will be T_WHITESPACE between T_CLASS and T_STRING).
@@ -134,6 +147,16 @@ class Tokenizer
                 $functionFound = false;
             }
 
+            // T_NAMESPACE token starts a namespace. We set $namespaceFound
+            // to true so that we can watch out for the namespace name (see above).
+            if ($tokenObj->getId() == T_NAMESPACE) {
+                // Reset the current namespace. It is a PHPCa convention to
+                // always make namespace statements themselves part of the
+                // global namespace.
+                $namespace = '\\';
+                $namespaceFound = true;
+            }
+
             // If we encounter a T_CLASS token, we have found a class definition.
             // We set $classFound to true so that we can watch out for the class
             // name (see above).
@@ -148,9 +171,27 @@ class Tokenizer
                 $functionFound = true;
             }
 
+            // A semicolon can end the namespace declaration. If we encounter
+            // a semicolon in $namespaceFound mode, we switch the mode which
+            // indicates that the full namespace name has been parsed.
+            if ($namespaceFound && $tokenObj->getId() == T_SEMICOLON) {
+                $namespaceStarted = true;
+                $namespaceFound = false;
+            }
+
             // Opening curly brace opens another block, thus increases the level.
             if ($tokenObj->getId() == T_OPEN_CURLY) {
                 $level++;
+
+                // An opening curly brace can end the namespace declaration.
+                // If we encounter one while in $namespaceFound mode, we switch
+                // the mode which indicates that the full namespace name has
+                // been parsed.
+                if ($namespaceFound) {
+                    $namespace = $newNamespace;
+                    $newNamespace = '';
+                    $namespaceFound = false;
+                }
 
                 // If we encounter the opening curly brace of a class (this happens
                 // when $waitForClassBegin is true), we remember the block level of
@@ -169,6 +210,16 @@ class Tokenizer
                     $functionCurlyLevel = $level;
                     $waitForFunctionBegin = false;
                 }
+            }
+
+            // Since we assemble any new namespace name in $newNamespace,
+            // we can safely always set the $namespace.
+            $tokenObj->setNamespace($namespace);
+
+            if ($namespaceStarted) {
+                $namespaceStarted = false;
+                $namespace = $newNamespace;
+                $newNamespace = '';
             }
 
             // This also sets the class when we are outside the class,
@@ -191,6 +242,12 @@ class Tokenizer
             // the closing curly's level matches the level of its opening brace.
             if ($tokenObj->getId() == T_CLOSE_CURLY) {
                 $level--;
+
+                // We get away with not dealing with namespace ends, since
+                // non-namespaced code is not allowed when there is at least
+                // one namespace in a file. So any namespace either implicitly
+                // ends at the end of a file, or another namespace starts,
+                // implicitly "ending" the previous namespace.
 
                 // If we are inside a class and the closing brace matches the
                 // opening brace of that class, the block/class has ended.
