@@ -225,15 +225,15 @@ class CLI implements ProgressPrinterInterface
     protected function getProgressLetter($file, Result $result)
     {
         if ($result->hasLintError($file)) {
-            return 'L';
+            return 'E';
         }
 
         if ($result->hasRuleError($file)) {
-            return 'R';
+            return 'E';
         }
 
         if ($result->hasViolations($file)) {
-            return 'V';
+            return 'F';
         }
 
         return '.';
@@ -405,12 +405,12 @@ class CLI implements ProgressPrinterInterface
 
         // only display lint errors in statistics if they occured
         if ($this->result->getNumberOfLintErrors() > 0) {
-            echo $this->result->getNumberOfLintErrors() . ' lint errors [L], ';
+            echo $this->result->getNumberOfLintErrors() . ' lint errors, ';
         }
 
         // only display rule errors in statistics if they occured
         if ($this->result->getNumberOfRuleErrors() > 0) {
-            echo $this->result->getNumberOfRuleErrors() . ' rule errors [R], ';
+            echo $this->result->getNumberOfRuleErrors() . ' rule errors, ';
         }
 
         echo $this->result->getNumberOfViolations() . ' violations';

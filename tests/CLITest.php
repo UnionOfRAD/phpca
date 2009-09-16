@@ -183,7 +183,7 @@ class CLITest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->runCLI(array('cli.php', '-p', trim(exec('which php')), __DIR__ . '/_testdata/Application/fail'));
 
-        $this->assertContains("\nV\n", $result);
+        $this->assertContains("\nF\n", $result);
         $this->assertContains('FAIL', $result);
     }
 
@@ -205,7 +205,7 @@ class CLITest extends \PHPUnit_Framework_TestCase
     {
         $result = $this->runCLI(array('cli.php', '-p', trim(exec('which php')), __DIR__ . '/_testdata/Application/lint_fail'));
 
-        $this->assertContains("\nL\n", $result);
+        $this->assertContains("\nE\n", $result);
         $this->assertContains('Parse error:', $result);
         $this->assertContains('FAIL', $result);
     }
