@@ -179,7 +179,7 @@ class CLITest extends \PHPUnit_Framework_TestCase
     /**
      * @covers spriebsch\PHPca\CLI
      */
-    public function testRunDisplaysFailMessageWhenAnalyzingFilesWithErrors()
+    public function testRunDisplaysFailMessageWhenAnalyzingFilesWithViolations()
     {
         $result = $this->runCLI(array('cli.php', '-p', trim(exec('which php')), __DIR__ . '/_testdata/Application/fail'));
 
@@ -190,7 +190,7 @@ class CLITest extends \PHPUnit_Framework_TestCase
     /**
      * @covers spriebsch\PHPca\CLI
      */
-    public function testRunDisplayOkMessageWhenAnalyzingFilesWithoutErrors()
+    public function testRunDisplayOkMessageWhenAnalyzingFilesWithoutViolations()
     {
         $result = $this->runCLI(array('cli.php', '-p', trim(exec('which php')), __DIR__ . '/_testdata/Application/pass'));
 

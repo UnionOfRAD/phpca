@@ -123,6 +123,26 @@ class FileTest extends \PHPUnit_Framework_TestCase
      */
     public function testSeekToken()
     {
+        $token = new Token(T_CLASS, 'class');
+
+        $file = new File('filename', 'sourcecode');
+        $file->add(new Token(T_OPEN_TAG, '<?php'));
+        $file->add(new Token(T_FUNCTION, 'function'));
+        $file->add($token);
+        $file->add(new Token(T_CLOSE_TAG, '?>'));
+
+        $file->seekToken($token);
+
+        $this->assertSame($token, $file->current());
+    }
+
+    /**
+     * @covers spriebsch\PHPca\File::__construct
+     * @covers spriebsch\PHPca\File::seekTokenId
+     * @covers spriebsch\PHPca\File::add
+     */
+    public function testSeekTokenId()
+    {
         $file = new File('filename', 'sourcecode');
         $file->add(new Token(T_OPEN_TAG, '<?php'));
         $file->add(new Token(T_FUNCTION, 'function'));
@@ -130,7 +150,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $file->add(new Token(T_CLOSE_TAG, '?>'));
 
         $file->rewind();
-        $file->seekToken(T_CLASS);
+        $file->seekTokenId(T_CLASS);
 
         $this->assertEquals('T_CLASS', $file->current()->getName());
     }
@@ -154,8 +174,8 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $file = Tokenizer::tokenize('test.php', file_get_contents(__DIR__ . '/_testdata/File/braces.php'));
         $file->rewind();
 
-        $file->seekToken(T_FUNCTION);
-        $file->seekToken(T_OPEN_CURLY);
+        $file->seekTokenId(T_FUNCTION);
+        $file->seekTokenId(T_OPEN_CURLY);
         $openBrace = $file->current();
 
         $file->seekMatchingCurlyBrace($openBrace);
@@ -194,8 +214,8 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $file = Tokenizer::tokenize('test.php', file_get_contents(__DIR__ . '/_testdata/File/braces.php'));
         $file->rewind();
 
-        $file->seekToken(T_CLASS);
-        $file->seekToken(T_OPEN_CURLY);
+        $file->seekTokenId(T_CLASS);
+        $file->seekTokenId(T_OPEN_CURLY);
         $openBrace = $file->current();
 
         $file->seekMatchingCurlyBrace($openBrace);
@@ -226,6 +246,21 @@ class FileTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @covers spriebsch\PHPca\File::__construct
+     * @covers spriebsch\PHPca\File::seekTokenId
+     * @covers spriebsch\PHPca\File::add
+     * @expectedException spriebsch\PHPca\Exception
+     */
+    public function testSeekTokenIdThrowsExceptionWhenTokenDoesNotExist()
+    {
+        $file = new File('filename', 'sourcecode');
+        $file->add(new Token(T_OPEN_TAG, '<?php'));
+
+        $file->rewind();
+        $file->seekTokenId(T_PUBLIC);
+    }
+
+    /**
+     * @covers spriebsch\PHPca\File::__construct
      * @covers spriebsch\PHPca\File::seekToken
      * @covers spriebsch\PHPca\File::add
      * @expectedException spriebsch\PHPca\Exception
@@ -236,7 +271,7 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $file->add(new Token(T_OPEN_TAG, '<?php'));
 
         $file->rewind();
-        $file->seekToken(T_PUBLIC);
+        $file->seekToken(new Token(T_CLOSE_TAG, '?>'));
     }
 
     /**

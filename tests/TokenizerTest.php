@@ -100,40 +100,40 @@ class TokenizerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('T_OPEN_TAG', $file[0]->getName());
         $this->assertEquals(0, $file[0]->getBlockLevel());
 
-        $file->seekToken(T_PROTECTED);
+        $file->seekTokenId(T_PROTECTED);
         $this->assertEquals(1, $file->current()->getBlockLevel());
 
-        $file->seekToken(T_IF);
+        $file->seekTokenId(T_IF);
         $this->assertEquals(2, $file->current()->getBlockLevel());
 
-        $file->seekToken(T_FOREACH);
+        $file->seekTokenId(T_FOREACH);
         $this->assertEquals(3, $file->current()->getBlockLevel());
 
-        $file->seekToken(T_IF);
+        $file->seekTokenId(T_IF);
         $this->assertEquals(4, $file->current()->getBlockLevel());
 
-        $file->seekToken(T_OBJECT_OPERATOR);
+        $file->seekTokenId(T_OBJECT_OPERATOR);
         $this->assertEquals(5, $file->current()->getBlockLevel());
 
-        $file->seekToken(T_ELSE);
+        $file->seekTokenId(T_ELSE);
         $this->assertEquals(4, $file->current()->getBlockLevel());
 
-        $file->seekToken(T_OPEN_CURLY);
+        $file->seekTokenId(T_OPEN_CURLY);
         $this->assertEquals(5, $file->current()->getBlockLevel());
 
-        $file->seekToken(T_CONTINUE);
+        $file->seekTokenId(T_CONTINUE);
         $this->assertEquals(5, $file->current()->getBlockLevel());
 
-        $file->seekToken(T_CLOSE_CURLY);
+        $file->seekTokenId(T_CLOSE_CURLY);
         $this->assertEquals(5, $file->current()->getBlockLevel());
 
-        $file->seekToken(T_ELSE);
+        $file->seekTokenId(T_ELSE);
         $this->assertEquals(2, $file->current()->getBlockLevel());
 
-        $file->seekToken(T_FOR);
+        $file->seekTokenId(T_FOR);
         $this->assertEquals(3, $file->current()->getBlockLevel());
 
-        $file->seekToken(T_CLOSE_TAG);
+        $file->seekTokenId(T_CLOSE_TAG);
         $this->assertEquals(0, $file->current()->getBlockLevel());
     }
 
@@ -148,22 +148,22 @@ class TokenizerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('T_OPEN_TAG', $file[0]->getName());
         $this->assertEquals('', $file[0]->getClass());
 
-        $file->seekToken(T_CLASS);
+        $file->seekTokenId(T_CLASS);
         $this->assertEquals('', $file->current()->getClass());
 
-        $file->seekToken(T_STRING);
+        $file->seekTokenId(T_STRING);
         $this->assertEquals('', $file->current()->getClass());
 
-        $file->seekToken(T_OPEN_CURLY);
+        $file->seekTokenId(T_OPEN_CURLY);
         $this->assertEquals('Test', $file->current()->getClass());
 
-        $file->seekToken(T_PUBLIC);
+        $file->seekTokenId(T_PUBLIC);
         $this->assertEquals('Test', $file->current()->getClass());
 
-        $file->seekToken(T_CLASS);
+        $file->seekTokenId(T_CLASS);
         $this->assertEquals('', $file->current()->getClass());
 
-        $file->seekToken(T_OPEN_CURLY);
+        $file->seekTokenId(T_OPEN_CURLY);
         $this->assertEquals('Something', $file->current()->getClass());
     }
 
@@ -178,54 +178,54 @@ class TokenizerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('T_OPEN_TAG', $file[0]->getName());
         $this->assertEquals('', $file[0]->getFunction());
 
-        $file->seekToken(T_PUBLIC);
+        $file->seekTokenId(T_PUBLIC);
         $this->assertEquals('', $file->current()->getFunction());
 
-        $file->seekToken(T_OPEN_CURLY);
+        $file->seekTokenId(T_OPEN_CURLY);
         $this->assertEquals('__construct', $file->current()->getFunction());
         $this->assertEquals('Test', $file->current()->getClass());
 
-        $file->seekToken(T_EXIT);
+        $file->seekTokenId(T_EXIT);
         $this->assertEquals('__construct', $file->current()->getFunction());
         $this->assertEquals('Test', $file->current()->getClass());
 
-        $file->seekToken(T_CLOSE_CURLY);
+        $file->seekTokenId(T_CLOSE_CURLY);
         $this->assertEquals('__construct', $file->current()->getFunction());
         $this->assertEquals('Test', $file->current()->getClass());
 
-        $file->seekToken(T_PUBLIC);
+        $file->seekTokenId(T_PUBLIC);
         $this->assertEquals('', $file->current()->getFunction());
         $this->assertEquals('Test', $file->current()->getClass());
 
-        $file->seekToken(T_OPEN_CURLY);
+        $file->seekTokenId(T_OPEN_CURLY);
         $this->assertEquals('setA', $file->current()->getFunction());
         $this->assertEquals('Test', $file->current()->getClass());
 
-        $file->seekToken(T_CLOSE_CURLY);
+        $file->seekTokenId(T_CLOSE_CURLY);
         $this->assertEquals('setA', $file->current()->getFunction());
         $this->assertEquals('Test', $file->current()->getClass());
 
-        $file->seekToken(T_FUNCTION);
+        $file->seekTokenId(T_FUNCTION);
         $this->assertEquals('Test', $file->current()->getClass());
 
         $file->next();
-        $file->seekToken(T_FUNCTION);
+        $file->seekTokenId(T_FUNCTION);
         $this->assertEquals('', $file->current()->getFunction());
         $this->assertEquals('', $file->current()->getClass());
 
-        $file->seekToken(T_OPEN_CURLY);
+        $file->seekTokenId(T_OPEN_CURLY);
         $this->assertEquals('run', $file->current()->getFunction());
         $this->assertEquals('', $file->current()->getClass());
 
-        $file->seekToken(T_OPEN_BRACKET);
+        $file->seekTokenId(T_OPEN_BRACKET);
         $this->assertEquals('run', $file->current()->getFunction());
         $this->assertEquals('', $file->current()->getClass());
 
-        $file->seekToken(T_CLOSE_CURLY);
+        $file->seekTokenId(T_CLOSE_CURLY);
         $this->assertEquals('run', $file->current()->getFunction());
         $this->assertEquals('', $file->current()->getClass());
 
-        $file->seekToken(T_WHITESPACE);
+        $file->seekTokenId(T_WHITESPACE);
         $this->assertEquals('', $file->current()->getFunction());
     }
 
@@ -240,22 +240,22 @@ class TokenizerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('T_OPEN_TAG', $file[0]->getName());
         $this->assertEquals('\\', $file[0]->getNamespace());
 
-        $file->seekToken(T_CLASS);
+        $file->seekTokenId(T_CLASS);
         $this->assertEquals('Foo\\Bar', $file->current()->getNamespace());
 
-        $file->seekToken(T_FUNCTION);
+        $file->seekTokenId(T_FUNCTION);
         $this->assertEquals('Foo\\Bar', $file->current()->getNamespace());
 
-        $file->seekToken(T_NAMESPACE);
+        $file->seekTokenId(T_NAMESPACE);
         $this->assertEquals('\\', $file->current()->getNamespace());
 
-        $file->seekToken(T_SEMICOLON);
+        $file->seekTokenId(T_SEMICOLON);
         $this->assertEquals('\\', $file->current()->getNamespace());
 
         $file->next();
         $this->assertEquals('Baz', $file->current()->getNamespace());
 
-        $file->seekToken(T_CLASS);
+        $file->seekTokenId(T_CLASS);
         $this->assertEquals('Baz', $file->current()->getNamespace());
     }
 
@@ -270,13 +270,13 @@ class TokenizerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('T_OPEN_TAG', $file[0]->getName());
         $this->assertEquals('\\', $file[0]->getNamespace());
 
-        $file->seekToken(T_CLASS);
+        $file->seekTokenId(T_CLASS);
         $this->assertEquals('Foo\\Bar', $file->current()->getNamespace());
 
-        $file->seekToken(T_FUNCTION);
+        $file->seekTokenId(T_FUNCTION);
         $this->assertEquals('Foo\\Bar', $file->current()->getNamespace());
 
-        $file->seekToken(T_CLASS);
+        $file->seekTokenId(T_CLASS);
         $this->assertEquals('Baz', $file->current()->getNamespace());
     }
 }

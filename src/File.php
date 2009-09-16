@@ -212,20 +212,47 @@ class File extends \SplQueue implements \SeekableIterator
     }
 
     /**
-     * Seek to the next token $id.
+     * Seek to given token. Will rewind(), so it finds the token
+     * regardless of the current position.
+     *
+     * @param Token $token
+     * @return null
+     */
+    public function seekToken(Token $token)
+    {
+        $this->rewind();
+
+        while($this->valid()) {
+            if ($this->current() === $token) {
+                return;
+            }
+            $this->next();
+        }
+
+        throw new Exception('Invalid seek token ' . $token->getName());
+    }
+
+    /**
+     * Seek to the next token $id. Seeking starts from current element.
      * If the current token has given ID, we do not seek to the next token of
      * that ID.
      *
      * @param int $id
+     * @param bool $backwards
      * @return null
      */
-    public function seekToken($id)
+    public function seekTokenId($id, $backwards = false)
     {
         while($this->valid()) {
             if ($this->current()->getId() == $id) {
                 return;
             }
-            $this->next();
+
+            if ($backwards) {
+                $this->prev();
+            } else {
+                $this->next();
+            }
         }
 
         throw new Exception('Invalid seek token id ' . $id);

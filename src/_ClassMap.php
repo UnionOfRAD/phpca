@@ -67,6 +67,7 @@ $_classMap = array(
     'spriebsch\PHPca\Rule\OneTrueBraceStyleRule'                => 'Rule/OneTrueBraceStyleRule.php',
     'spriebsch\PHPca\Rule\NoEvalStatementsRule'                 => 'Rule/NoEvalStatementsRule.php',
     'spriebsch\PHPca\Rule\NoVarKeywordsRule'                    => 'Rule/NoVarKeywordsRule.php',
+    'spriebsch\PHPca\Rule\FunctionsMustHaveDocBlockRule'        => 'Rule/FunctionsMustHaveDocBlockRule.php',
 
     'spriebsch\PHPca\Helper'                      => 'Helper.php',
 
