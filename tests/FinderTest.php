@@ -291,5 +291,48 @@ class FinderTest extends \PHPUnit_Framework_TestCase
         // The last element of the second result must be T_FUNCTION
         $this->assertEquals('T_FUNCTION', $result[1][2]->getName());
     }
+
+    /**
+     * Find all T_FUNCTION tokens in the file and make sure they have correct
+     * line/column positions.
+     *
+     * @covers spriebsch\PHPca\Finder::findPattern
+     */
+    public function testBug0002()
+    {
+        $file = Tokenizer::tokenize('filename', file_get_contents(__DIR__ . '/_testdata/Finder/bug0002.php'));
+
+        $pattern = new Pattern();
+        $pattern->token(T_FUNCTION);
+
+        $result = Finder::findPattern($file, $pattern);
+
+        $this->assertEquals(5, sizeof($result));
+
+        $this->assertEquals(1, sizeof($result[0]));
+        $this->assertEquals('T_FUNCTION', $result[0][0]->getName());
+        $this->assertEquals(8, $result[0][0]->getLine());
+        $this->assertEquals(12, $result[0][0]->getColumn());
+
+        $this->assertEquals(1, sizeof($result[1]));
+        $this->assertEquals('T_FUNCTION', $result[1][0]->getName());
+        $this->assertEquals(12, $result[1][0]->getLine());
+        $this->assertEquals(19, $result[1][0]->getColumn());
+
+        $this->assertEquals(1, sizeof($result[2]));
+        $this->assertEquals('T_FUNCTION', $result[2][0]->getName());
+        $this->assertEquals(16, $result[2][0]->getLine());
+        $this->assertEquals(21, $result[2][0]->getColumn());
+
+        $this->assertEquals(1, sizeof($result[3]));
+        $this->assertEquals('T_FUNCTION', $result[3][0]->getName());
+        $this->assertEquals(24, $result[3][0]->getLine());
+        $this->assertEquals(1, $result[3][0]->getColumn());
+
+        $this->assertEquals(1, sizeof($result[4]));
+        $this->assertEquals('T_FUNCTION', $result[4][0]->getName());
+        $this->assertEquals(28, $result[4][0]->getLine());
+        $this->assertEquals(1, $result[4][0]->getColumn());
+    }
 }
 ?>

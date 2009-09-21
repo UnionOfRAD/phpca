@@ -229,7 +229,7 @@ class File extends \SplQueue implements \SeekableIterator
             $this->next();
         }
 
-        throw new Exception('Invalid seek token ' . $token->getName());
+        throw new Exception('No token ' . $token->getName() . ' found');
     }
 
     /**
@@ -255,7 +255,7 @@ class File extends \SplQueue implements \SeekableIterator
             }
         }
 
-        throw new Exception('Invalid seek token id ' . $id);
+        throw new Exception('No token ' . Constants::getTokenName($id) . ' found');
     }
 
     /**

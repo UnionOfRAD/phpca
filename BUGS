@@ -1,0 +1,10 @@
+BUGS in PHPca
+=============
+
+No      Status  Description
+
+0001    Fixed   FunctionsMustHaveDocBlockRule: When first function has a docblock,
+                subsequent functions without docblock cause no rule violation.
+
+0002    Fixed   Finder returns token array of correct size, but each element
+                is the first token that has been found.

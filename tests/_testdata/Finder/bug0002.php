@@ -9,16 +9,10 @@ abstract class Test
     {
     }
 
-    /**
-     *
-     */
     static public function setA()
     {
     }
 
-    /**
-     *
-     */
     abstract public function setB()
     {
     }
@@ -28,6 +22,10 @@ abstract class Test
  * Some DocBlock
  */
 function test()
+{
+}
+
+function somethingElse()
 {
 }
 ?>

@@ -50,23 +50,44 @@ class FunctionsMustHaveDocBlockRule extends Rule
 {
     protected function doCheck()
     {
-        $pattern = new Pattern();
-        $pattern->token(T_FUNCTION);
+        // If there are no T_FUNCTION tokens, we are done.
+        if (!Finder::containsToken($this->file, T_FUNCTION)) {
+            return;
+        }
 
-        foreach (Finder::findPattern($this->file, $pattern) as $token) {
-            $this->file->seekToken($token[0]);
+        $this->file->rewind();
+
+        while (true) {
 
             try {
+                $this->file->seekTokenId(T_FUNCTION);
+                $functionToken = $this->file->current();
+            }
+
+            catch (\spriebsch\PHPca\Exception $e) {
+                // No more T_FUNCTION tokens found, we are done.
+                return;
+            }
+
+            try {
+                // Search backwards for next docblock.
                 $this->file->seekTokenId(T_DOC_COMMENT, true);
 
-                if (($this->file->current()->getEndLine() + 1) != $token[0]->getLine()) {
-                    $this->addViolation('Function has no docblock comment', $token[0]);
+                // Docblock must end exactly one line above function token,
+                // otherwise it can be the docblock of another function.
+                if (($this->file->current()->getEndLine() + 1) != $functionToken->getLine()) {
+                    $this->addViolation('Function has no docblock comment', $functionToken);
                 }
             }
 
-            catch (Exception $e) {
-                $this->addViolation('Function has no docblock comment', $token[0]);
+            catch (\spriebsch\PHPca\Exception $e) {
+                // Search for the docblock has failed,
+                $this->addViolation('Function has no docblock comment', $functionToken);
             }
+
+            // Seek back to the token following the T_FUNCTION we just processed.
+            $this->file->seekToken($functionToken);
+            $this->file->next();
         }
     }
 }

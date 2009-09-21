@@ -81,5 +81,30 @@ class FunctionsMustHaveDocBlockRuleTest extends AbstractRuleTest
         $this->assertTrue($this->result->hasViolations());
         $this->assertEquals(4, $this->result->getNumberOfViolations());
     }
+
+    /**
+     * @covers \spriebsch\PHPca\Rule\FunctionsMustHaveDocBlockRule
+     */
+    public function testBug0001()
+    {
+        $this->init(__DIR__ . '/../_testdata/FunctionsMustHaveDocBlockRule/bug0001.php');
+
+        $rule = new FunctionsMustHaveDocBlockRule();
+        $rule->check($this->file, $this->result);
+
+        $this->assertTrue($this->result->hasViolations());
+        $this->assertEquals(3, $this->result->getNumberOfViolations());
+
+        $violations = $this->result->getViolations('test.php');
+
+        $this->assertEquals(12, $violations[0]->getLine());
+        $this->assertEquals(19, $violations[0]->getColumn());
+
+        $this->assertEquals(16, $violations[1]->getLine());
+        $this->assertEquals(21, $violations[1]->getColumn());
+
+        $this->assertEquals(28, $violations[2]->getLine());
+        $this->assertEquals(1, $violations[2]->getColumn());
+    }
 }
 ?>

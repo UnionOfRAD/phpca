@@ -62,25 +62,35 @@ class Finder
         $tokens = (string) $file;
         $result = array();
 
-        foreach ($matches as $match) {
+        foreach (array_unique($matches) as $match) {
 
-            // To relate the string representation back to the token stream,
-            // we find the position of the match in the string representation
-            // of file, and count the spaces to find at which token in the
-            // sequence the match starts.
-            $tokenPos = substr_count(substr($tokens, 0, strpos($tokens, $match)), ' ');
+            $offset = 0;
 
-            // The numnber of tokens the match contains is the number of spaces
-            // plus one.
-            $length = substr_count($match, ' ') + 1;
+            do {
+                $offset = strpos($tokens, $match, $offset);
 
-            $sequence = array();
+                if ($offset !== false) {
+                    // To relate the string representation back to the token stream,
+                    // we find the position of the match in the string representation
+                    // of file, and count the spaces to find at which token in the
+                    // sequence the match starts.
+                    $position = substr_count(substr($tokens, 0, strpos($tokens, $match, $offset)), ' ');
 
-            for ($i = $tokenPos; $i < $tokenPos + $length; $i++) {
-                $sequence[] = $file[$i];
-            }
+                    // The number of tokens the match contains is the number of
+                    // spaces plus one.
+                    $length = substr_count($match, ' ') + 1;
 
-            $result[] = $sequence;
+                    $sequence = array();
+
+                    for ($i = $position; $i < $position + $length; $i++) {
+                        $sequence[] = $file[$i];
+                    }
+
+                    $result[] = $sequence;
+                }
+
+                $offset++;
+            } while ($offset !== false);
         }
 
         return $result;

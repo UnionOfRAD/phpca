@@ -47,6 +47,12 @@ class Pattern implements PatternInterface
 {
     protected $items = array();
 
+    /**
+     * Make sure that every element in a pattern implements PatternInterface.
+     *
+     * @param array $patterns
+     * @throws spriebsch\PHPca\Pattern\PatternException
+     */
     protected function checkType(array $patterns)
     {
         foreach($patterns as $pattern) {
