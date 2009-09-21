@@ -68,6 +68,7 @@ $_classMap = array(
     'spriebsch\PHPca\Rule\NoEvalStatementsRule'                 => 'Rule/NoEvalStatementsRule.php',
     'spriebsch\PHPca\Rule\NoVarKeywordsRule'                    => 'Rule/NoVarKeywordsRule.php',
     'spriebsch\PHPca\Rule\FunctionsMustHaveDocBlockRule'        => 'Rule/FunctionsMustHaveDocBlockRule.php',
+    'spriebsch\PHPca\Rule\MethodsMustHaveVisibilityOperatorRule'=> 'Rule/MethodsMustHaveVisibilityOperatorRule.php',
 
     'spriebsch\PHPca\Helper'                      => 'Helper.php',
 
