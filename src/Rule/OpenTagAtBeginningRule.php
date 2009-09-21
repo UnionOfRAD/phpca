@@ -49,6 +49,11 @@ use spriebsch\PHPca\Warning;
  */
 class OpenTagAtBeginningRule extends Rule
 {
+    /**
+     * Performs the rule check.
+     *
+     * @returns null
+     */
     protected function doCheck()
     {
         if ($this->file[0]->getId() != T_OPEN_TAG) {

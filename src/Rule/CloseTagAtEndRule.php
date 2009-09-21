@@ -49,6 +49,11 @@ use spriebsch\PHPca\Warning;
  */
 class CloseTagAtEndRule extends Rule
 {
+    /**
+     * Performs the rule check.
+     *
+     * @returns null
+     */
     protected function doCheck()
     {
         $token = $this->file->top();

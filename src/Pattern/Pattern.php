@@ -62,22 +62,45 @@ class Pattern implements PatternInterface
         }
     }
 
+    /**
+     * Returns whether the pattern is empty.
+     *
+     * @return bool
+     */
     public function isEmpty()
     {
         return sizeof($this->items) == 0;
     }
 
+    /**
+     * Add a pattern
+     *
+     * @param PatternInterface $pattern
+     * @return Pattern
+     */
     public function add(PatternInterface $pattern)
     {
         $this->items[] = $pattern;
         return $this;
     }
 
+    /**
+     * Add a Token to the pattern
+     *
+     * @param string $tokenId
+     * @return Pattern
+     */
     public function token($tokenId)
     {
         return $this->add(new Token($tokenId));
     }
 
+    /**
+     * Add a OneOf condition to the pattern
+     *
+     * @param array $patterns
+     * @return Pattern
+     */
     public function oneOf(array $patterns)
     {
         $this->checkType($patterns);
@@ -85,16 +108,33 @@ class Pattern implements PatternInterface
         return $this->add(new OneOf($patterns));
     }
 
+    /**
+     * Add a OneOrMore condition to the pattern
+     *
+     * @param array $patterns
+     * @return Pattern
+     */
     public function oneOrMore(PatternInterface $pattern)
     {
         return $this->add(new OneOrMore($pattern));
     }
 
+    /**
+     * Add a ZeroOrMore condition to the pattern
+     *
+     * @param PattenrInterface $pattern
+     * @return Pattern
+     */
     public function zeroOrMore(PatternInterface $pattern)
     {
         return $this->add(new ZeroOrMore($pattern));
     }
 
+    /**
+     * Returns the regular expression the pattern represents.
+     *
+     * @return string
+     */
     public function getRegEx()
     {
         $result = '';

@@ -49,6 +49,11 @@ use spriebsch\PHPca\Warning;
  */
 class NoVarKeywordsRule extends Rule
 {
+    /**
+     * Performs the rule check.
+     *
+     * @returns null
+     */
     protected function doCheck()
     {
         foreach (Finder::findToken($this->file, T_VAR) as $token) {

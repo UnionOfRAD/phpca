@@ -280,11 +280,21 @@ class Token
         return $this->column;
     }
 
+    /**
+     * Returns the line number the token ends on.
+     *
+     * @return int
+     */
     public function getEndLine()
     {
         return $this->line + $this->getNewLineCount();
     }
 
+    /**
+     * Returns the column number the token ends on.
+     *
+     * @return int
+     */
     public function getEndColumn()
     {
         if ($this->hasNewline()) {

@@ -45,6 +45,11 @@ namespace spriebsch\PHPca\Pattern;
  */
 class OneOf extends Pattern
 {
+    /**
+     * Constructs the object.
+     *
+     * @param PatternInterface $pattern
+     */
     public function __construct(array $patterns)
     {
         $this->checkType($patterns);
@@ -52,6 +57,11 @@ class OneOf extends Pattern
         $this->items = $patterns;
     }
 
+    /**
+     * Returns the regular expression the pattern represents.
+     *
+     * @return string
+     */
     public function getRegEx()
     {
         $result = array();

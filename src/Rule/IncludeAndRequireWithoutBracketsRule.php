@@ -51,6 +51,11 @@ use spriebsch\PHPca\Pattern\Pattern;
  */
 class IncludeAndRequireWithoutBracketsRule extends Rule
 {
+    /**
+     * Performs the rule check.
+     *
+     * @returns null
+     */
     protected function doCheck()
     {
         $pattern = new Pattern();

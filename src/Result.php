@@ -132,7 +132,7 @@ class Result
      * and also because there is no File instance when a LintError has occured.
      *
      * @param string $file filename
-     * @return void
+     * @return null
      */
     public function addFile($file)
     {
@@ -149,6 +149,13 @@ class Result
         return $this->files;
     }
 
+    /**
+     * Add namespaces to the result.
+     *
+     * @param File $file
+     * @param array $namespaces
+     * @return null
+     */
     public function addNamespaces($file, array $namespaces)
     {
         if (!isset($this->namespaces[$file])) {
@@ -158,6 +165,12 @@ class Result
         }
     }
 
+    /**
+     * Returns the namespaces that are part of the given file.
+     *
+     * @param string $file
+     * @return array
+     */
     public function getNamespaces($file)
     {
         if (!isset($this->namespaces[$file])) {
@@ -167,6 +180,13 @@ class Result
         return $this->namespaces[$file];
     }
 
+    /**
+     * Adds classes to the result.
+     *
+     * @param string $file
+     * @param array $classes
+     * @return null
+     */
     public function addClasses($file, array $classes)
     {
         if (!isset($this->classes[$file])) {
@@ -176,11 +196,24 @@ class Result
         }
     }
 
+    /**
+     * Returns the classes in a given file
+     *
+     * @param string $file
+     * @return null
+     */
     public function getClasses($file)
     {
         return $this->classes[$file];
     }
 
+    /**
+     * Adds functions to the result.
+     *
+     * @param string $file
+     * @param array $functions
+     * @return null
+     */
     public function addFunctions($file, array $functions)
     {
         if (!isset($this->functions[$file])) {
@@ -275,21 +308,42 @@ class Result
         return $this->violationCount[$file] > 0;
     }
 
+    /**
+     * Returns the number of rule violations.
+     * 
+     * @return int
+     */
     public function getNumberOfViolations()
     {
         return $this->globalViolationCount;
     }
 
+    /**
+     * Returns the number of lint errors.
+     *
+     * @return int
+     */
     public function getNumberOfLintErrors()
     {
         return $this->globalLintErrorCount;
     }
 
+    /**
+     * Returns the number of rule errors (exceptions that occured inside a Rule).
+     *
+     * @return int
+     */
     public function getNumberOfRuleErrors()
     {
         return $this->globalRuleErrorCount;
     }
-    
+
+    /**
+     * Returns whether given file has a lint error.
+     *
+     * @param string $file
+     * @return bool
+     */
     public function hasLintError($file)
     {
         if (!isset($this->messages[$file])) {
@@ -305,6 +359,12 @@ class Result
         return false;
     }
 
+    /**
+     * Returns whether given file has a rule error.
+     *
+     * @param string $file
+     * @return bool
+     */
     public function hasRuleError($file)
     {
         if (!isset($this->messages[$file])) {

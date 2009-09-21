@@ -129,6 +129,11 @@ class Message
        return $this->token->getColumn();
     }
 
+    /**
+     * Returns the token the message refers to.
+     *
+     * @return Token
+     */
     public function getToken()
     {
         return $this->token;

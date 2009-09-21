@@ -96,6 +96,13 @@ class Finder
         return $result;
     }
 
+    /**
+     * Finds token of given ID in a file.
+     *
+     * @param File $file
+     * @param string $tokenId
+     * @return array
+     */
     static public function findToken(File $file, $tokenId)
     {
         $result = array();
@@ -107,11 +114,25 @@ class Finder
         return $result;
     }
 
+    /**
+     * Checks whether file contains a given token
+     *
+     * @param File $file
+     * @param string $tokenId
+     * @return bool
+     */
     static public function containsToken(File $file, $tokenId)
     {
         return sizeof(self::findToken($file, $tokenId)) > 0;
     }
 
+    /**
+     * Finds a pattern in the file.
+     *
+     * @param File $file
+     * @param Patterninterface $pattern
+     * @return array
+     */
     static public function findPattern(File $file, PatternInterface $pattern)
     {
         if ($pattern->isEmpty()) {

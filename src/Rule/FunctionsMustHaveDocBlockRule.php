@@ -48,6 +48,11 @@ use spriebsch\PHPca\Pattern\Pattern;
  */
 class FunctionsMustHaveDocBlockRule extends Rule
 {
+    /**
+     * Performs the rule check.
+     *
+     * @returns null
+     */
     protected function doCheck()
     {
         // If there are no T_FUNCTION tokens, we are done.

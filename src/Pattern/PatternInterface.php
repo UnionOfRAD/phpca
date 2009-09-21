@@ -45,6 +45,11 @@ namespace spriebsch\PHPca\Pattern;
  */
 interface PatternInterface
 {
+    /**
+     * Returns the regular expression the pattern represents.
+     *
+     * @return string
+     */
     public function getRegEx();
 }
 ?>

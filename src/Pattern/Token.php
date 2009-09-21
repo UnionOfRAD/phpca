@@ -49,11 +49,21 @@ class Token implements PatternInterface
 {
     protected $id;
 
+    /**
+     * Constructs the object.
+     *
+     * @param PatternInterface $pattern
+     */
     public function __construct($tokenId)
     {
         $this->id = $tokenId;
     }
 
+    /**
+     * Returns the regular expression the pattern represents.
+     *
+     * @return string
+     */
     public function getRegEx()
     {
         if ($this->id == T_ANY) {

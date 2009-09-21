@@ -52,6 +52,14 @@ use spriebsch\PHPca\Pattern\Token;
  */
 class OneTrueBraceStyleRule extends Rule
 {
+    /**
+     * Helper function to generate violation depending on
+     * whether token and brace are on same or different line.
+     *
+     * @param string $firstToken Token ID
+     * @param string $error Error message
+     * @param bool $sameLine
+     */
     protected function checkBraceLine($firstToken, $error, $sameLine = true)
     {
         // Pattern from first token until the next open curly brace
@@ -80,6 +88,11 @@ class OneTrueBraceStyleRule extends Rule
         }
     }
 
+    /**
+     * Performs the rule check.
+     *
+     * @returns null
+     */
     protected function doCheck()
     {
         $this->checkBraceLine(T_CLASS, 'class: curly brace on same line');

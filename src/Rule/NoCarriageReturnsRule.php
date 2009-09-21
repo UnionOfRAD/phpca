@@ -49,6 +49,11 @@ use spriebsch\PHPca\Warning;
  */
 class NoCarriageReturnsRule extends Rule
 {
+    /**
+     * Performs the rule check.
+     *
+     * @returns null
+     */
     protected function doCheck()
     {
         foreach (Finder::findToken($this->file, T_WHITESPACE) as $token) {

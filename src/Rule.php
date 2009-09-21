@@ -58,7 +58,7 @@ abstract class Rule
      * 
      * @param File   $file   Tokenized file to apply rule to
      * @param Result $result Result object
-     * @return void
+     * @return null
      */
     public function check(File $file, Result $result)
     {
@@ -70,6 +70,13 @@ abstract class Rule
         $this->doCheck();
     }
 
+    /**
+     * Add a rule violation.
+     *
+     * @param string $message
+     * @param mixed $tokens
+     * @return null
+     */
     protected function addViolation($message, $tokens)
     {
         if (!is_array($tokens)) {
@@ -81,6 +88,11 @@ abstract class Rule
         }
     }
 
+    /**
+     * Performs the rule check.
+     *
+     * @return null
+     */
     abstract protected function doCheck();
 }
 ?>

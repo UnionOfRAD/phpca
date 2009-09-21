@@ -419,6 +419,9 @@ class CLI implements ProgressPrinterInterface
         echo PHP_EOL . PHP_EOL;
     }
 
+    /**
+     * Prints out statistics
+     */
     protected function printStatistics()
     {
         $statistics = array();

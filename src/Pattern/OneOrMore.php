@@ -48,11 +48,21 @@ class OneOrMore implements PatternInterface
 {
     protected $innerPattern;
     
+    /**
+     * Constructs the object.
+     *
+     * @param PatternInterface $pattern
+     */
     public function __construct(PatternInterface $pattern)
     {
         $this->innerPattern = $pattern;
     }
 
+    /**
+     * Returns the regular expression the pattern represents.
+     *
+     * @return string
+     */
     public function getRegEx()
     {
         return $this->innerPattern->getRegEx() . '+';
