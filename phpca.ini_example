@@ -1,0 +1,52 @@
+[general] or NO section
+
+indentation = "\t" | "    "
+line_endings = "\r\n"
+brace_style = K&R
+print or echo
+
+additional rule directories = a, b, c
+
+disabled rules = a, b, c
+
+[Rule]
+
+level = warning ; violations are reported as warnings
+disable = true; rule is generally disabled
+skip_for = path/to/file.php; given files/directories are skipped on this rule
+skip_for = path/to/directory
+
+execute_for = path; ???
+apply_to = ...
+
+
+
+[NoOutputAllowedRule]
+
+
+list of directories / namespaces / files / classes where no output may be done
+
+skip rules: why a certain rule(s) are skipped for a directory / file / class / namespace
+
+weigh rules + calculate a metric (sum of rule violations in relation to lines of code or "source lines") on how "compliant" the code is.
+(exceptions to the rules weigh negatively)
+
+meta rule / rule filter: activate/deactivate and/or configure rules, e.g.
+K&R brace style is comprised of several rules.
+
+[DIRECTORY]
+skip XyzRule
+
+[CLASS]
+skip xyz rule
+
+[FUNCTION]
+skip a rulenewfile
+
+[NS]
+skip rule
+
+for skip rules, optional comment why should be required, possibly
+phpca should output a skipped message with this string as the reason
+
+namespaces should be treated hiearically, possibly like directories

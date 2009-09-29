@@ -58,6 +58,19 @@ class FunctionsMustHaveDocBlockRuleTest extends AbstractRuleTest
     /**
      * @covers \spriebsch\PHPca\Rule\FunctionsMustHaveDocBlockRule
      */
+    public function testNoFunctionToken()
+    {
+        $this->init(__DIR__ . '/../_testdata/FunctionsMustHaveDocBlockRule/no_function.php');
+
+        $rule = new FunctionsMustHaveDocBlockRule();
+        $rule->check($this->file, $this->result);
+
+        $this->assertFalse($this->result->hasViolations());
+    }
+
+    /**
+     * @covers \spriebsch\PHPca\Rule\FunctionsMustHaveDocBlockRule
+     */
     public function testFunctionHasDocBlock()
     {
         $this->init(__DIR__ . '/../_testdata/FunctionsMustHaveDocBlockRule/docblock.php');

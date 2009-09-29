@@ -56,6 +56,19 @@ require_once __DIR__ . '/../../src/Loader.php';
 class MethodsMustHaveVisibilityOperatorTest extends AbstractRuleTest
 {
     /**
+     * @covers \spriebsch\PHPca\Rule\MethodsMustHaveVisibilityOperatorRule
+     */
+    public function testNoFunctionToken()
+    {
+        $this->init(__DIR__ . '/../_testdata/MethodsMustHaveVisibilityOperatorRule/no_function.php');
+
+        $rule = new MethodsMustHaveVisibilityOperatorRule();
+        $rule->check($this->file, $this->result);
+
+        $this->assertFalse($this->result->hasViolations());
+    }
+
+    /**
      * @covers spriebsch\PHPca\Rule\MethodsMustHaveVisibilityOperatorRule
      */
     public function testPass()
@@ -81,6 +94,19 @@ class MethodsMustHaveVisibilityOperatorTest extends AbstractRuleTest
         $this->assertTrue($this->result->hasViolations());
 
         $this->assertEquals(2, $this->result->getNumberOfViolations());
+    }
+
+    /**
+     * @covers spriebsch\PHPca\Rule\MethodsMustHaveVisibilityOperatorRule
+     */
+    public function testBug0003()
+    {
+        $this->init(__DIR__ . '/../_testdata/MethodsMustHaveVisibilityOperatorRule/bug0003.php');
+
+        $rule = new MethodsMustHaveVisibilityOperatorRule();
+        $rule->check($this->file, $this->result);
+
+        $this->assertFalse($this->result->hasViolations());
     }
 }
 ?>

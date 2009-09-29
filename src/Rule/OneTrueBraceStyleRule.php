@@ -117,8 +117,7 @@ class OneTrueBraceStyleRule extends Rule
                 ->token(T_WHITESPACE)
                 ->token(T_OPEN_CURLY);
 
-        foreach (Finder::findPattern($this->file, $pattern) as $match)
-        {
+        foreach (Finder::findPattern($this->file, $pattern) as $match) {
             $token = $match[0];
             $brace = $match[sizeof($match) - 1];
 

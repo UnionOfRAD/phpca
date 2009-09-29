@@ -326,12 +326,12 @@ class FinderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(1, sizeof($result[3]));
         $this->assertEquals('T_FUNCTION', $result[3][0]->getName());
-        $this->assertEquals(24, $result[3][0]->getLine());
+        $this->assertEquals(22, $result[3][0]->getLine());
         $this->assertEquals(1, $result[3][0]->getColumn());
 
         $this->assertEquals(1, sizeof($result[4]));
         $this->assertEquals('T_FUNCTION', $result[4][0]->getName());
-        $this->assertEquals(28, $result[4][0]->getLine());
+        $this->assertEquals(26, $result[4][0]->getLine());
         $this->assertEquals(1, $result[4][0]->getColumn());
     }
 }

@@ -8,3 +8,6 @@ No      Status  Description
 
 0002    Fixed   Finder returns token array of correct size, but each element
                 is the first token that has been found.
+
+0003            MethodsMustHaveVisibilityOperatorRule falls into endless loop
+                inside interfaces.

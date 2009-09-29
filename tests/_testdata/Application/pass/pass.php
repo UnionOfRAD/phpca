@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Some DocBlock
+ */
 class Test
 {
     protected $a;

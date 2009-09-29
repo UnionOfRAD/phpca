@@ -74,6 +74,13 @@ class Application
     protected $disabledRuleNames = array();
 
     /**
+     * List of requested rules
+     *
+     * @var array
+     */
+    protected $requestedRules = array();
+
+    /**
      * Result object
      *
      * @var Result
@@ -115,16 +122,40 @@ class Application
     }
 
     /**
+     * Check whether given rule was explicitly requested.
+     * When no requested rules are given, all rules are considered expected,
+     * since no restriction has been specified.
+     *
+     * @param string $className
+     * @return bool
+     */
+    protected function isRuleRequested($className)
+    {
+        if (sizeof($this->requestedRules) == 0) {
+            return true;
+        }
+
+        return in_array($className, $this->requestedRules);
+    }
+
+    /**
      * Loads all rules from given directories
      * Note: built-in rules are listed in the $_ClassMap.
      * Returns an array of Rule object instances.
      *
+     * @param array of Rule names
      * @return array of Rule
      * @todo handle potential class name conflicts between built-in and custom rules
      */
-    protected function loadRules()
+    protected function loadRules(array $requestedRules = array())
     {
+        foreach ($requestedRules as $rule) {
+            $this->requestedRules[] = '\\spriebsch\\PHPca\\Rule\\' . $rule . 'Rule';
+        }
+
         $result = array();
+
+        // Load built-in rules.
 
         if ($this->enableBuiltInRules) {
 
@@ -133,11 +164,13 @@ class Application
             foreach ($builtInRules as $rule) {
                 $className = $this->toClassName($rule);
 
-                if (!in_array($className, $this->disabledRuleNames)) {
+                if ($this->isRuleRequested($className) && !in_array($className, $this->disabledRuleNames)) {
                     $result[] = new $className;
                 }
             }
         }
+
+        // Load additional rules.
 
         foreach ($this->rulePaths as $path) {
 
@@ -146,7 +179,7 @@ class Application
             foreach($rules as $rule) {
                 $className = $this->toClassName($rule);
 
-                if (!in_array($className, $this->disabledRuleNames)) {
+                if ($this->isRuleRequested($className) && !in_array($className, $this->disabledRuleNames)) {
                     require_once $rule;
                     $result[] = new $className;
                 }
@@ -318,7 +351,7 @@ class Application
      * @param string $fileOrDirectory     path to file or directory to check
      * @return object
      */
-    public function run($pathToPhpExecutable, $fileOrDirectory, array $extensions = array('php'))
+    public function run($pathToPhpExecutable, $fileOrDirectory, array $extensions = array('php'), $rules = array())
     {
         if ($pathToPhpExecutable == '') {
             throw new Exception('No path to PHP executable specified');
@@ -342,7 +375,7 @@ class Application
         $this->result = new Result();
 
         // Create a list of all rules to enforce
-        $this->rules = $this->loadRules();
+        $this->rules = $this->loadRules($rules);
 
         // List all PHP files in given path
         $phpFiles = $this->listFiles($fileOrDirectory, $extensions);

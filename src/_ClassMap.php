@@ -47,6 +47,7 @@ $_classMap = array(
     'spriebsch\PHPca\Finder'                      => 'Finder.php',
     'spriebsch\PHPca\TokenFilterIterator'         => 'TokenFilterIterator.php',
     'spriebsch\PHPca\Result'                      => 'Result.php',
+    'spriebsch\PHPca\Configuration'               => 'Configuration.php',
 
     'spriebsch\PHPca\Message'                     => 'Message/Message.php',
     'spriebsch\PHPca\Violation'                   => 'Message/Violation.php',
@@ -69,6 +70,12 @@ $_classMap = array(
     'spriebsch\PHPca\Rule\NoVarKeywordsRule'                    => 'Rule/NoVarKeywordsRule.php',
     'spriebsch\PHPca\Rule\FunctionsMustHaveDocBlockRule'        => 'Rule/FunctionsMustHaveDocBlockRule.php',
     'spriebsch\PHPca\Rule\MethodsMustHaveVisibilityOperatorRule'=> 'Rule/MethodsMustHaveVisibilityOperatorRule.php',
+    'spriebsch\PHPca\Rule\NoGlobalStatementsRule'               => 'Rule/NoGlobalStatementsRule.php',
+    'spriebsch\PHPca\Rule\NoShutupOperatorsRule'                => 'Rule/NoShutupOperatorsRule.php',
+    'spriebsch\PHPca\Rule\NoForbiddenStatementsRule'            => 'Rule/NoForbiddenStatementsRule.php',
+    'spriebsch\PHPca\Rule\NoAlternativeSyntaxStatementsRule'    => 'Rule/NoAlternativeSyntaxStatementsRule.php',
+    'spriebsch\PHPca\Rule\ClassesMustHaveDocBlockRule'          => 'Rule/ClassesMustHaveDocBlockRule.php',
+    'spriebsch\PHPca\Rule\NoGotoStatementsRule'                 => 'Rule/NoGotoStatementsRule.php',
 
     'spriebsch\PHPca\Helper'                      => 'Helper.php',
 

@@ -284,5 +284,39 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $file = new File('filename', 'sourcecode');
         $file->seek(1);
     }
+
+    /**
+     * @covers spriebsch\PHPca\File::seekNamespace
+     */
+    public function testSeekNamespace()
+    {
+        $file = Tokenizer::tokenize('test.php', file_get_contents(__DIR__ . '/_testdata/File/blocks.php'));
+        $file->rewind();
+
+        $file->seekNamespace('B\\C');
+
+        $this->assertEquals('T_OPEN_CURLY', $file->current()->getName());
+        $this->assertEquals(18, $file->current()->getLine());
+
+        $file->seekNamespace('A\\B');
+
+        $this->assertEquals('T_OPEN_CURLY', $file->current()->getName());
+        $this->assertEquals(4, $file->current()->getLine());
+    }
+
+//    /**
+//     * @covers spriebsch\PHPca\File::seekClass
+//     */
+//    public function testSeekClass()
+//    {
+//        $file = Tokenizer::tokenize('test.php', file_get_contents(__DIR__ . '/_testdata/File/blocks.php'));
+//        $file->rewind();
+//
+//        $file->seekClass('Test');
+//
+//        $this->assertEquals('T_OPEN_CURLY', $file->current()->getName());
+//        $this->assertEquals(6, $file->current()->getLine());
+//        $this->assertEquals(5, $file->current()->getColumn());
+//    }
 }
 ?>

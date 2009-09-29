@@ -14,7 +14,7 @@ class Test
                 } else {
                     continue;
                 }
-            }            
+            }
         } else {
             for ($i = 0; $i < 23; $i++) {
                 $this->doRun();

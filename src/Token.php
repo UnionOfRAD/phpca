@@ -89,6 +89,11 @@ class Token
     /**
      * @var string
      */
+    protected $interface;
+
+    /**
+     * @var string
+     */
     protected $function;
 
     /**
@@ -174,6 +179,27 @@ class Token
     public function getClass()
     {
         return $this->class;
+    }
+
+    /**
+     * Set the interface the token is part of.
+     *
+     * @param string $interface
+     * @return null
+     */
+    public function setInterface($interface)
+    {
+        $this->interface = $interface;
+    }
+
+    /**
+     * Returns the interface the token is part of.
+     *
+     * @return string
+     */
+    public function getInterface()
+    {
+        return $this->interface;
     }
 
     /**

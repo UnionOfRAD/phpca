@@ -48,58 +48,35 @@ require_once __DIR__ . '/../../src/Exceptions.php';
 require_once __DIR__ . '/../../src/Loader.php';
 
 /**
- * Tests for the OpenTagArBeginning rule.
+ * Tests for the no alternative syntax statements rule.
  *
  * @author     Stefan Priebsch <stefan@priebsch.de>
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
-class OpenTagAtBeginningRuleTest extends AbstractRuleTest
+class NoAlternativeSyntaxStatementsRuleTest extends AbstractRuleTest
 {
     /**
-     * @covers \spriebsch\PHPca\Rule\OpenTagAtBeginningRule
+     * @covers \spriebsch\PHPca\Rule\NoAlternativeSyntaxStatementsRule
      */
-    public function testOpenTagAtBeginning()
+    public function testDetectsAlternativeSyntaxStatements()
     {
-        $this->init(__DIR__ . '/../_testdata/OpenTagAtBeginningRule/opentag.php');
+        $this->init(__DIR__ . '/../_testdata/NoAlternativeSyntaxStatementsRule/alternative.php');
 
-        $rule = new OpenTagAtBeginningRule();
+        $rule = new NoAlternativeSyntaxStatementsRule();
         $rule->check($this->file, $this->result);
 
-        $this->assertFalse($this->result->hasViolations());
-    }
+        $this->assertTrue($this->result->hasViolations());
 
-    /**
-     * This test depends on the php.ini setting short_open_tag.
-     * If short_open_tag is set to On in php.ini, short open tags
-     * will be tokenized as PHP_OPEN_TAG.
-     *
-     * @covers \spriebsch\PHPca\Rule\OpenTagAtBeginningRule
-     */
-    public function testShortOpenTagAtBeginning()
-    {
-        $this->init(__DIR__ . '/../_testdata/OpenTagAtBeginningRule/shorttag.php');
+        $violations = $this->result->getViolations('test.php');
 
-        $rule = new OpenTagAtBeginningRule();
-        $rule->check($this->file, $this->result);
+        $this->assertTrue($this->result->hasViolations());
+        $this->assertEquals(5, $this->result->getNumberOfViolations());
 
-        if (ini_get('short_open_tag')) {
-            $this->markTestSkipped('short_open_tags enabled in php.ini');
-        }
-
-        $this->assertEquals(1, $this->result->getNumberOfViolations());
-    }
-
-    /**
-     * @covers \spriebsch\PHPca\Rule\OpenTagAtBeginningRule
-     */
-    public function testNoOpenTagAtBeginning()
-    {
-        $this->init(__DIR__ . '/../_testdata/OpenTagAtBeginningRule/leading_whitespace.php');
-
-        $rule = new OpenTagAtBeginningRule();
-        $rule->check($this->file, $this->result);
-
-        $this->assertEquals(1, $this->result->getNumberOfViolations());
+        $this->assertEquals('alternative syntax if/endif', $violations[0]->getMessage());
+        $this->assertEquals('alternative syntax for/endfor', $violations[1]->getMessage());
+        $this->assertEquals('alternative syntax foreach/endforeach', $violations[2]->getMessage());
+        $this->assertEquals('alternative syntax while/endwhile', $violations[3]->getMessage());
+        $this->assertEquals('alternative syntax switch/endswitch', $violations[4]->getMessage());
     }
 }
 ?>

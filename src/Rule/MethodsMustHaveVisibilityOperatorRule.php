@@ -67,7 +67,6 @@ class MethodsMustHaveVisibilityOperatorRule extends Rule
         $this->file->rewind();
 
         while (true) {
-
             try {
                 $this->file->seekTokenId(T_FUNCTION);
                 $functionToken = $this->file->current();
@@ -80,7 +79,8 @@ class MethodsMustHaveVisibilityOperatorRule extends Rule
 
             try {
 
-                if ($functionToken->getClass() == '') {
+                if ($functionToken->getClass() == '' && $functionToken->getInterface() == '') {
+                    $this->file->next();
                     continue;
                 }
 

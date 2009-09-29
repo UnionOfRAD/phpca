@@ -37,69 +37,63 @@
 
 namespace spriebsch\PHPca\Rule;
 
-use spriebsch\PHPca\Loader;
-use spriebsch\PHPca\Constants;
-use spriebsch\PHPca\Tokenizer;
-use spriebsch\PHPca\Result;
-
-require_once 'PHPUnit/Framework.php';
-require_once __DIR__ . '/AbstractRuleTest.php';
-require_once __DIR__ . '/../../src/Exceptions.php';
-require_once __DIR__ . '/../../src/Loader.php';
+use spriebsch\PHPca\Finder;
+use spriebsch\PHPca\Pattern\Pattern;
 
 /**
- * Tests for the OpenTagArBeginning rule.
+ * Make sure that every class has a docblock.
  *
  * @author     Stefan Priebsch <stefan@priebsch.de>
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
-class OpenTagAtBeginningRuleTest extends AbstractRuleTest
+class ClassesMustHaveDocBlockRule extends Rule
 {
     /**
-     * @covers \spriebsch\PHPca\Rule\OpenTagAtBeginningRule
-     */
-    public function testOpenTagAtBeginning()
-    {
-        $this->init(__DIR__ . '/../_testdata/OpenTagAtBeginningRule/opentag.php');
-
-        $rule = new OpenTagAtBeginningRule();
-        $rule->check($this->file, $this->result);
-
-        $this->assertFalse($this->result->hasViolations());
-    }
-
-    /**
-     * This test depends on the php.ini setting short_open_tag.
-     * If short_open_tag is set to On in php.ini, short open tags
-     * will be tokenized as PHP_OPEN_TAG.
+     * Performs the rule check.
      *
-     * @covers \spriebsch\PHPca\Rule\OpenTagAtBeginningRule
+     * @returns null
      */
-    public function testShortOpenTagAtBeginning()
+    protected function doCheck()
     {
-        $this->init(__DIR__ . '/../_testdata/OpenTagAtBeginningRule/shorttag.php');
-
-        $rule = new OpenTagAtBeginningRule();
-        $rule->check($this->file, $this->result);
-
-        if (ini_get('short_open_tag')) {
-            $this->markTestSkipped('short_open_tags enabled in php.ini');
+        // If there are no T_CLASS tokens, we are done.
+        if (!Finder::containsToken($this->file, T_CLASS)) {
+            return;
         }
 
-        $this->assertEquals(1, $this->result->getNumberOfViolations());
-    }
+        $this->file->rewind();
 
-    /**
-     * @covers \spriebsch\PHPca\Rule\OpenTagAtBeginningRule
-     */
-    public function testNoOpenTagAtBeginning()
-    {
-        $this->init(__DIR__ . '/../_testdata/OpenTagAtBeginningRule/leading_whitespace.php');
+        while (true) {
 
-        $rule = new OpenTagAtBeginningRule();
-        $rule->check($this->file, $this->result);
+            try {
+                $this->file->seekTokenId(T_CLASS);
+                $classToken = $this->file->current();
+            }
 
-        $this->assertEquals(1, $this->result->getNumberOfViolations());
+            catch (\spriebsch\PHPca\Exception $e) {
+                // No more T_CLASS tokens found, we are done.
+                return;
+            }
+
+            try {
+                // Search backwards for next docblock.
+                $this->file->seekTokenId(T_DOC_COMMENT, true);
+
+                // Docblock must end exactly one line above class token,
+                // otherwise it can be the docblock of another function.
+                if (($this->file->current()->getEndLine() + 1) != $classToken->getLine()) {
+                    $this->addViolation('Class has no docblock comment', $classToken);
+                }
+            }
+
+            catch (\spriebsch\PHPca\Exception $e) {
+                // Search for the docblock has failed,
+                $this->addViolation('Class has no docblock comment', $classToken);
+            }
+
+            // Seek back to the token following the T_CLASS we just processed.
+            $this->file->seekToken($classToken);
+            $this->file->next();
+        }
     }
 }
 ?>

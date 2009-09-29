@@ -131,7 +131,7 @@ class Linter
             throw new LinterException('File ' . $fileName . ' not found');
         }
 
-        $cmd = $this->phpExecutable . ' -l ' . escapeshellarg($fileName) . ' 2>/dev/null';
+        $cmd = $this->phpExecutable . ' -n -l ' . escapeshellarg($fileName) . ' 2>/dev/null';
         $this->output = trim(shell_exec($cmd));
 
         $cmp = 'No syntax errors';

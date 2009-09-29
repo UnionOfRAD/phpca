@@ -75,6 +75,7 @@ class Constants
         '$'  => array(524, 'T_DOLLAR'),
         '^'  => array(525, 'T_CARET'),
         '~'  => array(526, 'T_TILDE'),
+        '`'  => array(527, 'T_BACKTICK'),
     );
 
     /**

@@ -48,58 +48,51 @@ require_once __DIR__ . '/../../src/Exceptions.php';
 require_once __DIR__ . '/../../src/Loader.php';
 
 /**
- * Tests for the OpenTagArBeginning rule.
+ * Tests for the classes must have doc block rule.
  *
  * @author     Stefan Priebsch <stefan@priebsch.de>
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
-class OpenTagAtBeginningRuleTest extends AbstractRuleTest
+class ClassesMustHaveDocBlockRuleTest extends AbstractRuleTest
 {
     /**
-     * @covers \spriebsch\PHPca\Rule\OpenTagAtBeginningRule
+     * @covers \spriebsch\PHPca\Rule\ClassesMustHaveDocBlockRule
      */
-    public function testOpenTagAtBeginning()
+    public function testNoClassToken()
     {
-        $this->init(__DIR__ . '/../_testdata/OpenTagAtBeginningRule/opentag.php');
+        $this->init(__DIR__ . '/../_testdata/ClassesMustHaveDocBlockRule/no_class.php');
 
-        $rule = new OpenTagAtBeginningRule();
+        $rule = new ClassesMustHaveDocBlockRule();
         $rule->check($this->file, $this->result);
 
         $this->assertFalse($this->result->hasViolations());
     }
 
     /**
-     * This test depends on the php.ini setting short_open_tag.
-     * If short_open_tag is set to On in php.ini, short open tags
-     * will be tokenized as PHP_OPEN_TAG.
-     *
-     * @covers \spriebsch\PHPca\Rule\OpenTagAtBeginningRule
+     * @covers \spriebsch\PHPca\Rule\ClassesMustHaveDocBlockRule
      */
-    public function testShortOpenTagAtBeginning()
+    public function testNoViolations()
     {
-        $this->init(__DIR__ . '/../_testdata/OpenTagAtBeginningRule/shorttag.php');
+        $this->init(__DIR__ . '/../_testdata/ClassesMustHaveDocBlockRule/docblock.php');
 
-        $rule = new OpenTagAtBeginningRule();
+        $rule = new ClassesMustHaveDocBlockRule();
         $rule->check($this->file, $this->result);
 
-        if (ini_get('short_open_tag')) {
-            $this->markTestSkipped('short_open_tags enabled in php.ini');
-        }
-
-        $this->assertEquals(1, $this->result->getNumberOfViolations());
+        $this->assertFalse($this->result->hasViolations());
     }
 
     /**
-     * @covers \spriebsch\PHPca\Rule\OpenTagAtBeginningRule
+     * @covers \spriebsch\PHPca\Rule\ClassesMustHaveDocBlockRule
      */
-    public function testNoOpenTagAtBeginning()
+    public function testViolations()
     {
-        $this->init(__DIR__ . '/../_testdata/OpenTagAtBeginningRule/leading_whitespace.php');
+        $this->init(__DIR__ . '/../_testdata/ClassesMustHaveDocBlockRule/no_docblock.php');
 
-        $rule = new OpenTagAtBeginningRule();
+        $rule = new ClassesMustHaveDocBlockRule();
         $rule->check($this->file, $this->result);
 
-        $this->assertEquals(1, $this->result->getNumberOfViolations());
+        $this->assertTrue($this->result->hasViolations());
+        $this->assertEquals(2, $this->result->getNumberOfViolations());
     }
 }
 ?>

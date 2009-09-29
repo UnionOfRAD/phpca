@@ -48,56 +48,24 @@ require_once __DIR__ . '/../../src/Exceptions.php';
 require_once __DIR__ . '/../../src/Loader.php';
 
 /**
- * Tests for the OpenTagArBeginning rule.
+ * Tests for the no goto statement rule.
  *
  * @author     Stefan Priebsch <stefan@priebsch.de>
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
-class OpenTagAtBeginningRuleTest extends AbstractRuleTest
+class NoGotoStatementRuleTest extends AbstractRuleTest
 {
     /**
-     * @covers \spriebsch\PHPca\Rule\OpenTagAtBeginningRule
+     * @covers \spriebsch\PHPca\Rule\NoGotoStatementsRule
      */
-    public function testOpenTagAtBeginning()
+    public function testDetectsGotoStatement()
     {
-        $this->init(__DIR__ . '/../_testdata/OpenTagAtBeginningRule/opentag.php');
+        $this->init(__DIR__ . '/../_testdata/NoGotoStatementsRule/goto.php');
 
-        $rule = new OpenTagAtBeginningRule();
+        $rule = new NoGotoStatementsRule();
         $rule->check($this->file, $this->result);
 
-        $this->assertFalse($this->result->hasViolations());
-    }
-
-    /**
-     * This test depends on the php.ini setting short_open_tag.
-     * If short_open_tag is set to On in php.ini, short open tags
-     * will be tokenized as PHP_OPEN_TAG.
-     *
-     * @covers \spriebsch\PHPca\Rule\OpenTagAtBeginningRule
-     */
-    public function testShortOpenTagAtBeginning()
-    {
-        $this->init(__DIR__ . '/../_testdata/OpenTagAtBeginningRule/shorttag.php');
-
-        $rule = new OpenTagAtBeginningRule();
-        $rule->check($this->file, $this->result);
-
-        if (ini_get('short_open_tag')) {
-            $this->markTestSkipped('short_open_tags enabled in php.ini');
-        }
-
-        $this->assertEquals(1, $this->result->getNumberOfViolations());
-    }
-
-    /**
-     * @covers \spriebsch\PHPca\Rule\OpenTagAtBeginningRule
-     */
-    public function testNoOpenTagAtBeginning()
-    {
-        $this->init(__DIR__ . '/../_testdata/OpenTagAtBeginningRule/leading_whitespace.php');
-
-        $rule = new OpenTagAtBeginningRule();
-        $rule->check($this->file, $this->result);
+        $this->assertTrue($this->result->hasViolations());
 
         $this->assertEquals(1, $this->result->getNumberOfViolations());
     }

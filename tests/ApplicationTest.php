@@ -187,10 +187,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Calls run() with a single file instead of a directory.
-     * This test depends on the CloseTagAtEndRule and might fail if rules
-     * are added that fail on _testdata/Application/fail/fail.php
-     * or when the error message of CloseTagAtEndRule is modified.
+     * Makes sure that at least one built-in rule reports a violation.
      *
      * @covers spriebsch\PHPca\Application::run
      */
@@ -199,9 +196,8 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $this->application->setEnableBuiltInRules(true);
 
         $result = $this->application->run(trim(exec('which php')), __DIR__ . '/_testdata/Application/fail/fail.php');
-        $errors = $result->getViolations(__DIR__ . '/_testdata/Application/fail/fail.php');
 
-        $this->assertContains('File does not end with PHP close tag', $errors[0]->getMessage());
+        $this->assertTrue($result->hasViolations());
     }
 
     /**

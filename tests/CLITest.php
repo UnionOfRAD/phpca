@@ -149,26 +149,6 @@ class CLITest extends \PHPUnit_Framework_TestCase
     /**
      * @covers spriebsch\PHPca\CLI
      */
-    public function testRunShowsVersionWhenInvokedWithShortVersionSwitch()
-    {
-        $result = $this->runCLI(array('cli.php', '-v'));
-
-        $this->assertContains('Version:', $result);
-    }
-
-    /**
-     * @covers spriebsch\PHPca\CLI
-     */
-    public function testRunShowsVersionWhenInvokedWithLongVersionSwitch()
-    {
-        $result = $this->runCLI(array('cli.php', '--version'));
-
-        $this->assertContains('Version:', $result);
-    }
-
-    /**
-     * @covers spriebsch\PHPca\CLI
-     */
     public function testRunDisplaysErrorWhenNoFilesToAnalyze()
     {
         $result = $this->runCLI(array('cli.php', '-p', trim(exec('which php')), __DIR__ . '/_testdata/Application/none'));

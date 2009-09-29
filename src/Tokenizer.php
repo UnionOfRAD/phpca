@@ -63,6 +63,11 @@ class Tokenizer
         $waitForClassBegin = false;
         $classCurlyLevel = 0;
 
+        $interface = '';
+        $interfaceFound = false;
+        $waitForInterfaceBegin = false;
+        $interfaceCurlyLevel = 0;
+
         $function = '';
         $functionFound = false;
         $waitForFunctionBegin = false;
@@ -135,6 +140,18 @@ class Tokenizer
                 $classFound = false;
             }
 
+            // We have encountered a T_INTERFACE token before (this is indicated
+            // by $interfaceFound being true, so the T_STRING contains the class
+            // name (there will be T_WHITESPACE between T_INTERFACE and T_STRING).
+            // We remember the interface name, but do not set it until we have
+            // encountered the next opening brace. We set $waitForInterfaceBegin
+            // to true so that we can wait for the next opening curly brace.
+            if ($interfaceFound && $tokenObj->getId() == T_STRING) {
+                $interface = $tokenObj->getText();
+                $waitForInterfaceBegin = true;
+                $interfaceFound = false;
+            }
+
             // We have encountered a T_FUNCTION token before (this is indicated
             // by $functionFound being true, so the T_STRING contains the class
             // name (there will be T_WHITESPACE between T_FUNCTION and T_STRING).
@@ -164,6 +181,13 @@ class Tokenizer
                 $classFound = true;
             }
 
+            // If we encounter a T_INTERFACE token, we have found an interface definition.
+            // We set $interfaceFound to true so that we can watch out for the interface
+            // name (see above).
+            if ($tokenObj->getId() == T_INTERFACE) {
+                $interfaceFound = true;
+            }
+
             // If we encounter a T_FUNCTION token, we have found a function.
             // We set $functionFound to true so that we can watch out for the
             // function name (see above).
@@ -180,7 +204,7 @@ class Tokenizer
             }
 
             // Opening curly brace opens another block, thus increases the level.
-            if ($tokenObj->getId() == T_OPEN_CURLY) {
+            if ($tokenObj->getId() == T_OPEN_CURLY || $tokenObj->getId() == T_CURLY_OPEN) {
                 $level++;
 
                 // An opening curly brace can end the namespace declaration.
@@ -200,6 +224,15 @@ class Tokenizer
                 if ($waitForClassBegin) {
                     $classCurlyLevel = $level;
                     $waitForClassBegin = false;
+                }
+
+                // If we encounter the opening curly brace of an interface (this happens
+                // when $waitForInterfaceBegin is true), we remember the block level of
+                // this brace so that we can end the interface when we encounter the
+                // matching closing tag.
+                if ($waitForInterfaceBegin) {
+                    $interfaceCurlyLevel = $level;
+                    $waitForInterfaceBegin = false;
                 }
 
                 // If we encounter the opening curly brace of a class (this happens
@@ -233,6 +266,17 @@ class Tokenizer
                 $tokenObj->setClass($classname);
             }
 
+            // This also sets the interface when we are outside the interface,
+            // which is harmless because we then just set an emtpy string.
+            if (!$waitForInterfaceBegin) {
+                if (substr($interface, 0, 1) == '\\' || $namespace == '\\') {
+                    $interfaceName = $interface;
+                } else {
+                    $interfaceName = $namespace . '\\' . $interface;
+                }
+                $tokenObj->setInterface($interfaceName);
+            }
+
             // This also sets the function when we are outside the function,
             // which is harmless because we then just set an emtpy string.
             if (!$waitForFunctionBegin) {
@@ -258,6 +302,13 @@ class Tokenizer
                 if ($class != '' && $tokenObj->getBlockLevel() == $classCurlyLevel) {
                     $class = '';
                     $classCurlyLevel = 0;
+                }
+
+                // If we are inside an interface and the closing brace matches the
+                // opening brace of that interface, the block/interface has ended.
+                if ($interface != '' && $tokenObj->getBlockLevel() == $interfaceCurlyLevel) {
+                    $interface = '';
+                    $interfaceCurlyLevel = 0;
                 }
 
                 // If we are inside a function and the closing brace matches the

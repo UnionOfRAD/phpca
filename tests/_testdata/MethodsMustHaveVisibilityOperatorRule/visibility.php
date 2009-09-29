@@ -1,5 +1,9 @@
 <?php
 
+function ignored()
+{
+}
+
 class Test
 {
     public static function a()

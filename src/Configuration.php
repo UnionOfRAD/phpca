@@ -35,71 +35,35 @@
  * @license    BSD License
  */
 
-namespace spriebsch\PHPca\Rule;
-
-use spriebsch\PHPca\Loader;
-use spriebsch\PHPca\Constants;
-use spriebsch\PHPca\Tokenizer;
-use spriebsch\PHPca\Result;
-
-require_once 'PHPUnit/Framework.php';
-require_once __DIR__ . '/AbstractRuleTest.php';
-require_once __DIR__ . '/../../src/Exceptions.php';
-require_once __DIR__ . '/../../src/Loader.php';
+namespace spriebsch\PHPca;
 
 /**
- * Tests for the OpenTagArBeginning rule.
+ * The PHPCA configuration.
  *
  * @author     Stefan Priebsch <stefan@priebsch.de>
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
-class OpenTagAtBeginningRuleTest extends AbstractRuleTest
+class Configuration
 {
-    /**
-     * @covers \spriebsch\PHPca\Rule\OpenTagAtBeginningRule
-     */
-    public function testOpenTagAtBeginning()
+    protected $configuration = array();
+
+    public function __construct(array $configuration)
     {
-        $this->init(__DIR__ . '/../_testdata/OpenTagAtBeginningRule/opentag.php');
-
-        $rule = new OpenTagAtBeginningRule();
-        $rule->check($this->file, $this->result);
-
-        $this->assertFalse($this->result->hasViolations());
+        $this->configuration = $configuration;
     }
 
-    /**
-     * This test depends on the php.ini setting short_open_tag.
-     * If short_open_tag is set to On in php.ini, short open tags
-     * will be tokenized as PHP_OPEN_TAG.
-     *
-     * @covers \spriebsch\PHPca\Rule\OpenTagAtBeginningRule
-     */
-    public function testShortOpenTagAtBeginning()
+    public function hasSetting($rule, $setting)
     {
-        $this->init(__DIR__ . '/../_testdata/OpenTagAtBeginningRule/shorttag.php');
+        return isset($this->configuration[$rule]) && isset($this->configuration[$rule][$setting]);
+    }
 
-        $rule = new OpenTagAtBeginningRule();
-        $rule->check($this->file, $this->result);
-
-        if (ini_get('short_open_tag')) {
-            $this->markTestSkipped('short_open_tags enabled in php.ini');
+    public function getSetting($rule, $setting)
+    {
+        if (!isset($this->configuration[$rule]) && !isset($this->configuration[$rule][$setting])) {
+            return '';
         }
 
-        $this->assertEquals(1, $this->result->getNumberOfViolations());
-    }
-
-    /**
-     * @covers \spriebsch\PHPca\Rule\OpenTagAtBeginningRule
-     */
-    public function testNoOpenTagAtBeginning()
-    {
-        $this->init(__DIR__ . '/../_testdata/OpenTagAtBeginningRule/leading_whitespace.php');
-
-        $rule = new OpenTagAtBeginningRule();
-        $rule->check($this->file, $this->result);
-
-        $this->assertEquals(1, $this->result->getNumberOfViolations());
+        return $this->configuration[$rule][$setting];
     }
 }
 ?>

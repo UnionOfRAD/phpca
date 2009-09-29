@@ -212,6 +212,46 @@ class File extends \SplQueue implements \SeekableIterator
     }
 
     /**
+     * Seek to a namespace.
+     * Search always starts from the beginning.
+     *
+     * @param string $namespace
+     */
+    public function seekNamespace($namespace)
+    {
+        $this->rewind();
+
+        while($this->valid()) {
+            if ($this->current()->getNamespace() == $namespace) {
+                return;
+            }
+            $this->next();
+        }
+
+        throw new Exception('No namespace ' . $token->getNamespace() . ' found');
+    }
+
+    /**
+     * Seek to a class.
+     * Search always starts from the beginning.
+     *
+     * @param string $class
+     */
+//    public function seekClass($class)
+//    {
+//        $this->rewind();
+//
+//        while($this->valid()) {
+//            if ($this->current()->getClass() == $class) {
+//                return;
+//            }
+//            $this->next();
+//        }
+//
+//        throw new Exception('No class ' . $token->getClass() . ' found');
+//    }
+
+    /**
      * Seek to given token. Will rewind(), so it finds the token
      * regardless of the current position.
      *

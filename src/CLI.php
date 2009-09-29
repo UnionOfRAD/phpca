@@ -62,9 +62,16 @@ class CLI implements ProgressPrinterInterface
     /**
      * File extensions to analyze
      *
-     * @var string
+     * @var array
      */
     protected $extensions = array('php');
+
+    /**
+     * Rules to execute while analyzing
+     *
+     * @var array
+     */
+    protected $rules = array();
 
     /**
      * Position counter for dot output of progress printer
@@ -95,6 +102,13 @@ class CLI implements ProgressPrinterInterface
     protected $endTime = 0;
 
     /**
+     * Configuration
+     *
+     * @var Configuration
+     */
+    protected $configuration;
+    
+    /**
      * Number of files that will be analyzed.
      * See Application::getNumberOfFiles().
      *
@@ -115,6 +129,11 @@ class CLI implements ProgressPrinterInterface
     protected $printStatistics = false;
 
     /**
+     * @var bool
+     */
+    protected $verbose = false;
+
+    /**
      * Prints the usage message.
      *
      * @return void
@@ -123,21 +142,31 @@ class CLI implements ProgressPrinterInterface
     {
         echo 'Usage: php phpca.phar -p <file> <file to analyze>' . PHP_EOL .
              '       php phpca.phar -p <file> <directory to analyze>' . PHP_EOL . PHP_EOL .
+
              '  -e <extensions>' . PHP_EOL .
              '  --ext <extensions>  Specify file extensions to analyze, without dot.' . PHP_EOL .
              '                      Separate multiple entries by comma, without whitespace.' . PHP_EOL .
              '                      To analyze .inc files as well, use -e php,inc' . PHP_EOL .
              '                      Defaults to \'php\'.' . PHP_EOL . PHP_EOL .
+
              '  -p <file>' . PHP_EOL .
              '  --php <file>        Specify path to PHP executable (required).' . PHP_EOL . PHP_EOL .
+
              '  -l' . PHP_EOL .
              '  --list              List all built-in rules.' . PHP_EOL . PHP_EOL .
+
              '  -h' . PHP_EOL .
              '  --help              Prints this usage information.' . PHP_EOL . PHP_EOL .
-             '  -s' . PHP_EOL .
-             '  --statistics        Prints additional statistics.' . PHP_EOL . PHP_EOL .
+
+             '  -r <rules>' . PHP_EOL .
+             '  --rules <rules>     Specify file rules to analyze, without Rule end.' . PHP_EOL .
+             '                      Separate multiple entries by comma, without whitespace.' . PHP_EOL .             '                      If not specified, all rules will be executed.' . PHP_EOL . PHP_EOL .
+
+//             '  -s' . PHP_EOL .
+//             '  --statistics        Prints additional statistics.' . PHP_EOL . PHP_EOL .
+
              '  -v' . PHP_EOL .
-             '  --version           Prints the version number.' . PHP_EOL . PHP_EOL;
+             '  --verbose           Verbose output.' . PHP_EOL . PHP_EOL;
     }
 
     /**
@@ -180,17 +209,6 @@ class CLI implements ProgressPrinterInterface
     }
 
     /**
-     * Prints version number.
-     *
-     * @return Result
-     */
-    protected function printVersionCommand()
-    {
-        echo 'Version: ' . Application::$version . PHP_EOL . PHP_EOL;
-        return new Result();
-    }
-
-    /**
      * Prints usage message.
      *
      * @return Result
@@ -201,6 +219,15 @@ class CLI implements ProgressPrinterInterface
         return new Result();
     }
 
+    protected function loadConfigurationFile()
+    {
+        if (!file_exists('phpca.ini')) {
+            return;
+        }
+
+        $this->configuration = new Configuration(parse_ini_file('phpca.ini', true));
+    }
+
     /**
      * Anaylzes PHP files by calling Application::run().
      *
@@ -208,10 +235,12 @@ class CLI implements ProgressPrinterInterface
      */
     protected function analyzeFilesCommand()
     {
+        $this->loadConfigurationFile();
+
         $application = new Application();
         $application->registerProgressPrinter($this);
 
-        return call_user_func_array(array($application, 'run'), array($this->phpExecutable, $this->path, $this->extensions));
+        return call_user_func_array(array($application, 'run'), array($this->phpExecutable, $this->path, $this->extensions, $this->rules));
     }
 
     /**
@@ -265,6 +294,11 @@ class CLI implements ProgressPrinterInterface
                     $this->extensions = explode(',', array_shift($arguments));
                     break;
 
+                case '-r':
+                case '--rules':
+                    $this->rules = explode(',', array_shift($arguments));
+                    break;
+
                 case '-h':
                 case '--help':
                     $method = 'printUsageCommand';
@@ -286,10 +320,9 @@ class CLI implements ProgressPrinterInterface
                     break;
 
                 case '-v':
-                case '--version':
-                    $method = 'printVersionCommand';
+                case '--verbose':
+                    $this->verbose = true;
                     break;
-
 
                 default:
                     throw new Exception('Unknown option: ' . $argument);
@@ -506,11 +539,29 @@ var_dump($class);
         $this->fileCount++;
         $this->positionCount++;
 
-        echo $this->getProgressLetter($file, $result);
+        $letter = $this->getProgressLetter($file, $result);
 
-        if ($this->positionCount > 59) {
-            echo ' ' . $this->formatFileCount($this->fileCount) . ' / ' . $this->numberOfFiles . PHP_EOL;
-            $this->positionCount = 0;
+        if ($this->verbose) {
+            switch ($letter) {
+                case '.':
+                    $letter = 'OK';
+                    break;
+                case 'F':
+                    $letter = 'FAIL';
+                    break;
+                case 'E':
+                    $letter = 'ERROR';
+                    break;
+            }
+
+            echo $this->formatFileCount($this->fileCount) . ' ' . $file . ': ' . $letter . PHP_EOL;
+        } else {
+            echo $letter;
+
+            if ($this->positionCount > 59) {
+                echo ' ' . $this->formatFileCount($this->fileCount) . ' / ' . $this->numberOfFiles . PHP_EOL;
+                $this->positionCount = 0;
+            }            
         }
     }
 }
