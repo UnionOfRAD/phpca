@@ -189,17 +189,5 @@ class CLITest extends \PHPUnit_Framework_TestCase
         $this->assertContains('Parse error:', $result);
         $this->assertContains('FAIL', $result);
     }
-
-    /**
-     * @covers spriebsch\PHPca\CLI::parseCommandLine
-     * @covers spriebsch\PHPca\CLI::printBuiltInRulesCommand
-     * @covers spriebsch\PHPca\CLI::toRuleName
-     */
-    public function testRunShowsUsageMessageWhenInvokedWithLongListSwitch()
-    {
-        $result = $this->runCLI(array('cli.php', '--list'));
-
-        $this->assertContains('Built-in rules:', $result);
-    }
 }
 ?>
