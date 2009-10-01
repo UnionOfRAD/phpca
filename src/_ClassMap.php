@@ -76,6 +76,7 @@ $_classMap = array(
     'spriebsch\PHPca\Rule\NoAlternativeSyntaxStatementsRule'    => 'Rule/NoAlternativeSyntaxStatementsRule.php',
     'spriebsch\PHPca\Rule\ClassesMustHaveDocBlockRule'          => 'Rule/ClassesMustHaveDocBlockRule.php',
     'spriebsch\PHPca\Rule\NoGotoStatementsRule'                 => 'Rule/NoGotoStatementsRule.php',
+    'spriebsch\PHPca\Rule\NoVarDumpStatementsRule'              => 'Rule/NoVarDumpStatementsRule.php',
 
     'spriebsch\PHPca\Helper'                      => 'Helper.php',
 
