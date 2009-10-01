@@ -219,7 +219,7 @@ class CLI implements ProgressPrinterInterface
         return new Result();
     }
 
-    protected function loadConfigurationFile()
+    protected function loadConfigurationFile($file = null)
     {
         if (!file_exists('phpca.ini')) {
             return;
@@ -240,7 +240,7 @@ class CLI implements ProgressPrinterInterface
         $application = new Application();
         $application->registerProgressPrinter($this);
 
-        return call_user_func_array(array($application, 'run'), array($this->phpExecutable, $this->path, $this->extensions, $this->rules));
+        return call_user_func_array(array($application, 'run'), array($this->phpExecutable, $this->path, $this->configuration, $this->extensions, $this->rules));
     }
 
     /**
@@ -269,6 +269,21 @@ class CLI implements ProgressPrinterInterface
     }
 
     /**
+     * Make sure that $switch has an argument that does not start with - or --.
+     *
+     * @param string $switch
+     * @param array $arguments
+     * @return null
+     * @throws Exception
+     */
+    protected function checkNextArgument($switch, array $arguments)
+    {
+        if (!isset($arguments[0]) || substr($arguments[0], 0, 1) == '-') {
+            throw new Exception('Missing parameter to ' . $switch . ' switch');
+        }
+    }
+
+    /**
      * Parse the command line and determine which command method to run.
      * Returns the name of the method to run.
      *
@@ -289,13 +304,21 @@ class CLI implements ProgressPrinterInterface
 
             switch ($argument) {
 
+                case '-c':
+                case '--config':
+                    $this->checkNextArgument($argument, $arguments);
+                    $this->loadConfigurationFile(array_shift($arguments));
+                    break;
+
                 case '-e':
                 case '--ext':
+                    $this->checkNextArgument($argument, $arguments);
                     $this->extensions = explode(',', array_shift($arguments));
                     break;
 
                 case '-r':
                 case '--rules':
+                    $this->checkNextArgument($argument, $arguments);
                     $this->rules = explode(',', array_shift($arguments));
                     break;
 
@@ -311,6 +334,7 @@ class CLI implements ProgressPrinterInterface
 
                 case '-p':
                 case '--php':
+                    $this->checkNextArgument($argument, $arguments);
                     $this->phpExecutable = array_shift($arguments);
                     break;
 
