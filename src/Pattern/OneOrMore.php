@@ -44,6 +44,12 @@ namespace spriebsch\PHPca\Pattern;
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
 
+/**
+ * Represents one or more repetitions in a search pattern.
+ *
+ * @author     Stefan Priebsch <stefan@priebsch.de>
+ * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
+ */
 class OneOrMore implements PatternInterface
 {
     protected $innerPattern;

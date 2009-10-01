@@ -37,6 +37,12 @@
 
 namespace spriebsch\PHPca;
 
+/**
+ * Helper class.
+ *
+ * @author     Stefan Priebsch <stefan@priebsch.de>
+ * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
+ */
 class Helper
 {
     /**

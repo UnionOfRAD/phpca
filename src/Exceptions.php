@@ -37,38 +37,65 @@
 
 namespace spriebsch\PHPca
 {
+    /**
+     * Exception base class.
+     */
     class Exception extends \RuntimeException
     {
     }
 
+    /**
+     *
+     */
     class LoaderException extends Exception
     {
     }
 
+    /**
+     *
+     */
     class CannotInstantiateLoaderException extends Exception
     {
     }
 
+    /**
+     *
+     */
     class ClassMapNotFoundException extends Exception
     {
     }
 
+    /**
+     *
+     */
     class InvalidClassMapException extends Exception
     {
     }
 
+    /**
+     *
+     */
     class UnknownVariableException extends Exception
     {
     }
 
+    /**
+     *
+     */
     class LinterException extends Exception
     {
     }
 
+    /**
+     *
+     */
     class TokenizerException extends Exception
     {
     }
 
+    /**
+     *
+     */
     class EmptyPatternException extends Exception
     {
     }
@@ -76,6 +103,9 @@ namespace spriebsch\PHPca
 
 namespace spriebsch\PHPca\Pattern
 {
+    /**
+     *
+     */
     class PatternException extends \spriebsch\PHPca\Exception
     {
     }

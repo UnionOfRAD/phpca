@@ -154,6 +154,11 @@ class CLI implements ProgressPrinterInterface
      */
     protected $verbose = false;
 
+    /**
+     * Constructs the object.
+     *
+     * @return null
+     */
     public function __construct()
     {
         $this->configuration = new Configuration();

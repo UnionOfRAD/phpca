@@ -38,12 +38,11 @@
 namespace spriebsch\PHPca\Pattern;
 
 /**
- * Represents one or more repetitions in a search pattern.
+ * Represents zero or more repetitions in a search pattern.
  *
  * @author     Stefan Priebsch <stefan@priebsch.de>
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
-
 class ZeroOrMore implements PatternInterface
 {
     protected $innerPattern;
