@@ -291,7 +291,7 @@ class CLI implements ProgressPrinterInterface
         echo 'Available coding standards: ' . PHP_EOL . PHP_EOL;
 
         foreach ($standards as $standard) {
-            echo '  - ' . str_replace('.ini', '', basename($standard)) . PHP_EOL;
+            echo '  - ' . str_replace('.ini', '', basename($standard)) . ' (' . basename($standard) . ')'. PHP_EOL;
         }
 
         echo PHP_EOL;
@@ -308,7 +308,7 @@ class CLI implements ProgressPrinterInterface
         $rules = $application->listFiles(__DIR__ . '/Rule');
         sort($rules);
 
-        echo 'Built-in rules: ' . PHP_EOL . PHP_EOL;
+        echo 'Available rules: ' . PHP_EOL . PHP_EOL;
 
         foreach ($rules as $rule) {
             echo '  -' . $this->toRuleName($rule) . ' (' . basename($rule) . ')'. PHP_EOL;
