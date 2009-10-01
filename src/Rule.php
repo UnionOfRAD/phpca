@@ -50,8 +50,23 @@ use spriebsch\PHPca\Violation;
  */
 abstract class Rule
 {
+    protected $settings;
     protected $file;
     protected $result;
+
+    /**
+     * Checks whether this rule is disabled.
+     *
+     * @return bool
+     */
+    protected function isDisabled()
+    {
+        if (!isset($this->settings['disable'])) {
+            return false;
+        }
+
+        return (bool) $this->settings['disable'];
+    }
 
     /**
      * Checks the rule.
@@ -63,11 +78,26 @@ abstract class Rule
     public function check(File $file, Result $result)
     {
         $this->file = $file;
-        $this->result = $result;
 
+        if ($this->isDisabled()) {
+            return;
+        }
+
+        $this->result = $result;
         $this->file->rewind();
 
         $this->doCheck();
+    }
+
+    /**
+     * Configure the rule.
+     *
+     * @param array $settings
+     * @return null
+     */
+    public function configure(array $settings)
+    {
+        $this->settings = $settings;
     }
 
     /**

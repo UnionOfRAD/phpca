@@ -53,6 +53,13 @@ class Application
     static public $version = '0.4.5';
 
     /**
+     * Rule namespace
+     *
+     * @var string
+     */
+    static public $ruleNamespace = '\\spriebsch\PHPca\\Rule\\';
+
+    /**
      * Additional paths to load rules from.
      *
      * @var array of string
@@ -169,7 +176,12 @@ class Application
                     }
                 }
 
-                $result[] = new $className;
+                $baseName = str_replace(self::$ruleNamespace, '', $className);
+
+                $ruleObject = new $className;
+                $ruleObject->configure($this->configuration->getSettings($baseName));
+
+                $result[] = $ruleObject;
             }
         }
 
