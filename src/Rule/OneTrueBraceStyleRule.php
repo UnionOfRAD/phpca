@@ -53,6 +53,11 @@ use spriebsch\PHPca\Pattern\Token;
 class OneTrueBraceStyleRule extends Rule
 {
     /**
+     * @var array
+     */
+    protected $blacklist;
+
+    /**
      * Helper function to generate violation depending on
      * whether token and brace are on same or different line.
      *
@@ -71,6 +76,12 @@ class OneTrueBraceStyleRule extends Rule
         foreach (Finder::findPattern($this->file, $pattern) as $match) {
 
             $token = $match[0];
+
+            // Skip T_WHILE when they are part of a do ... while statement
+            if (in_array($token, $this->blacklist)) {
+                continue;
+            }
+
             $brace = $match[sizeof($match) - 1];
 
             $line = $token->getLine();
@@ -95,6 +106,24 @@ class OneTrueBraceStyleRule extends Rule
      */
     protected function doCheck()
     {
+        // exclude do ... while statements by putting them on the blacklist
+        $pattern = new Pattern();
+        $pattern->token(T_DO)
+                ->token(T_WHITESPACE)
+                ->token(T_OPEN_CURLY)
+                ->zeroOrMore(new Token(T_ANY))
+                ->token(T_CLOSE_CURLY)
+                ->token(T_WHITESPACE)
+                ->token(T_WHILE);
+
+        $this->blacklist = array();
+
+        foreach (Finder::findPattern($this->file, $pattern) as $match) {
+            if ($match[0]->getBlockLevel() == $match[sizeof($match) - 1]->getBlockLevel()) {
+                $this->blacklist[] = $match[sizeof($match) - 1];
+            }
+        }
+
         $this->checkBraceLine(T_CLASS, 'class: curly brace on same line');
         $this->checkBraceLine(T_FUNCTION, 'function: curly brace on same line');
 
