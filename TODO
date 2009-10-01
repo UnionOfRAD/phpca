@@ -32,3 +32,5 @@ Rules to add (in no particular order, just a collection of ideas)
 * disablow write to superglobals
 * no var_dump, no print_r
 * call-time references (?)
+* FIX: make sure do ... while closing brace is at correct level
+* FIX: ${ token opens block level
