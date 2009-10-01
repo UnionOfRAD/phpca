@@ -55,7 +55,6 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         Loader::registerPath(__DIR__ . '/../src');
 
         $this->application = new Application();
-        $this->application->setEnableBuiltInRules(false);
     }
 
     protected function tearDown()
@@ -94,30 +93,6 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     public function testRunThrowsExceptionWhenNoPathToAnalyzeIsGiven()
     {
         $this->application->run('php', '');
-    }
-
-    /**
-     * Calls setEnableBuiltInRules with a non-boolean parameter.
-     *
-     * @covers spriebsch\PHPca\Application::setEnableBuiltInRules
-     * @expectedException spriebsch\PHPca\Exception
-     */
-    public function testSetEnableBuiltInRulesThrowsExceptionWhenParameterIsNotBoolean()
-    {
-        $this->application->setEnableBuiltInRules('nonsense');
-    }
-
-    /**
-     * Disables the built-in rules and do not specify any
-     * additional rule directories, thus there are no rules to enforce.
-     *
-     * @covers spriebsch\PHPca\Application::run
-     * @covers spriebsch\PHPca\Application::setEnableBuiltInRules
-     * @expectedException spriebsch\PHPca\Exception
-     */
-    public function testRunThrowsExceptionWhenNoRulesToEnforce()
-    {
-        $this->application->run(trim(exec('which php')), __DIR__ . '/_testdata/Application');
     }
 
     /**
@@ -193,8 +168,6 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testRunEnforcesBuiltInRules()
     {
-        $this->application->setEnableBuiltInRules(true);
-
         $result = $this->application->run(trim(exec('which php')), __DIR__ . '/_testdata/Application/fail/fail.php');
 
         $this->assertTrue($result->hasViolations());
@@ -224,42 +197,6 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $this->application->addRulePath(__DIR__ . '/_testdata/Application/_rules');
 
         $this->assertEquals(array(__DIR__ . '/_testdata/Application/_rules'), $this->application->getRulePaths());
-    }
-
-    /**
-     * Registers ErrorTestRule and PassTestRule, but then explicitly disables
-     * ErrorTestRule so that no error must occur.
-     *
-     * @covers spriebsch\PHPca\Application::disableRule
-     * @covers spriebsch\PHPca\Application::enforceRules
-     */
-    public function testDisableRuleDisablesGivenRule()
-    {
-        $this->application->addRulePath(__DIR__ . '/_testdata/Application/_rules/pass');
-        $this->application->addRulePath(__DIR__ . '/_testdata/Application/_rules/error');
-        $this->application->disableRule('\\spriebsch\\PHPca\\Rule\\ErrorTestRule');
-
-        $result = $this->application->run(trim(exec('which php')), __DIR__ . '/_testdata/Application/pass/pass.php');
-
-        $this->assertFalse($result->hasErrors());
-    }
-
-    /**
-     * Disables CloseTagAtEndRule rule, then analyzes fail.php that has
-     * no close tag at the end. If the rule has been disabled, no error
-     * may occur. Also see testRunLoadsBuiltInRules().
-     *
-     * @covers spriebsch\PHPca\Application::disableRule
-     * @covers spriebsch\PHPca\Application::enforceRules
-     */
-    public function testDisableRuleDisablesBuiltInRule()
-    {
-        $this->application->setEnableBuiltInRules(true);
-        $this->application->disableRule('\\spriebsch\\PHPca\\Rule\\CloseTagAtEndRule');
-
-        $result = $this->application->run(trim(exec('which php')), __DIR__ . '/_testdata/Application/fail/fail.php');
-
-        $this->assertFalse($result->hasErrors());
     }
 
     /**

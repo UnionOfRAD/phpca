@@ -46,10 +46,25 @@ namespace spriebsch\PHPca;
 class Configuration
 {
     protected $configuration = array();
+    protected $rules = array();
 
-    public function __construct(array $configuration)
+    public function __construct(array $configuration = array())
     {
         $this->configuration = $configuration;
+    }
+
+    public function hasSettings($rule)
+    {
+        return isset($this->configuration[$rule]);
+    }
+
+    public function getSettings($rule)
+    {
+        if (!isset($this->configuration[$rule])) {
+            return array();
+        }
+
+        return $this->configuration[$rule];
     }
 
     public function hasSetting($rule, $setting)

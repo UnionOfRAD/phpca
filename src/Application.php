@@ -67,13 +67,6 @@ class Application
     protected $rules = array();
 
     /**
-     * List of Rule classes not to enforce
-     *
-     * @var array of string
-     */
-    protected $disabledRuleNames = array();
-
-    /**
      * List of requested rules
      *
      * @var array
@@ -95,19 +88,21 @@ class Application
     protected $progressPrinter;
 
     /**
-     * Whether to ignore all built-in rules.
-     * Useful for unit testing.
-     *
-     * @var bool
-     */
-    protected $enableBuiltInRules = true;
-
-    /**
      * Number of files that will be analyzed.
      *
      * @var int
      */
     protected $numberOfFiles = 0;
+
+    /**
+     * Constructs the object.
+     *
+     * @return null
+     */
+    public function __construct()
+    {
+        $this->configuration = new Configuration();
+    }
 
     /**
      * Converts a rule filename to a rule classname
@@ -149,40 +144,32 @@ class Application
      */
     protected function loadRules(array $requestedRules = array())
     {
+        $builtInRules = $this->listFiles(__DIR__ . '/Rule');
+        $rules = $builtInRules;
+
         foreach ($requestedRules as $rule) {
             $this->requestedRules[] = '\\spriebsch\\PHPca\\Rule\\' . $rule . 'Rule';
         }
 
-        $result = array();
-
-        // Load built-in rules.
-
-        if ($this->enableBuiltInRules) {
-
-            $builtInRules = $this->listFiles(__DIR__ . '/Rule');
-
-            foreach ($builtInRules as $rule) {
-                $className = $this->toClassName($rule);
-
-                if ($this->isRuleRequested($className) && !in_array($className, $this->disabledRuleNames)) {
-                    $result[] = new $className;
-                }
-            }
+        foreach ($this->rulePaths as $path) {
+            $rules = array_merge($rules, $this->listFiles($path));
         }
 
-        // Load additional rules.
+        $result = array();
 
-        foreach ($this->rulePaths as $path) {
+        foreach ($rules as $rule) {
 
-            $rules = $this->listFiles($path);
+            $className = $this->toClassName($rule);
 
-            foreach($rules as $rule) {
-                $className = $this->toClassName($rule);
-
-                if ($this->isRuleRequested($className) && !in_array($className, $this->disabledRuleNames)) {
+            if ($this->isRuleRequested($className)) {
+                if (!in_array($rule, $builtInRules)) {
                     require_once $rule;
-                    $result[] = new $className;
+                    if (!class_exists($className)) {
+                        throw new Exception('Additional rule ' . $rule . ' not found');
+                    }
                 }
+
+                $result[] = new $className;
             }
         }
 
@@ -260,35 +247,6 @@ class Application
     }
 
     /**
-     * Disable a rule by class name.
-     * Requires fully qualified class name starting with a backslash.
-     *
-     * @param string $name Rule Name
-     * @return void
-     */
-    public function disableRule($name)
-    {
-        $this->disabledRuleNames[] = $name;
-    }
-
-    /**
-     * Toggle use of built-in rules.
-     * Default value is true.
-     * Especially useful for unit testing.
-     *
-     * @param bool $flag Flag
-     * @return void
-     */
-    public function setEnableBuiltInRules($flag)
-    {
-        if (!is_bool($flag)) {
-            throw new Exception('Boolean value expected');
-        }
-
-        $this->enableBuiltInRules = $flag;
-    }
-
-    /**
      * Add a path to load rules from.
      * No $_ClassMap is required in that directory since additional rules
      * are not autoloaded.
@@ -351,7 +309,7 @@ class Application
      * @param string $fileOrDirectory     path to file or directory to check
      * @return object
      */
-    public function run($pathToPhpExecutable, $fileOrDirectory, array $extensions = array('php'), $rules = array())
+    public function run($pathToPhpExecutable, $fileOrDirectory, Configuration $configuration = null, array $extensions = array('php'), $rules = array())
     {
         if ($pathToPhpExecutable == '') {
             throw new Exception('No path to PHP executable specified');
@@ -363,6 +321,10 @@ class Application
 
         if (sizeof($extensions) == 0) {
             throw new Exception('No file extension(s) specified');
+        }
+
+        if (!is_null($configuration)) {
+            $this->configuration = $configuration;
         }
 
         // Define our own additionl T_* token constants
