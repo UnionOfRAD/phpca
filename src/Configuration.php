@@ -71,6 +71,22 @@ class Configuration
     protected $rules = array();
 
     /**
+     * Sets the standard settings read from an ini file.
+     *
+     * @param array $settings
+     * @return null
+     */
+    public function setStandard(array $settings)
+    {
+        if (isset($settings['PHPca'])) {
+            $this->settings = $settings['PHPca'];
+            unset($settings['PHPca']);
+        }
+
+        $this->ruleSettings = $settings;
+    }
+
+    /**
      * Sets the configuration settings read from an ini file.
      *
      * @param array $configuration
@@ -79,11 +95,11 @@ class Configuration
     public function setConfiguration(array $configuration)
     {
         if (isset($configuration['PHPca'])) {
-            $this->settings = $configuration;
+            $this->settings = array_merge($this->settings, $configuration['PHPca']);
             unset($configuration['PHPca']);
         }
 
-        $this->ruleSettings = $configuration;
+        $this->ruleSettings = array_merge($this->ruleSettings, $configuration);
     }
 
     /**

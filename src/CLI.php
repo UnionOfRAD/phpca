@@ -107,7 +107,28 @@ class CLI implements ProgressPrinterInterface
      * @var Configuration
      */
     protected $configuration;
-    
+
+    /**
+     * The coding standard to be used.
+     *
+     * @var string
+     */
+    protected $codingStandard;
+
+    /**
+     * Settings array parsed from configuration ini file
+     *
+     * @var array
+     */
+    protected $iniSettings = array();
+
+    /**
+     * Settings array parsed from standards ini file
+     *
+     * @var array
+     */
+    protected $standardSettings = array();
+
     /**
      * Number of files that will be analyzed.
      * See Application::getNumberOfFiles().
@@ -166,7 +187,23 @@ class CLI implements ProgressPrinterInterface
             throw new Exception('Configuration file ' . $file . ' not found');
         }
 
-        $this->configuration->setConfiguration(parse_ini_file($file, true));
+        $this->iniSettings = parse_ini_file($file, true);
+    }
+
+    /**
+     * Loads coding standard
+     *
+     * @param string $file
+     */
+    protected function loadCodingStandard($standard)
+    {
+        $filename = __DIR__ . '/Standard/' . $standard . '.ini';
+
+        if (!file_exists($filename)) {
+            throw new Exception('Coding standard ' . $standard . ' not found in ' . $filename);
+        }
+
+        $this->standardSettings = parse_ini_file($filename, true);
     }
 
     /**
@@ -264,6 +301,9 @@ class CLI implements ProgressPrinterInterface
     {
         $application = new Application();
         $application->registerProgressPrinter($this);
+
+        $this->configuration->setStandard($this->standardSettings);
+        $this->configuration->setConfiguration($this->iniSettings);
 
         return call_user_func_array(array($application, 'run'), array($this->phpExecutable, $this->path, $this->configuration));
     }
@@ -366,7 +406,9 @@ class CLI implements ProgressPrinterInterface
                 case '-s':
                 case '--standard':
                     $this->checkNextArgument($argument, $arguments);
-                    $this->codingStandard = array_shift($arguments);
+                    $standard = array_shift($arguments);
+                    $this->codingStandard = $standard;
+                    $this->loadCodingStandard($standard);
                     break;
 
                 case '-v':
