@@ -133,6 +133,42 @@ class CLI implements ProgressPrinterInterface
      */
     protected $verbose = false;
 
+    public function __construct()
+    {
+        $this->configuration = new Configuration();
+    }
+
+    /**
+     * Wrapper method to exit() with a given exit code.
+     * Will only exit when $exitOnError is true.
+     * This function makes it possible to unit test the CLI class,
+     * since exit'ing will also exit from PHPUnit.
+     *
+     * @param int $exitCode
+     */
+    protected function doExit($exitCode)
+    {
+        // @codeCoverageIgnoreStart
+        if ($this->exitOnError) {
+            exit($exitCode);
+        }
+        // @codeCoverageIgnoreEnd
+    }
+
+    /**
+     * Loads the configuration file
+     *
+     * @param string $file
+     */
+    protected function loadConfigurationFile($file)
+    {
+        if (!file_exists($file)) {
+            throw new Exception('Configuration file ' . $file . ' not found');
+        }
+
+        $this->configuration->setConfiguration(parse_ini_file($file, true));
+    }
+
     /**
      * Prints the usage message.
      *
@@ -162,8 +198,8 @@ class CLI implements ProgressPrinterInterface
              '  --rules <rules>     Specify file rules to analyze, without Rule end.' . PHP_EOL .
              '                      Separate multiple entries by comma, without whitespace.' . PHP_EOL .             '                      If not specified, all rules will be executed.' . PHP_EOL . PHP_EOL .
 
-//             '  -s' . PHP_EOL .
-//             '  --statistics        Prints additional statistics.' . PHP_EOL . PHP_EOL .
+             '  -s' . PHP_EOL .
+             '  --standard          The coding standard to use (defaults to thePHP.cc).' . PHP_EOL . PHP_EOL .
 
              '  -v' . PHP_EOL .
              '  --verbose           Verbose output.' . PHP_EOL . PHP_EOL;
@@ -219,15 +255,6 @@ class CLI implements ProgressPrinterInterface
         return new Result();
     }
 
-    protected function loadConfigurationFile($file = null)
-    {
-        if (!file_exists('phpca.ini')) {
-            return;
-        }
-
-        $this->configuration = new Configuration(parse_ini_file('phpca.ini', true));
-    }
-
     /**
      * Anaylzes PHP files by calling Application::run().
      *
@@ -235,12 +262,10 @@ class CLI implements ProgressPrinterInterface
      */
     protected function analyzeFilesCommand()
     {
-        $this->loadConfigurationFile();
-
         $application = new Application();
         $application->registerProgressPrinter($this);
 
-        return call_user_func_array(array($application, 'run'), array($this->phpExecutable, $this->path, $this->configuration, $this->extensions, $this->rules));
+        return call_user_func_array(array($application, 'run'), array($this->phpExecutable, $this->path, $this->configuration));
     }
 
     /**
@@ -313,13 +338,7 @@ class CLI implements ProgressPrinterInterface
                 case '-e':
                 case '--ext':
                     $this->checkNextArgument($argument, $arguments);
-                    $this->extensions = explode(',', array_shift($arguments));
-                    break;
-
-                case '-r':
-                case '--rules':
-                    $this->checkNextArgument($argument, $arguments);
-                    $this->rules = explode(',', array_shift($arguments));
+                    $this->configuration->setExtensions(explode(',', array_shift($arguments)));
                     break;
 
                 case '-h':
@@ -336,6 +355,18 @@ class CLI implements ProgressPrinterInterface
                 case '--php':
                     $this->checkNextArgument($argument, $arguments);
                     $this->phpExecutable = array_shift($arguments);
+                    break;
+
+                case '-r':
+                case '--rules':
+                    $this->checkNextArgument($argument, $arguments);
+                    $this->configuration->setRules(explode(',', array_shift($arguments)));
+                    break;
+
+                case '-s':
+                case '--standard':
+                    $this->checkNextArgument($argument, $arguments);
+                    $this->codingStandard = array_shift($arguments);
                     break;
 
                 case '-v':
@@ -392,23 +423,6 @@ class CLI implements ProgressPrinterInterface
         }
 
         return $fileCount;
-    }
-
-    /**
-     * Wrapper method to exit() with a given exit code.
-     * Will only exit when $exitOnError is true.
-     * This function makes it possible to unit test the CLI class,
-     * since exit'ing will also exit from PHPUnit.
-     *
-     * @param int $exitCode
-     */
-    protected function doExit($exitCode)
-    {
-        // @codeCoverageIgnoreStart
-        if ($this->exitOnError) {
-            exit($exitCode);
-        }
-        // @codeCoverageIgnoreEnd
     }
 
     /**

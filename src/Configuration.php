@@ -38,47 +38,169 @@
 namespace spriebsch\PHPca;
 
 /**
- * The PHPCA configuration.
+ * The PHPca configuration.
  *
  * @author     Stefan Priebsch <stefan@priebsch.de>
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
 class Configuration
 {
-    protected $configuration = array();
+    /**
+     * @var array
+     */
+    protected $settings = array();
+
+    /**
+     * @var array
+     */
+    protected $ruleSettings = array();
+
+    /**
+     * @var string
+     */
+    protected $codingStandard;
+
+    /**
+     * @var array
+     */
+    protected $extensions = array('php');
+
+    /**
+     * @var array
+     */
     protected $rules = array();
 
-    public function __construct(array $configuration = array())
+    /**
+     * Sets the configuration settings read from an ini file.
+     *
+     * @param array $configuration
+     * @return null
+     */
+    public function setConfiguration(array $configuration)
     {
-        $this->configuration = $configuration;
+        if (isset($configuration['PHPca'])) {
+            $this->settings = $configuration;
+            unset($configuration['PHPca']);
+        }
+
+        $this->ruleSettings = $configuration;
     }
 
+    /**
+     * Sets the name of the coding standard to use.
+     *
+     * @param string $codingStandard
+     * @return null
+     */
+    public function setCodingStandard($codingStandard)
+    {
+        $this->codingStandard = $codingStandard;
+    }
+
+    /**
+     * Returns the coding standard used.
+     *
+     * @return string
+     */
+    public function getCodingStandard()
+    {
+        return $this->codingStandard;
+    }
+
+    /**
+     * Sets the file extensions to analyze.
+     *
+     * @param array $extensions
+     * @return null
+     */
+    public function setExtensions(array $extensions)
+    {
+        $this->extensions = $extensions;
+    }
+
+    /**
+     * Returns the file extensions to analyze.
+     *
+     * @return array
+     */
+    public function getExtensions()
+    {
+        return $this->extensions;
+    }
+
+    /**
+     * Sets the rules to enforce.
+     *
+     * @param array $extensions
+     * @return null
+     */
+    public function setRules(array $rules)
+    {
+        $this->rules = $rules;
+    }
+
+    /**
+     * Returns the rules to enforce.
+     *
+     * @return array
+     */
+    public function getRules()
+    {
+        return $this->rules;
+    }
+
+    /**
+     * Checks whether settings exist for given rule.
+     *
+     * @param string $rule
+     * @return bool
+     */
     public function hasSettings($rule)
     {
-        return isset($this->configuration[$rule]);
+        return isset($this->ruleSettings[$rule]);
     }
 
+    /**
+     * Returns all settings for given rule.
+     *
+     * @param string $rule
+     * @return array
+     */
     public function getSettings($rule)
     {
-        if (!isset($this->configuration[$rule])) {
+        if (!isset($this->ruleSettings[$rule])) {
             return array();
         }
 
-        return $this->configuration[$rule];
+        return $this->ruleSettings[$rule];
     }
 
+    /**
+     * Checks whether a certain setting exists for given rule.
+     *
+     * @param string $rule
+     * @param string $setting
+     * @return bool
+     */
     public function hasSetting($rule, $setting)
     {
-        return isset($this->configuration[$rule]) && isset($this->configuration[$rule][$setting]);
+        return isset($this->ruleSettings[$rule]) && isset($this->ruleSettings[$rule][$setting]);
     }
 
+    /**
+     * Returns given setting for a given rule.
+     *
+     * @param string $rule
+     * @param string $setting
+     * @return string
+     */
     public function getSetting($rule, $setting)
     {
-        if (!isset($this->configuration[$rule]) && !isset($this->configuration[$rule][$setting])) {
+        if (!isset($this->ruleSettings[$rule]) && !isset($this->ruleSettings[$rule][$setting])) {
             return '';
         }
 
-        return $this->configuration[$rule][$setting];
+        return $this->ruleSettings[$rule][$setting];
     }
 }
 ?>

@@ -337,10 +337,10 @@ class Application
         $this->result = new Result();
 
         // Create a list of all rules to enforce
-        $this->rules = $this->loadRules($rules);
+        $this->rules = $this->loadRules($this->configuration->getRules());
 
         // List all PHP files in given path
-        $phpFiles = $this->listFiles($fileOrDirectory, $extensions);
+        $phpFiles = $this->listFiles($fileOrDirectory, $this->configuration->getExtensions());
 
         if (sizeof($phpFiles) == 0) {
             throw new Exception('No PHP files to analyze');
