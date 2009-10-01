@@ -338,11 +338,6 @@ class CLI implements ProgressPrinterInterface
                     $this->phpExecutable = array_shift($arguments);
                     break;
 
-                case '-s':
-                case '--statistics':
-                    $this->printStatistics = true;
-                    break;
-
                 case '-v':
                 case '--verbose':
                     $this->verbose = true;
@@ -472,34 +467,6 @@ class CLI implements ProgressPrinterInterface
 
         echo $this->result->getNumberOfViolations() . ' violations';
         echo ')';
-
-        echo PHP_EOL . PHP_EOL;
-    }
-
-    /**
-     * Prints out statistics
-     */
-    protected function printStatistics()
-    {
-        $statistics = array();
-
-        foreach ($this->result->getFiles() as $file) {
-
-            $namespaces = array();
-
-            foreach ($this->result->getNamespaces($file) as $namespace) {
-                $statistics[$namespace][] = $file;
-            }
-        }
-
-asort($statistics);
-var_dump($statistics);
-
-        foreach ($this->result->getFiles() as $file) {
-            foreach ($this->result->getClasses($file) as $class) {
-var_dump($class);
-            }
-        }
 
         echo PHP_EOL . PHP_EOL;
     }
