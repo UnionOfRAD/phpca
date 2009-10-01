@@ -265,11 +265,44 @@ class CLI implements ProgressPrinterInterface
     }
 
     /**
+     * Prints out info.
+     *
+     * @return Result
+     */
+    protected function printInfoCommand()
+    {
+        $this->printStandards();
+        $this->printBuiltInRules();
+
+        return new Result();
+    }
+
+    /**
+     * Lists all available coding standards.
+     *
+     * @return Result
+     */
+    protected function printStandards()
+    {
+        $application = new Application();
+        $standards = $application->listFiles(__DIR__ . '/Standard', array('ini'));
+        sort($standards);
+
+        echo 'Available coding standards: ' . PHP_EOL . PHP_EOL;
+
+        foreach ($standards as $standard) {
+            echo '  - ' . str_replace('.ini', '', basename($standard)) . PHP_EOL;
+        }
+
+        echo PHP_EOL;
+    }
+
+    /**
      * Lists all built-in rules.
      *
      * @return Result
      */
-    protected function printBuiltInRulesCommand()
+    protected function printBuiltInRules()
     {
         $application = new Application();
         $rules = $application->listFiles(__DIR__ . '/Rule');
@@ -282,8 +315,6 @@ class CLI implements ProgressPrinterInterface
         }
 
         echo PHP_EOL;
-
-        return new Result();
     }
 
     /**
@@ -391,9 +422,9 @@ class CLI implements ProgressPrinterInterface
                     $method = 'printUsageCommand';
                     break;
 
-                case '-l':
-                case '--list':
-                    $method = 'printBuiltInRulesCommand';
+                case '-i':
+                case '--info':
+                    $method = 'printInfoCommand';
                     break;
 
                 case '-p':
