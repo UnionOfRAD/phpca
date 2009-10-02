@@ -2,4 +2,6 @@
 
 @print 'hello world';
 
+print '@';
+
 ?>
