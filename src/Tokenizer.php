@@ -203,8 +203,10 @@ class Tokenizer
                 $namespaceFound = false;
             }
 
+            $id = $tokenObj->getId();
+
             // Opening curly brace opens another block, thus increases the level.
-            if ($tokenObj->getId() == T_OPEN_CURLY || $tokenObj->getId() == T_CURLY_OPEN) {
+            if ($id == T_OPEN_CURLY || $id == T_CURLY_OPEN || $id == T_DOLLAR_OPEN_CURLY_BRACES) {
                 $level++;
 
                 // An opening curly brace can end the namespace declaration.
