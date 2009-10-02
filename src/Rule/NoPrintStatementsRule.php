@@ -57,7 +57,7 @@ class NoPrintStatementsRule extends Rule
     protected function doCheck()
     {
         foreach (Finder::findToken($this->file, T_PRINT) as $token) {
-            $this->addViolation('var_dump() statement', $token);
+            $this->addViolation('print statement', $token);
         }
     }
 }
