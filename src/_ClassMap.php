@@ -80,6 +80,7 @@ $_classMap = array(
     'spriebsch\PHPca\Rule\NoPrintStatementsRule'                => 'Rule/NoPrintStatementsRule.php',
     'spriebsch\PHPca\Rule\NoEchoStatementsRule'                 => 'Rule/NoEchoStatementsRule.php',
     'spriebsch\PHPca\Rule\NoShutupOperatorsRule'                => 'Rule/NoShutupOperatorsRule.php',
+    'spriebsch\PHPca\Rule\NoInlineHtmlRule'                     => 'Rule/NoInlineHtmlRule.php',
 
     'spriebsch\PHPca\Helper'                      => 'Helper.php',
 
