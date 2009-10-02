@@ -152,6 +152,12 @@ class Configuration
      */
     public function setRules(array $rules)
     {
+        foreach ($rules as &$rule) {
+            if (substr($rule, -4) == 'Rule') {
+                $rule = substr($rule, 0, -4);
+            }
+        }
+
         $this->rules = $rules;
     }
 

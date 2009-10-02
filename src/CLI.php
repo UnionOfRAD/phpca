@@ -60,20 +60,6 @@ class CLI implements ProgressPrinterInterface
     protected $phpExecutable;
 
     /**
-     * File extensions to analyze
-     *
-     * @var array
-     */
-    protected $extensions = array('php');
-
-    /**
-     * Rules to execute while analyzing
-     *
-     * @var array
-     */
-    protected $rules = array();
-
-    /**
      * Position counter for dot output of progress printer
      *
      * @var integer
@@ -221,20 +207,14 @@ class CLI implements ProgressPrinterInterface
         echo 'Usage: php phpca.phar -p <file> <file to analyze>' . PHP_EOL .
              '       php phpca.phar -p <file> <directory to analyze>' . PHP_EOL . PHP_EOL .
 
-             '  -e <extensions>' . PHP_EOL .
-             '  --ext <extensions>  Specify file extensions to analyze, without dot.' . PHP_EOL .
-             '                      Separate multiple entries by comma, without whitespace.' . PHP_EOL .
-             '                      To analyze .inc files as well, use -e php,inc' . PHP_EOL .
-             '                      Defaults to \'php\'.' . PHP_EOL . PHP_EOL .
+             '  -h' . PHP_EOL .
+             '  --help              Prints this usage information.' . PHP_EOL . PHP_EOL .
+
+             '  -i' . PHP_EOL .
+             '  --info              Prints information about coding standards and rules.' . PHP_EOL . PHP_EOL .
 
              '  -p <file>' . PHP_EOL .
              '  --php <file>        Specify path to PHP executable (required).' . PHP_EOL . PHP_EOL .
-
-             '  -l' . PHP_EOL .
-             '  --list              List all built-in rules.' . PHP_EOL . PHP_EOL .
-
-             '  -h' . PHP_EOL .
-             '  --help              Prints this usage information.' . PHP_EOL . PHP_EOL .
 
              '  -r <rules>' . PHP_EOL .
              '  --rules <rules>     Specify file rules to analyze, without Rule end.' . PHP_EOL .
@@ -411,12 +391,6 @@ class CLI implements ProgressPrinterInterface
                     $this->loadConfigurationFile(array_shift($arguments));
                     break;
 
-                case '-e':
-                case '--ext':
-                    $this->checkNextArgument($argument, $arguments);
-                    $this->configuration->setExtensions(explode(',', array_shift($arguments)));
-                    break;
-
                 case '-h':
                 case '--help':
                     $method = 'printUsageCommand';
@@ -433,18 +407,16 @@ class CLI implements ProgressPrinterInterface
                     $this->phpExecutable = array_shift($arguments);
                     break;
 
+                case '-p':
+                case '--php':
+                    $this->checkNextArgument($argument, $arguments);
+                    $this->phpExecutable = array_shift($arguments);
+                    break;
+
                 case '-r':
                 case '--rules':
                     $this->checkNextArgument($argument, $arguments);
                     $this->configuration->setRules(explode(',', array_shift($arguments)));
-                    break;
-
-                case '-s':
-                case '--standard':
-                    $this->checkNextArgument($argument, $arguments);
-                    $standard = array_shift($arguments);
-                    $this->codingStandard = $standard;
-                    $this->loadCodingStandard($standard);
                     break;
 
                 case '-v':
@@ -576,6 +548,13 @@ class CLI implements ProgressPrinterInterface
             $this->startTimer();
 
             $method = $this->parseCommandLine($arguments);
+
+            $rules = $this->configuration->getRules();
+
+            if (sizeof($rules) != 0) {
+                print 'Rules: ' . implode(', ', $rules) . PHP_EOL . PHP_EOL;
+            }
+
             $this->result = $this->$method();
 
             $this->endTimer();
