@@ -204,27 +204,27 @@ class CLI implements ProgressPrinterInterface
      */
     protected function printUsageMessage()
     {
-        echo 'Usage: php phpca.phar -p <file> <file to analyze>' . PHP_EOL .
-             '       php phpca.phar -p <file> <directory to analyze>' . PHP_EOL . PHP_EOL .
+        print 'Usage: php phpca.phar -p <file> <file to analyze>' . PHP_EOL .
+              '       php phpca.phar -p <file> <directory to analyze>' . PHP_EOL . PHP_EOL .
 
-             '  -h' . PHP_EOL .
-             '  --help              Prints this usage information.' . PHP_EOL . PHP_EOL .
+              '  -h' . PHP_EOL .
+              '  --help              Prints this usage information.' . PHP_EOL . PHP_EOL .
 
-             '  -i' . PHP_EOL .
-             '  --info              Prints information about coding standards and rules.' . PHP_EOL . PHP_EOL .
+              '  -i' . PHP_EOL .
+              '  --info              Prints information about coding standards and rules.' . PHP_EOL . PHP_EOL .
 
-             '  -p <file>' . PHP_EOL .
-             '  --php <file>        Specify path to PHP executable (required).' . PHP_EOL . PHP_EOL .
+              '  -p <file>' . PHP_EOL .
+              '  --php <file>        Specify path to PHP executable (required).' . PHP_EOL . PHP_EOL .
 
-             '  -r <rules>' . PHP_EOL .
-             '  --rules <rules>     Specify file rules to analyze, without Rule end.' . PHP_EOL .
-             '                      Separate multiple entries by comma, without whitespace.' . PHP_EOL .             '                      If not specified, all rules will be executed.' . PHP_EOL . PHP_EOL .
+              '  -r <rules>' . PHP_EOL .
+              '  --rules <rules>     Specify file rules to analyze, without Rule end.' . PHP_EOL .
+              '                      Separate multiple entries by comma, without whitespace.' . PHP_EOL .             '                      If not specified, all rules will be executed.' . PHP_EOL . PHP_EOL .
 
-             '  -s' . PHP_EOL .
-             '  --standard          The coding standard to use (defaults to thePHP.cc).' . PHP_EOL . PHP_EOL .
+              '  -s' . PHP_EOL .
+              '  --standard          The coding standard to use (defaults to thePHP.cc).' . PHP_EOL . PHP_EOL .
 
-             '  -v' . PHP_EOL .
-             '  --verbose           Verbose output.' . PHP_EOL . PHP_EOL;
+              '  -v' . PHP_EOL .
+              '  --verbose           Verbose output.' . PHP_EOL . PHP_EOL;
     }
 
     /**
@@ -268,13 +268,13 @@ class CLI implements ProgressPrinterInterface
         $standards = $application->listFiles(__DIR__ . '/Standard', array('ini'));
         sort($standards);
 
-        echo 'Available coding standards: ' . PHP_EOL . PHP_EOL;
+        print 'Available coding standards: ' . PHP_EOL . PHP_EOL;
 
         foreach ($standards as $standard) {
-            echo '  - ' . str_replace('.ini', '', basename($standard)) . ' (' . basename($standard) . ')'. PHP_EOL;
+            print '  - ' . str_replace('.ini', '', basename($standard)) . ' (' . basename($standard) . ')'. PHP_EOL;
         }
 
-        echo PHP_EOL;
+        print PHP_EOL;
     }
 
     /**
@@ -288,13 +288,13 @@ class CLI implements ProgressPrinterInterface
         $rules = $application->listFiles(__DIR__ . '/Rule');
         sort($rules);
 
-        echo 'Available rules: ' . PHP_EOL . PHP_EOL;
+        print 'Available rules: ' . PHP_EOL . PHP_EOL;
 
         foreach ($rules as $rule) {
-            echo '  -' . $this->toRuleName($rule) . ' (' . basename($rule) . ')'. PHP_EOL;
+            print '  -' . $this->toRuleName($rule) . ' (' . basename($rule) . ')'. PHP_EOL;
         }
 
-        echo PHP_EOL;
+        print PHP_EOL;
     }
 
     /**
@@ -482,57 +482,57 @@ class CLI implements ProgressPrinterInterface
      */
     protected function printSummary()
     {
-        echo PHP_EOL . PHP_EOL;
+        print PHP_EOL . PHP_EOL;
 
         $time = ceil($this->endTime - $this->startTime);
 
-        echo 'Time: ' . $time . ' ';
+        print 'Time: ' . $time . ' ';
         if ($time == 1) {
-            echo 'second';
+            print 'second';
         } else {
-            echo 'seconds';
+            print 'seconds';
         }
-        echo PHP_EOL . PHP_EOL;
+        print PHP_EOL . PHP_EOL;
 
         if (!$this->result->hasErrors()) {
-            echo 'OK';
+            print 'OK';
         } else {
             foreach($this->result->getFiles() as $file) {
                 if ($this->result->hasErrors($file)) {
-                    echo $file . ':' . PHP_EOL;
+                    print $file . ':' . PHP_EOL;
                     if ($this->result->hasLintError($file)) {
                         // For lint errors, display original error message
-                        echo $this->result->getLintError($file)->getMessage() . PHP_EOL;
+                        print $this->result->getLintError($file)->getMessage() . PHP_EOL;
                     }
 
                     foreach ($this->result->getViolations($file) as $error) {
                         // A "line number | column number | message" line
-                        echo sprintf('%4u', $error->getLine()) . '|' . sprintf('%3u', $error->getColumn()) . '| ' . $error->getMessage() . PHP_EOL;
+                        print sprintf('%4u', $error->getLine()) . '|' . sprintf('%3u', $error->getColumn()) . '| ' . $error->getMessage() . PHP_EOL;
                     }
-                    echo PHP_EOL;
+                    print PHP_EOL;
                 }
             }
 
-            echo 'FAIL';
+            print 'FAIL';
         }
 
-        echo ' (';
-        echo $this->result->getNumberOfFiles() . ' files, ';
+        print ' (';
+        print $this->result->getNumberOfFiles() . ' files, ';
 
         // only display lint errors in statistics if they occured
         if ($this->result->getNumberOfLintErrors() > 0) {
-            echo $this->result->getNumberOfLintErrors() . ' lint errors, ';
+            print $this->result->getNumberOfLintErrors() . ' lint errors, ';
         }
 
         // only display rule errors in statistics if they occured
         if ($this->result->getNumberOfRuleErrors() > 0) {
-            echo $this->result->getNumberOfRuleErrors() . ' rule errors, ';
+            print $this->result->getNumberOfRuleErrors() . ' rule errors, ';
         }
 
-        echo $this->result->getNumberOfViolations() . ' violations';
-        echo ')';
+        print $this->result->getNumberOfViolations() . ' violations';
+        print ')';
 
-        echo PHP_EOL . PHP_EOL;
+        print PHP_EOL . PHP_EOL;
     }
 
     /**
@@ -542,7 +542,7 @@ class CLI implements ProgressPrinterInterface
      */
     public function run($arguments)
     {
-        echo 'PHP Code Analyzer ' . Application::$version . ' by Stefan Priebsch.' . PHP_EOL . PHP_EOL;
+        print 'PHP Code Analyzer ' . Application::$version . ' by Stefan Priebsch.' . PHP_EOL . PHP_EOL;
 
         try {
             $this->startTimer();
@@ -573,7 +573,7 @@ class CLI implements ProgressPrinterInterface
         }
 
         catch (Exception $e) {
-            echo 'Error: ' . $e->getMessage() . PHP_EOL . PHP_EOL;
+            print 'Error: ' . $e->getMessage() . PHP_EOL . PHP_EOL;
             $this->printUsageMessage();
             $this->doExit(-1);
         }
@@ -616,12 +616,12 @@ class CLI implements ProgressPrinterInterface
                     break;
             }
 
-            echo $this->formatFileCount($this->fileCount) . ' ' . $file . ': ' . $letter . PHP_EOL;
+            print $this->formatFileCount($this->fileCount) . ' ' . $file . ': ' . $letter . PHP_EOL;
         } else {
-            echo $letter;
+            print $letter;
 
             if ($this->positionCount > 59) {
-                echo ' ' . $this->formatFileCount($this->fileCount) . ' / ' . $this->numberOfFiles . PHP_EOL;
+                print ' ' . $this->formatFileCount($this->fileCount) . ' / ' . $this->numberOfFiles . PHP_EOL;
                 $this->positionCount = 0;
             }            
         }

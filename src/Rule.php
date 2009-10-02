@@ -55,17 +55,59 @@ abstract class Rule
     protected $result;
 
     /**
+     * Checks whether a configuration setting exists
+     *
+     * @param mixed $setting
+     */
+    protected function hasSetting($setting)
+    {
+        return isset($this->settings[$setting]);
+    }
+
+    /**
+     * Returns a configuration setting
+     *
+     * @param mixed $setting
+     */
+    protected function getSetting($setting)
+    {
+        if (!isset($this->settings[$setting])) {
+            throw new Exception('Configuration setting ' . $setting . ' does not exist');
+        }
+
+        return $this->settings[$setting];
+    }
+
+    /**
      * Checks whether this rule is disabled.
      *
      * @return bool
      */
     protected function isDisabled()
     {
-        if (!isset($this->settings['disable'])) {
+        if (!$this->hasSetting('disable')) {
             return false;
         }
 
-        return (bool) $this->settings['disable'];
+        return (bool) $this->getSetting('disable');
+    }
+
+    /**
+     * Checks whether this rule should be skipped
+     *
+     * @return bool
+     */
+    protected function skip()
+    {
+        if (!$this->hasSetting('skip')) {
+            return false;
+        }
+
+        if (in_array($this->file->getFileName(), $this->getSetting('skip'))) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -80,6 +122,10 @@ abstract class Rule
         $this->file = $file;
 
         if ($this->isDisabled()) {
+            return;
+        }
+
+        if ($this->skip()) {
             return;
         }
 
@@ -98,6 +144,11 @@ abstract class Rule
     public function configure(array $settings)
     {
         $this->settings = $settings;
+
+        if (isset($this->settings['skip'])) {
+            $this->settings['skip'] = explode(',', $this->settings['skip']);
+            $this->settings['skip'] = array_map('trim', $this->settings['skip']);
+        }
     }
 
     /**
