@@ -78,6 +78,7 @@ $_classMap = array(
     'spriebsch\PHPca\Rule\NoGotoStatementsRule'                 => 'Rule/NoGotoStatementsRule.php',
     'spriebsch\PHPca\Rule\NoVarDumpStatementsRule'              => 'Rule/NoVarDumpStatementsRule.php',
     'spriebsch\PHPca\Rule\NoPrintStatementsRule'                => 'Rule/NoPrintStatementsRule.php',
+    'spriebsch\PHPca\Rule\NoEchoStatementsRule'                 => 'Rule/NoEchoStatementsRule.php',
 
     'spriebsch\PHPca\Helper'                      => 'Helper.php',
 
