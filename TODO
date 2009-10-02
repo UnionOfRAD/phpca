@@ -35,3 +35,5 @@ Rules to add (in no particular order, just a collection of ideas)
 * call-time references (?)
 * FIX: make sure do ... while closing brace is at correct level
 * FIX: ${ token opens block level
+* disallow multiple comma-separated variable declarations (also for globals)
+* disallow $a = $b = $c statements
