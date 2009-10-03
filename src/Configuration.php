@@ -95,11 +95,11 @@ class Configuration
     public function setConfiguration(array $configuration)
     {
         if (isset($configuration['PHPca'])) {
-            $this->settings = array_merge($this->settings, $configuration['PHPca']);
+            $this->settings = array_replace($this->settings, $configuration['PHPca']);
             unset($configuration['PHPca']);
         }
 
-        $this->ruleSettings = array_merge($this->ruleSettings, $configuration);
+        $this->ruleSettings = array_replace($this->ruleSettings, $configuration);
     }
 
     /**
@@ -141,6 +141,11 @@ class Configuration
      */
     public function getExtensions()
     {
+        if ($this->settings['extensions']) {
+            $extensions = explode(',', $this->settings['extensions']);
+            return array_map('trim', $extensions);
+        }
+
         return $this->extensions;
     }
 

@@ -102,6 +102,13 @@ class CLI implements ProgressPrinterInterface
     protected $codingStandard = 'spriebsch';
 
     /**
+     * The configuration file to be used.
+     *
+     * @var string
+     */
+    protected $configurationFile;
+
+    /**
      * Settings array parsed from configuration ini file
      *
      * @var array
@@ -396,7 +403,11 @@ class CLI implements ProgressPrinterInterface
                 case '-c':
                 case '--config':
                     $this->checkNextArgument($argument, $arguments);
-                    $this->loadConfigurationFile(array_shift($arguments));
+                    $this->configurationFile = array_shift($arguments);
+
+                    if (!is_null($this->configurationFile)) {
+                        $this->loadConfigurationFile($this->configurationFile);
+                    }
                     break;
 
                 case '-h':
@@ -563,13 +574,19 @@ class CLI implements ProgressPrinterInterface
 
             $method = $this->parseCommandLine($arguments);
 
-            print 'Coding standard: ' . $this->codingStandard . PHP_EOL . PHP_EOL;
+            print 'Coding standard: ' . $this->codingStandard . PHP_EOL;
+
+            if (!is_null($this->configurationFile)) {
+                print 'Configuration: ' . $this->configurationFile . PHP_EOL;
+            }
 
             $rules = $this->configuration->getRules();
 
             if (sizeof($rules) != 0) {
-                print 'Rules: ' . implode(', ', $rules) . PHP_EOL . PHP_EOL;
+                print PHP_EOL . 'Rules: ' . implode(', ', $rules) . PHP_EOL;
             }
+
+            print PHP_EOL;
 
             $this->result = $this->$method();
 
