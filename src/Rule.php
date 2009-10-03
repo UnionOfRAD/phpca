@@ -165,7 +165,9 @@ abstract class Rule
         }
 
         foreach ($tokens as $token) {
-            $this->result->addMessage(new Violation($this->file->getFileName(), $message, $token));
+            $violation = new Violation($this->file->getFileName(), $message, $token);
+            $violation->setRule($this);
+            $this->result->addMessage($violation);
         }
     }
 

@@ -47,5 +47,12 @@ namespace spriebsch\PHPca;
  */
 class Violation extends Message
 {
+    protected $ruleName;
+
+    public function setRule(\spriebsch\PHPca\Rule\Rule $rule)
+    {
+        $ruleNamespace = substr(\spriebsch\PHPca\Application::$ruleNamespace, 1);
+        $this->ruleName = substr(get_class($rule), strlen($ruleNamespace));
+    }
 }
 ?>
