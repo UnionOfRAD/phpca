@@ -99,7 +99,7 @@ class CLI implements ProgressPrinterInterface
      *
      * @var string
      */
-    protected $codingStandard;
+    protected $codingStandard = 'spriebsch';
 
     /**
      * Settings array parsed from configuration ini file
@@ -188,10 +188,14 @@ class CLI implements ProgressPrinterInterface
      */
     protected function loadCodingStandard($standard)
     {
-        $filename = __DIR__ . '/Standard/' . $standard . '.ini';
+        if (substr($standard, 0, -4) == '.ini' && file_exists($standard)) {
+            $filename = $standard;
+        } else {
+            $filename = __DIR__ . '/Standard/' . $standard . '.ini';
 
-        if (!file_exists($filename)) {
-            throw new Exception('Coding standard ' . $standard . ' not found in ' . $filename);
+            if (!file_exists($filename)) {
+                throw new Exception('Coding standard ' . $standard . ' not found in ' . $filename);
+            }
         }
 
         $this->standardSettings = parse_ini_file($filename, true);
@@ -218,10 +222,13 @@ class CLI implements ProgressPrinterInterface
 
               '  -r <rules>' . PHP_EOL .
               '  --rules <rules>     Specify file rules to analyze, without Rule end.' . PHP_EOL .
-              '                      Separate multiple entries by comma, without whitespace.' . PHP_EOL .             '                      If not specified, all rules will be executed.' . PHP_EOL . PHP_EOL .
+              '                      Separate multiple entries by comma, without whitespace.' . PHP_EOL .
+              '                      If not specified, all rules will be executed.' . PHP_EOL . PHP_EOL .
 
               '  -s' . PHP_EOL .
-              '  --standard          The coding standard to use (defaults to thePHP.cc).' . PHP_EOL . PHP_EOL .
+              '  --standard          The coding standard to use (defaults to spriebsch).' . PHP_EOL .
+              '                      Specify either an absolute or relative path to an ini file' . PHP_EOL .
+              '                      or the name of a built-in coding standard (use -i to list)' . PHP_EOL . PHP_EOL .
 
               '  -v' . PHP_EOL .
               '  --verbose           Verbose output.' . PHP_EOL . PHP_EOL;
@@ -318,6 +325,7 @@ class CLI implements ProgressPrinterInterface
         $application = new Application();
         $application->registerProgressPrinter($this);
 
+        $this->loadCodingStandard($this->codingStandard);
         $this->configuration->setStandard($this->standardSettings);
         $this->configuration->setConfiguration($this->iniSettings);
 
@@ -417,6 +425,12 @@ class CLI implements ProgressPrinterInterface
                 case '--rules':
                     $this->checkNextArgument($argument, $arguments);
                     $this->configuration->setRules(explode(',', array_shift($arguments)));
+                    break;
+
+                case '-s':
+                case '--standard':
+                    $this->checkNextArgument($argument, $arguments);
+                    $this->codingStandard = array_shift($arguments);
                     break;
 
                 case '-v':
