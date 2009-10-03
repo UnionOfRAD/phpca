@@ -141,7 +141,7 @@ class Configuration
      */
     public function getExtensions()
     {
-        if ($this->settings['extensions']) {
+        if (isset($this->settings['extensions'])) {
             $extensions = explode(',', $this->settings['extensions']);
             return array_map('trim', $extensions);
         }
