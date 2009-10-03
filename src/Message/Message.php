@@ -45,9 +45,6 @@ namespace spriebsch\PHPca;
  */
 class Message
 {
-    const ERROR = 0;
-    const WARNING = 1;
-
     /**
      * @var string
      */
