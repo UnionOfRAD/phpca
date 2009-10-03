@@ -321,7 +321,7 @@ class Application
      * @param string $fileOrDirectory     path to file or directory to check
      * @return object
      */
-    public function run($pathToPhpExecutable, $fileOrDirectory, Configuration $configuration = null, array $extensions = array('php'), $rules = array())
+    public function run($pathToPhpExecutable, $fileOrDirectory, Configuration $configuration = null)
     {
         if ($pathToPhpExecutable == '') {
             throw new Exception('No path to PHP executable specified');
@@ -329,10 +329,6 @@ class Application
 
         if ($fileOrDirectory == '') {
             throw new Exception('No file or directory to analyze');
-        }
-
-        if (sizeof($extensions) == 0) {
-            throw new Exception('No file extension(s) specified');
         }
 
         if (!is_null($configuration)) {
