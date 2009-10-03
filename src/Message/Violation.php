@@ -49,6 +49,12 @@ class Violation extends Message
 {
     protected $ruleName;
 
+    /**
+     * Sets the name of the rule that has triggered the violation.
+     *
+     * @param spriebsch\PHPca\Rule\Rule
+     * @return null
+     */
     public function setRule(\spriebsch\PHPca\Rule\Rule $rule)
     {
         $ruleNamespace = substr(\spriebsch\PHPca\Application::$ruleNamespace, 1);
