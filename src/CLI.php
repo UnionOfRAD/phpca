@@ -563,6 +563,8 @@ class CLI implements ProgressPrinterInterface
 
             $method = $this->parseCommandLine($arguments);
 
+            print 'Coding standard: ' . $this->codingStandard . PHP_EOL . PHP_EOL;
+
             $rules = $this->configuration->getRules();
 
             if (sizeof($rules) != 0) {
