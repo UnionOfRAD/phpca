@@ -167,22 +167,27 @@ class Application
         foreach ($rules as $rule) {
 
             $className = $this->toClassName($rule);
+            $baseName = str_replace(self::$ruleNamespace, '', $className);
 
-            if ($this->isRuleRequested($className)) {
-                if (!in_array($rule, $builtInRules)) {
-                    require_once $rule;
-                    if (!class_exists($className)) {
-                        throw new Exception('Additional rule ' . $rule . ' not found');
-                    }
-                }
-
-                $baseName = str_replace(self::$ruleNamespace, '', $className);
-
-                $ruleObject = new $className;
-                $ruleObject->configure($this->configuration->getSettings($baseName));
-
-                $result[] = $ruleObject;
+            if (!$this->isRuleRequested($className)) {
+                continue;
             }
+
+            if (!$this->configuration->hasSettings($baseName)) {
+                continue;
+            }
+
+            if (!in_array($rule, $builtInRules)) {
+                require_once $rule;
+                if (!class_exists($className)) {
+                    throw new Exception('Additional rule ' . $rule . ' not found');
+                }
+            }
+
+            $ruleObject = new $className;
+            $ruleObject->configure($this->configuration->getSettings($baseName));
+
+            $result[] = $ruleObject;
         }
 
         return $result;
