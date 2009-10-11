@@ -148,6 +148,7 @@ class Application
      * @param array of Rule names
      * @return array of Rule
      * @todo handle potential class name conflicts between built-in and custom rules
+     * @todo make requested rules override configuration
      */
     protected function loadRules(array $requestedRules = array())
     {
@@ -169,9 +170,9 @@ class Application
             $className = $this->toClassName($rule);
             $baseName = str_replace(self::$ruleNamespace, '', $className);
 
-            if (!$this->isRuleRequested($className)) {
-                continue;
-            }
+//            if (!$this->isRuleRequested($className)) {
+//                continue;
+//            }
 
             if (!$this->configuration->hasSettings($baseName)) {
                 continue;
