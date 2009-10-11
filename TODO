@@ -7,11 +7,11 @@ Roadmap (tasks listed in decreasing priority)
 * Port "interesting" rules from phpcs
 * write a source code highlighter that highlights violations in the source code and attaches the error message as popup
 * write output statistics that aggregate how often each rule has been violated (these are the rules you must teach the developers)
+* internally use realpath, allow for disabling rules for directories as well
 
 Rules to add (in no particular order, just a collection of ideas)
 
-* disallow PHP 4 style constructors (T)
-* no shutup operator (T)
+* disallow PHP 4 style constructors (methods inside a class that have the name of the class) (T)
 * No inline if (T)
 * Correct indentation
 * no trailing whitespace (T)
@@ -19,8 +19,6 @@ Rules to add (in no particular order, just a collection of ideas)
 * no brackets around return value
 * no deprecated PHPDoc tags (@access, ...)
 * one blank after comma in argument lists
-* consistently use echo or print -> no echo or print statements
-* no output (echo, print) in certain classes/directories
 * test method has @covers tag
 * all thrown exceptions are documented in docblocks
 * all parameters are documented in docblocks
@@ -31,9 +29,29 @@ Rules to add (in no particular order, just a collection of ideas)
 * disallow ereg + split
 * disallow access superglobals rule
 * disablow write to superglobals
-* no var_dump, no print_r
+* no print_r
 * call-time references (?)
 * FIX: make sure do ... while closing brace is at correct level
 * FIX: ${ token opens block level
 * disallow multiple comma-separated variable declarations (also for globals)
 * disallow $a = $b = $c statements
+* keywords (                T_CLASS,
+                T_INTERFACE,
+                T_EXTENDS,
+                T_IMPLEMENTS,
+                T_ABSTRACT,
+                T_FINAL,
+                T_VAR,
+                T_CONST,
+                array
+  are all lowercase
+* class/function/variable names capitalization
+* one blank line above docblock comments
+* docblock comments for member variables
+* check docblock star lines alignment
+* empty catch statements
+* all comments must be on new line
+* disallow T_INLINE_THEN
+* disallow trigger_error
+* warn when private/protected method is never called?
+* disallow interface without methods
