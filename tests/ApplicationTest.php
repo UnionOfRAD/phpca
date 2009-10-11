@@ -124,9 +124,9 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testRunCreatesErrorOnLintFail()
     {
-        $result = $this->application->run(trim(exec('which php')), __DIR__ . '/_testdata/Application/lint_fail');
+        $result = $this->application->run(trim(exec('which php')), __DIR__ . '/_testdata/lint_fail.php');
 
-        $this->assertTrue($result->hasLintError(__DIR__ . '/_testdata/Application/lint_fail/fail.php'));
+        $this->assertTrue($result->hasLintError(__DIR__ . '/_testdata/lint_fail.php'));
     }
 
     /**

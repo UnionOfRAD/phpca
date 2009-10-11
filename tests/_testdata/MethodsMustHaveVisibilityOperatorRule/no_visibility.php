@@ -6,7 +6,7 @@ class Test
     {
     }
 
-    protected b()
+    protected function b()
     {
     }
 

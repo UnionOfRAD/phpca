@@ -10,11 +10,11 @@ class Test
     {
     }
 
-    protected static b()
+    protected static function b()
     {
     }
 
-    private static c()
+    private static function c()
     {
     }
 
@@ -22,11 +22,11 @@ class Test
     {
     }
 
-    static protected e()
+    static protected function e()
     {
     }
 
-    static private f()
+    static private function f()
     {
     }
 
@@ -34,11 +34,11 @@ class Test
     {
     }
 
-    protected h()
+    protected function h()
     {
     }
 
-    private i()
+    private function i()
     {
     }
 }

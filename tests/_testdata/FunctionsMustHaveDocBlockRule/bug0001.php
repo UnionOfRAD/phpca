@@ -13,9 +13,7 @@ abstract class Test
     {
     }
 
-    abstract public function setB()
-    {
-    }
+    abstract public function setB();
 }
 
 /**

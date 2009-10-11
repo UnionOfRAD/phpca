@@ -130,7 +130,7 @@ class LinterTest extends \PHPUnit_Framework_TestCase
         $php = trim(exec('which php'));
         $linter = new Linter($php);
 
-        $this->assertFalse($linter->runLintCheck(__DIR__ . '/_testdata/Linter/fail.php'));
+        $this->assertFalse($linter->runLintCheck(__DIR__ . '/_testdata/lint_fail.php'));
     }
 
     /**
@@ -142,7 +142,7 @@ class LinterTest extends \PHPUnit_Framework_TestCase
     {
         $php = trim(exec('which php'));
         $linter = new Linter($php);
-        $linter->runLintCheck(__DIR__ . '/_testdata/Linter/fail.php');
+        $linter->runLintCheck(__DIR__ . '/_testdata/lint_fail.php');
 
         $this->assertContains('Parse error', $linter->getErrorMessages());
     }
