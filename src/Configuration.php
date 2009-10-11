@@ -71,6 +71,32 @@ class Configuration
     protected $rules = array();
 
     /**
+     * @var string
+     */
+    protected $basePath;
+
+    /**
+     * Sets the base path for all relative paths.
+     *
+     * @param string $basePath The base path
+     * @return null
+     */
+    public function setBasePath($basePath)
+    {
+        $this->basePath = $basePath;
+    }
+
+    /**
+     * Returns the base path.
+     *
+     * @return string
+     */
+    public function getBasePath()
+    {
+        return $this->basePath;
+    }
+
+    /**
      * Sets the standard settings read from an ini file.
      *
      * @param array $settings
@@ -147,6 +173,21 @@ class Configuration
         }
 
         return $this->extensions;
+    }
+
+    /**
+     * Returns the additional rule paths from the configuration file.
+     *
+     * @return array
+     */
+    public function getRulePaths()
+    {
+        if (!isset($this->settings['additional_rules'])) {
+            return array();
+        }
+
+        $paths = explode(',', $this->settings['additional_rules']);
+        return array_map('trim', $paths);
     }
 
     /**

@@ -116,7 +116,7 @@ class FunctionsMustHaveDocBlockRuleTest extends AbstractRuleTest
         $this->assertEquals(16, $violations[1]->getLine());
         $this->assertEquals(21, $violations[1]->getColumn());
 
-        $this->assertEquals(28, $violations[2]->getLine());
+        $this->assertEquals(26, $violations[2]->getLine());
         $this->assertEquals(1, $violations[2]->getColumn());
     }
 }

@@ -54,6 +54,9 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         Loader::init();
         Loader::registerPath(__DIR__ . '/../src');
 
+        $this->configuration = new Configuration();
+        $this->configuration->setBasePath(realpath(__DIR__ . '/..'));
+
         $this->application = new Application();
     }
 
@@ -67,8 +70,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetNumberOfFilesIsInitiallyZero()
     {
-        $application = new Application();
-        $this->assertEquals(0, $application->getNumberOfFiles());
+        $this->assertEquals(0, $this->application->getNumberOfFiles());
     }
 
     /**
@@ -80,12 +82,13 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testRunThrowsExceptionWhenNoPhpExecutableIsGiven()
     {
-        $application = new Application();
-        $application->run('', '');
+        $this->configuration->setConfiguration(parse_ini_file(__DIR__ . '/_testdata/pass.ini', true));
+
+        $this->application->run('', '', $this->configuration);
     }
 
     /**
-     * Does not specify a file or directory to analyze.
+     * Does not specify a parse_ini_file or directory to analyze.
      *
      * @covers spriebsch\PHPca\Application::run
      * @expectedException spriebsch\PHPca\Exception
@@ -96,7 +99,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Specifies a directory that contains no PHP files.
+     * Specifies a directory that contains no PHP parse_ini_files.
      *
      * @covers spriebsch\PHPca\Application::run
      * @expectedException spriebsch\PHPca\Exception
@@ -107,7 +110,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Specifies a non-existing file/directory to analyze.
+     * Specifies a non-existing parse_ini_file/directory to analyze.
      *
      * @covers spriebsch\PHPca\Application::run
      * @expectedException spriebsch\PHPca\Exception
@@ -118,7 +121,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Analyzes a file with a lint error.
+     * Analyzes a parse_ini_file with a lint error.
      *
      * @covers spriebsch\PHPca\Application::run
      */
@@ -130,47 +133,35 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Calls run() with a single file instead of a directory.
+     * Calls run() with a single parse_ini_file instead of a directory.
      *
      * @covers spriebsch\PHPca\Application::run
      */
     public function testRunAcceptsSingleFile()
     {
-        $this->application->addRulePath(__DIR__ . '/_testdata/Application/_rules/pass');
+        $this->configuration->setConfiguration(parse_ini_file(__DIR__ . '/_testdata/pass.ini', true));
 
-        $result = $this->application->run(trim(exec('which php')), __DIR__ . '/_testdata/Application/pass/pass.php');
+        $result = $this->application->run(trim(exec('which php')), __DIR__ . '/_testdata/Application/pass/pass.php', $this->configuration);
 
         $this->assertFalse($result->hasErrors());
     }
 
     /**
      * Registers a progress printer to make sure that it gets called
-     * after processing a file.
+     * after processing a parse_ini_file.
      *
      * @covers spriebsch\PHPca\Application::run
      */
     public function testRunNotifiesProgressPrinter()
     {
-        $this->application->addRulePath(__DIR__ . '/_testdata/Application/_rules/pass');
+        $this->configuration->setConfiguration(parse_ini_file(__DIR__ . '/_testdata/pass.ini', true));
 
         $mock = $this->getMock('spriebsch\PHPca\ProgressPrinterInterface', array('showProgress'));
         $mock->expects($this->once())->method('showProgress');
 
         $this->application->registerProgressPrinter($mock);
 
-        $result = $this->application->run(trim(exec('which php')), __DIR__ . '/_testdata/Application/pass');
-    }
-
-    /**
-     * Makes sure that at least one built-in rule reports a violation.
-     *
-     * @covers spriebsch\PHPca\Application::run
-     */
-    public function testRunEnforcesBuiltInRules()
-    {
-        $result = $this->application->run(trim(exec('which php')), __DIR__ . '/_testdata/Application/fail/fail.php');
-
-        $this->assertTrue($result->hasViolations());
+        $result = $this->application->run(trim(exec('which php')), __DIR__ . '/_testdata/Application/pass', $this->configuration);
     }
 
     /**
@@ -207,9 +198,9 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
      */
     public function testRunGeneratesRuleErrorOnExceptionInRule()
     {
-        $this->application->addRulePath(__DIR__ . '/_testdata/Application/_rules/fail');
+        $this->configuration->setConfiguration(parse_ini_file(__DIR__ . '/_testdata/fail.ini', true));
 
-        $result = $this->application->run(trim(exec('which php')), __DIR__ . '/_testdata/Application/pass/pass.php');
+        $result = $this->application->run(trim(exec('which php')), __DIR__ . '/_testdata/Application/pass/pass.php', $this->configuration);
         // $errors = $result->getViolations(__DIR__ . '/_testdata/Application/pass/pass.php');
 
         $this->assertTrue($result->hasRuleError(__DIR__ . '/_testdata/Application/pass/pass.php'));

@@ -183,7 +183,7 @@ class CLITest extends \PHPUnit_Framework_TestCase
      */
     public function testRunDisplayLintErrorWhenAnalyzingFilesWithLintErrors()
     {
-        $result = $this->runCLI(array('cli.php', '-p', trim(exec('which php')), __DIR__ . '/_testdata/Application/lint_fail'));
+        $result = $this->runCLI(array('cli.php', '-p', trim(exec('which php')), __DIR__ . '/_testdata/lint_fail.php'));
 
         $this->assertContains("\nE\n", $result);
         $this->assertContains('Parse error:', $result);

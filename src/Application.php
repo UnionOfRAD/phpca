@@ -159,13 +159,17 @@ class Application
             $this->requestedRules[] = '\\spriebsch\\PHPca\\Rule\\' . $rule . 'Rule';
         }
 
-        foreach ($this->rulePaths as $path) {
+        foreach ($this->configuration->getRulePaths() as $path) {
             $rules = array_merge($rules, $this->listFiles($path));
         }
 
         $result = array();
 
         foreach ($rules as $rule) {
+
+            if (substr($rule, -8) != 'Rule.php') {
+                continue;
+            }
 
             $className = $this->toClassName($rule);
             $baseName = str_replace(self::$ruleNamespace, '', $className);
@@ -220,6 +224,15 @@ class Application
         }
     }
 
+    protected function toAbsolutePath($path, $basePath)
+    {
+        if (substr($path, 0, 1) == '/') {
+            return $path;
+        }
+
+        return $basePath . '/' . $path;
+    }
+
     /**
      * Returns array of all .php filenames in given directory.
      * If $path points to a single file, we do not iterate.
@@ -229,6 +242,8 @@ class Application
      */
     public function listFiles($path, array $extensions = array('php'))
     {
+        $path = $this->toAbsolutePath($path, $this->configuration->getBasePath());
+
         if (!file_exists($path)) {
             throw new Exception($path . ' not found');
         }
