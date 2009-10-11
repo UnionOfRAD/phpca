@@ -9,6 +9,8 @@ additional rule directories = a, b, c
 
 disabled rules = a, b, c
 
+ignored files/directories = ...
+
 [Rule]
 
 level = warning ; violations are reported as warnings
