@@ -88,6 +88,13 @@ class Configuration
     protected $rules = array();
 
     /**
+     * Files to skip.
+     *
+     * @var array
+     */
+    protected $skipFiles = array();
+
+    /**
      * Sets the standard settings read from an ini file.
      *
      * @param array $settings
@@ -119,6 +126,11 @@ class Configuration
         if (isset($this->settings['additional_rules'])) {
             $paths = explode(',', $this->settings['additional_rules']);
             $this->rulePaths = array_map('trim', $paths);
+        }
+
+        if (isset($this->settings['skip'])) {
+            $files = explode(',', $this->settings['skip']);
+            $this->skipFiles = array_map('trim', $files);
         }
 
         $this->ruleSettings = array_replace($this->ruleSettings, $configuration);
@@ -250,6 +262,16 @@ class Configuration
     public function getRules()
     {
         return $this->rules;
+    }
+
+    /**
+     * Returns the list of files to skip.
+     *
+     * @return array
+     */
+    public function getSkipFiles()
+    {
+        return $this->skipFiles;
     }
 
     /**

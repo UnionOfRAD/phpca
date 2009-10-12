@@ -81,6 +81,13 @@ class Application
     protected $requestedRules = array();
 
     /**
+     * List of files to skip
+     *
+     * @var array
+     */
+    protected $skipFiles = array();
+
+    /**
      * Result object
      *
      * @var Result
@@ -155,6 +162,28 @@ class Application
         }
 
         return in_array($className, $this->requestedRules);
+    }
+
+    /**
+     * Checks whether this file should be skipped.
+     *
+     * @param string $file The filename
+     * @return bool
+     */
+    protected function isSkipped($file)
+    {
+        if (sizeof($this->skipFiles) == 0) {
+            $this->skipFiles = $this->configuration->getSkipFiles();
+            $this->skipFiles = array_map(array($this, 'toAbsolutePath'), $this->skipFiles);
+        }
+
+        foreach ($this->skipFiles as $skip) {
+            if ($file == $skip) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -360,16 +389,20 @@ class Application
             // even if it generates no message at all.
             $this->result->addFile($phpFile);
 
-            if ($linter->runLintCheck($phpFile)) {
-                $file = Tokenizer::tokenize($phpFile, file_get_contents($phpFile));
-
-                $this->result->addNamespaces($phpFile, $file->getNamespaces());
-                $this->result->addClasses($phpFile, $file->getClasses());
-                $this->result->addFunctions($phpFile, $file->getFunctions());
-
-                $this->enforceRules($phpFile, $file);
+            if ($this->isSkipped($phpFile)) {
+                $this->result->addMessage(new Skipped($phpFile, 'Skipped'));
             } else {
-                $this->result->addMessage(new LintError($phpFile, $linter->getErrorMessages()));
+                if ($linter->runLintCheck($phpFile)) {
+                    $file = Tokenizer::tokenize($phpFile, file_get_contents($phpFile));
+
+                    $this->result->addNamespaces($phpFile, $file->getNamespaces());
+                    $this->result->addClasses($phpFile, $file->getClasses());
+                    $this->result->addFunctions($phpFile, $file->getFunctions());
+
+                    $this->enforceRules($phpFile, $file);
+                } else {
+                    $this->result->addMessage(new LintError($phpFile, $linter->getErrorMessages()));
+                }
             }
 
             // Notify the progress printer that we have analyzed a file

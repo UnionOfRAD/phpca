@@ -349,6 +349,10 @@ class CLI implements ProgressPrinterInterface
      */
     protected function getProgressLetter($file, Result $result)
     {
+        if ($result->wasSkipped($file)) {
+            return 'S';
+        }
+
         if ($result->hasLintError($file)) {
             return 'E';
         }
@@ -519,30 +523,53 @@ class CLI implements ProgressPrinterInterface
         }
         print PHP_EOL . PHP_EOL;
 
-        if (!$this->result->hasErrors()) {
-            print 'OK';
-        } else {
+        if ($this->result->hasErrors()) {
             foreach($this->result->getFiles() as $file) {
-                if ($this->result->hasErrors($file)) {
-                    print $file . ':' . PHP_EOL;
+                if ($this->result->hasErrors($file) || $this->result->wasSkipped($file)) {
+                    print $file . ':';
+
+                    if ($this->result->wasSkipped($file)) {
+                        print ' Skipped' . PHP_EOL;
+                    }
+
                     if ($this->result->hasLintError($file)) {
                         // For lint errors, display original error message
-                        print $this->result->getLintError($file)->getMessage() . PHP_EOL;
+                        print PHP_EOL . $this->result->getLintError($file)->getMessage() . PHP_EOL . PHP_EOL;
                     }
 
                     foreach ($this->result->getViolations($file) as $error) {
                         // A "line number | column number | message" line
-                        print sprintf('%4u', $error->getLine()) . '|' . sprintf('%3u', $error->getColumn()) . '| ' . $error->getMessage() . PHP_EOL;
+                        print PHP_EOL . sprintf('%4u', $error->getLine()) . '|' . sprintf('%3u', $error->getColumn()) . '| ' . $error->getMessage();
                     }
+
+                    if ($this->result->hasViolations($file)) {
+                        print PHP_EOL;
+                    }
+
                     print PHP_EOL;
                 }
             }
 
             print 'FAIL';
+        } else {
+            if ($this->result->getNumberOfSkippedFiles() != 0) {
+                foreach ($this->result->getSkippedFiles() as $skippedFile) {
+                    print 'Skipped: ' . $skippedFile . PHP_EOL;
+                }
+
+                print PHP_EOL;
+            }
+
+            print 'OK';
         }
 
         print ' (';
         print $this->result->getNumberOfFiles() . ' files, ';
+
+        // only display skipped files in statistics if they occured
+        if ($this->result->getNumberOfSkippedFiles() > 0) {
+            print $this->result->getNumberOfSkippedFiles() . ' skipped, ';
+        }
 
         // only display lint errors in statistics if they occured
         if ($this->result->getNumberOfLintErrors() > 0) {

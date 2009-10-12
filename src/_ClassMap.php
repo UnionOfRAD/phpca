@@ -51,6 +51,7 @@ $_classMap = array(
 
     'spriebsch\PHPca\Message'                     => 'Message/Message.php',
     'spriebsch\PHPca\Violation'                   => 'Message/Violation.php',
+    'spriebsch\PHPca\Skipped'                     => 'Message/Skipped.php',
     'spriebsch\PHPca\LintError'                   => 'Message/LintError.php',
     'spriebsch\PHPca\RuleError'                   => 'Message/RuleError.php',
 

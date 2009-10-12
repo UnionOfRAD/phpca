@@ -80,6 +80,11 @@ class Result
     /**
      * @var int
      */
+    protected $globalSkippedCount = 0;
+
+    /**
+     * @var int
+     */
     protected $globalViolationCount = 0;
 
     /**
@@ -251,6 +256,11 @@ class Result
 
         $this->messages[$filename][] = $message;
 
+        if ($message instanceOf Skipped) {
+            $this->globalSkippedCount++;
+            $counted = true;
+        }
+
         if ($message instanceOf RuleError) {
             $this->globalRuleErrorCount++;
             $counted = true;
@@ -309,6 +319,16 @@ class Result
     }
 
     /**
+     * Returns the number skipped files.
+     *
+     * @return int
+     */
+    public function getNumberOfSkippedFiles()
+    {
+        return $this->globalSkippedCount;
+    }
+
+    /**
      * Returns the number of rule violations.
      * 
      * @return int
@@ -336,6 +356,27 @@ class Result
     public function getNumberOfRuleErrors()
     {
         return $this->globalRuleErrorCount;
+    }
+
+    /**
+     * Returns whether given file was skipped.
+     *
+     * @param string $file
+     * @return bool
+     */
+    public function wasSkipped($file)
+    {
+        if (!isset($this->messages[$file])) {
+            return false;
+        }
+
+        foreach ($this->messages[$file] as $message) {
+            if ($message instanceOf Skipped) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -420,6 +461,28 @@ class Result
         }
 
         usort($result, array($this, 'sortByLine'));
+
+        return $result;
+    }
+
+    /**
+     * Return array with all skipped files, or all violations for given filename.
+     *
+     * @return array
+     */
+    public function getSkippedFiles()
+    {
+        $result = array();
+
+        foreach ($this->messages as $file) {
+            foreach ($file as $message) {
+                if ($message instanceOf Skipped) {
+                    $result[] = $message->getFileName();
+                }
+            }
+        }
+
+        sort($result);
 
         return $result;
     }
