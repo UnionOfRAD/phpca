@@ -178,7 +178,19 @@ class Application
         }
 
         foreach ($this->skipFiles as $skip) {
+
+            // Exact match
             if ($file == $skip) {
+                return true;
+            }
+
+            // File match with wildcards
+            if (fnmatch($skip, $file)) {
+                return true;
+            }
+
+            // $file is a subdirectory of $skip
+            if (substr($file, 0, strlen($skip)) == $skip) {
                 return true;
             }
         }
