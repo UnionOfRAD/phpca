@@ -55,9 +55,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         Loader::registerPath(__DIR__ . '/../src');
 
         $this->configuration = new Configuration();
-        $this->configuration->setBasePath(realpath(__DIR__ . '/..'));
-
-        $this->application = new Application();
+        $this->application = new Application(getcwd());
     }
 
     protected function tearDown()
@@ -162,32 +160,6 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         $this->application->registerProgressPrinter($mock);
 
         $result = $this->application->run(trim(exec('which php')), __DIR__ . '/_testdata/Application/pass', $this->configuration);
-    }
-
-    /**
-     * Calls addRulePath with a non-existing path.
-     *
-     * @covers spriebsch\PHPca\Application::addRulePath
-     * @expectedException spriebsch\PHPca\Exception
-     */
-    public function testAddRulePathThrowsExceptionWhenPathDoesNotExist()
-    {
-        $this->application->addRulePath('does/not/exist');
-    }
-
-    /**
-     * Calls addRulePath twíce with the same path,
-     * and makes sure that the path is only added once.
-     *
-     * @covers spriebsch\PHPca\Application::addRulePath
-     * @covers spriebsch\PHPca\Application::getRulePaths
-     */
-    public function testAddRulePathAddsPathOnlyOnce()
-    {
-        $this->application->addRulePath(__DIR__ . '/_testdata/Application/_rules');
-        $this->application->addRulePath(__DIR__ . '/_testdata/Application/_rules');
-
-        $this->assertEquals(array(__DIR__ . '/_testdata/Application/_rules'), $this->application->getRulePaths());
     }
 
     /**

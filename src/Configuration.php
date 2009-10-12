@@ -68,33 +68,12 @@ class Configuration
     /**
      * @var array
      */
+    protected $rulePaths = array();
+
+    /**
+     * @var array
+     */
     protected $rules = array();
-
-    /**
-     * @var string
-     */
-    protected $basePath;
-
-    /**
-     * Sets the base path for all relative paths.
-     *
-     * @param string $basePath The base path
-     * @return null
-     */
-    public function setBasePath($basePath)
-    {
-        $this->basePath = $basePath;
-    }
-
-    /**
-     * Returns the base path.
-     *
-     * @return string
-     */
-    public function getBasePath()
-    {
-        return $this->basePath;
-    }
 
     /**
      * Sets the standard settings read from an ini file.
@@ -123,6 +102,11 @@ class Configuration
         if (isset($configuration['PHPca'])) {
             $this->settings = array_replace($this->settings, $configuration['PHPca']);
             unset($configuration['PHPca']);
+        }
+
+        if (isset($this->settings['additional_rules'])) {
+            $paths = explode(',', $this->settings['additional_rules']);
+            $paths = array_map('trim', $paths);
         }
 
         $this->ruleSettings = array_replace($this->ruleSettings, $configuration);
@@ -176,18 +160,35 @@ class Configuration
     }
 
     /**
+     * Sets the rule paths to load additional rules from.
+     *
+     * @param array $rulePaths Array of rule paths
+     * @return null
+     */
+    public function setRulePaths(array $rulePaths)
+    {
+        $this->rulePaths = $rulePaths;
+    }
+
+    /**
+     * Adds another path to load additional rules from.
+     *
+     * @param array $paths Rule paths
+     * @return null
+     */
+    public function addRulePath($path)
+    {
+        $this->rulePaths[] = $path;
+    }
+
+    /**
      * Returns the additional rule paths from the configuration file.
      *
      * @return array
      */
     public function getRulePaths()
     {
-        if (!isset($this->settings['additional_rules'])) {
-            return array();
-        }
-
-        $paths = explode(',', $this->settings['additional_rules']);
-        return array_map('trim', $paths);
+        return $this->rulePaths;
     }
 
     /**

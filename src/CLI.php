@@ -278,7 +278,7 @@ class CLI implements ProgressPrinterInterface
      */
     protected function printStandards()
     {
-        $application = new Application();
+        $application = new Application(getcwd());
         $standards = $application->listFiles(__DIR__ . '/Standard', array('ini'));
         sort($standards);
 
@@ -298,7 +298,7 @@ class CLI implements ProgressPrinterInterface
      */
     protected function printBuiltInRules()
     {
-        $application = new Application();
+        $application = new Application(getcwd());
         $rules = $application->listFiles(__DIR__ . '/Rule');
         sort($rules);
 
@@ -329,7 +329,7 @@ class CLI implements ProgressPrinterInterface
      */
     protected function analyzeFilesCommand()
     {
-        $application = new Application();
+        $application = new Application(getcwd());
         $application->registerProgressPrinter($this);
 
         $this->loadCodingStandard($this->codingStandard);

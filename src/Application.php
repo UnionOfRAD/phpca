@@ -60,13 +60,6 @@ class Application
     static public $ruleNamespace = '\\spriebsch\PHPca\\Rule\\';
 
     /**
-     * Additional paths to load rules from.
-     *
-     * @var array of string
-     */
-    protected $rulePaths = array();
-
-    /**
      * All Rule class instances.
      *
      * @var array of Rule
@@ -102,12 +95,20 @@ class Application
     protected $numberOfFiles = 0;
 
     /**
+     * Base path of all relative paths.
+     *
+     * @var string
+     */
+    protected $basePath;
+
+    /**
      * Constructs the object.
      *
      * @return null
      */
-    public function __construct()
+    public function __construct($basePath)
     {
+        $this->basePath = realpath($basePath);
         $this->configuration = new Configuration();
     }
 
@@ -224,13 +225,13 @@ class Application
         }
     }
 
-    protected function toAbsolutePath($path, $basePath)
+    protected function toAbsolutePath($path)
     {
         if (substr($path, 0, 1) == '/') {
             return $path;
         }
 
-        return $basePath . '/' . $path;
+        return $this->basePath . '/' . $path;
     }
 
     /**
@@ -242,7 +243,7 @@ class Application
      */
     public function listFiles($path, array $extensions = array('php'))
     {
-        $path = $this->toAbsolutePath($path, $this->configuration->getBasePath());
+        $path = $this->toAbsolutePath($path);
 
         if (!file_exists($path)) {
             throw new Exception($path . ' not found');
@@ -277,37 +278,6 @@ class Application
         }
 
         return $result;
-    }
-
-    /**
-     * Add a path to load rules from.
-     * No $_ClassMap is required in that directory since additional rules
-     * are not autoloaded.
-     * Note: All additional rules must be in spriebsch\PHPca\Rule namespace.
-     *
-     * @param string $path
-     * @return void
-     */
-    public function addRulePath($path)
-    {
-        if (!file_exists($path)) {
-            throw new Exception('The path ' . $path . ' does not exist');
-        }
-
-        // Make sure each item of the rule path is unique
-        if (!in_array($path, $this->rulePaths)) {
-            $this->rulePaths[] = $path;
-        }
-    }
-
-    /**
-     * Return the array of paths where additional rules are loaded from.
-     *
-     * @return array
-     */
-    public function getRulePaths()
-    {
-        return $this->rulePaths;
     }
 
     /**
