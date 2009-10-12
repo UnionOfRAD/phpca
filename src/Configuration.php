@@ -46,31 +46,43 @@ namespace spriebsch\PHPca;
 class Configuration
 {
     /**
+     * Global configuration settings.
+     *
      * @var array
      */
     protected $settings = array();
 
     /**
+     * Configuration settings for individual rules.
+     *
      * @var array
      */
     protected $ruleSettings = array();
 
     /**
+     * The coding standard to enforce.
+     *
      * @var string
      */
     protected $codingStandard;
 
     /**
+     * File extensions to analyze.
+     *
      * @var array
      */
     protected $extensions = array('php');
 
     /**
+     * Additional paths to load rules from.
+     *
      * @var array
      */
     protected $rulePaths = array();
 
     /**
+     * Rules to enforce.
+     *
      * @var array
      */
     protected $rules = array();
@@ -136,12 +148,23 @@ class Configuration
     /**
      * Sets the file extensions to analyze.
      *
-     * @param array $extensions
+     * @param array $extensions Array of file extensions
      * @return null
      */
     public function setExtensions(array $extensions)
     {
         $this->extensions = $extensions;
+    }
+
+    /**
+     * Adds a file extensions to analyze.
+     *
+     * @param string $extension File extension
+     * @return null
+     */
+    public function addtExtension($extension)
+    {
+        $this->extensions[] = $extension;
     }
 
     /**
@@ -206,6 +229,17 @@ class Configuration
         }
 
         $this->rules = $rules;
+    }
+
+    /**
+     * Add rule to enforce.
+     *
+     * @param string $rule
+     * @return null
+     */
+    public function addRule($rule)
+    {
+        $this->rules[] = $rule;
     }
 
     /**
