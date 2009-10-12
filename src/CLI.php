@@ -150,11 +150,12 @@ class CLI implements ProgressPrinterInterface
     /**
      * Constructs the object.
      *
+     * @param string $basePath The base path
      * @return null
      */
-    public function __construct()
+    public function __construct($basePath)
     {
-        $this->configuration = new Configuration();
+        $this->configuration = new Configuration($basePath);
     }
 
     /**

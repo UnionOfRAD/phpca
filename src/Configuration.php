@@ -95,6 +95,43 @@ class Configuration
     protected $skipFiles = array();
 
     /**
+     * Constructs the object.
+     *
+     * @param string $basePath
+     * @return null
+     */
+    public function __construct($basePath)
+    {
+        $this->basePath = realpath($basePath);
+    }
+
+    /**
+     * Converts paths to absolute paths.
+     *
+     * @param string $path Path
+     * @return string
+     * @todo fix for Windows
+     */
+    protected function toAbsolutePath($path)
+    {
+        if (substr($path, 0, 1) == '/') {
+            return $path;
+        }
+
+        return $this->basePath . '/' . $path;
+    }
+
+    /**
+     * Returns the base path.
+     *
+     * @return null
+     */
+    public function getBasePath()
+    {
+        return $this->basePath;
+    }
+
+    /**
      * Sets the standard settings read from an ini file.
      *
      * @param array $settings
@@ -297,7 +334,18 @@ class Configuration
             return array();
         }
 
-        return $this->ruleSettings[$rule];
+        $settings = $this->ruleSettings[$rule];
+
+        if (isset($settings['skip'])) {
+            $settings['skip'] = explode(',', $settings['skip']);
+            $settings['skip'] = array_map('trim', $settings['skip']);
+
+            foreach ($settings['skip'] as &$path) {
+                $path = $this->toAbsolutePath($path);
+            }
+        }
+
+        return $settings;
     }
 
     /**

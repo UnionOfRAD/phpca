@@ -58,7 +58,7 @@ class CLITest extends \PHPUnit_Framework_TestCase
         Loader::registerPath(__DIR__ . '/../src');
         Loader::registerPath(__DIR__ . '/_testdata/CLI');
 
-        $this->cli = new TestCLISubclass();
+        $this->cli = new TestCLISubclass(getcwd());
     }
 
     protected function tearDown()

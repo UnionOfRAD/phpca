@@ -144,11 +144,6 @@ abstract class Rule
     public function configure(array $settings)
     {
         $this->settings = $settings;
-
-        if (isset($this->settings['skip'])) {
-            $this->settings['skip'] = explode(',', $this->settings['skip']);
-            $this->settings['skip'] = array_map('trim', $this->settings['skip']);
-        }
     }
 
     /**

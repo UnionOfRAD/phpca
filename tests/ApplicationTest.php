@@ -54,7 +54,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase
         Loader::init();
         Loader::registerPath(__DIR__ . '/../src');
 
-        $this->configuration = new Configuration();
+        $this->configuration = new Configuration(getcwd());
         $this->application = new Application(getcwd());
     }
 

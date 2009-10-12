@@ -9,7 +9,7 @@ additional rule directories = a, b, c
 
 disabled rules = a, b, c
 
-ignored files/directories = ...
+skip = tests/_testdata/Rule
 
 [Rule]
 

@@ -128,7 +128,7 @@ class Application
     public function __construct($basePath)
     {
         $this->basePath = realpath($basePath);
-        $this->configuration = new Configuration();
+        $this->configuration = new Configuration($this->basePath);
     }
 
     /**
