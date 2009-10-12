@@ -106,7 +106,7 @@ class Configuration
 
         if (isset($this->settings['additional_rules'])) {
             $paths = explode(',', $this->settings['additional_rules']);
-            $paths = array_map('trim', $paths);
+            $this->rulePaths = array_map('trim', $paths);
         }
 
         $this->ruleSettings = array_replace($this->ruleSettings, $configuration);

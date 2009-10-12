@@ -60,6 +60,13 @@ class Application
     static public $ruleNamespace = '\\spriebsch\PHPca\\Rule\\';
 
     /**
+     * Base path of all relative paths.
+     *
+     * @var string
+     */
+    protected $basePath;
+
+    /**
      * All Rule class instances.
      *
      * @var array of Rule
@@ -95,11 +102,16 @@ class Application
     protected $numberOfFiles = 0;
 
     /**
-     * Base path of all relative paths.
+     * Converts a rule filename to a rule classname
+     * by removing the .php extension and prepending the namespace.
      *
-     * @var string
+     * @param string $fileName The file name
+     * @return string The rule name
      */
-    protected $basePath;
+    static protected function toClassName($fileName)
+    {
+        return self::$ruleNamespace . substr(basename($fileName), 0, -4);
+    }
 
     /**
      * Constructs the object.
@@ -113,15 +125,19 @@ class Application
     }
 
     /**
-     * Converts a rule filename to a rule classname
-     * by removing the .php extension and prepending the namespace.
+     * Converts paths to absolute paths.
      *
-     * @param string $fileName The file name
-     * @return string The rule name
+     * @param string $path Path
+     * @return string
+     * @todo fix for Windows
      */
-    protected function toClassName($fileName)
+    protected function toAbsolutePath($path)
     {
-        return '\\spriebsch\\PHPca\\Rule\\' . substr(basename($fileName), 0, -4);
+        if (substr($path, 0, 1) == '/') {
+            return $path;
+        }
+
+        return $this->basePath . '/' . $path;
     }
 
     /**
@@ -172,7 +188,7 @@ class Application
                 continue;
             }
 
-            $className = $this->toClassName($rule);
+            $className = self::toClassName($rule);
             $baseName = str_replace(self::$ruleNamespace, '', $className);
 
 //            if (!$this->isRuleRequested($className)) {
@@ -223,15 +239,6 @@ class Application
                 $this->result->addMessage(new RuleError($fileName, 'Rule ' . get_class($rule) . ': ' . $e->getMessage()));
             }
         }
-    }
-
-    protected function toAbsolutePath($path)
-    {
-        if (substr($path, 0, 1) == '/') {
-            return $path;
-        }
-
-        return $this->basePath . '/' . $path;
     }
 
     /**
