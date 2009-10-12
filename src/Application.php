@@ -50,7 +50,7 @@ class Application
      *
      * @var string
      */
-    static public $version = '0.4.5';
+    static public $version = '0.5.0';
 
     /**
      * Rule namespace
