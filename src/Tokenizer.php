@@ -263,7 +263,11 @@ class Tokenizer
                 if (substr($class, 0, 1) == '\\' || $namespace == '\\') {
                     $classname = $class;
                 } else {
-                    $classname = $namespace . '\\' . $class;
+                    if ($class != '') {
+                        $classname = $namespace . '\\' . $class;
+                    } else {
+                        $classname = '';
+                    }
                 }
                 $tokenObj->setClass($classname);
             }

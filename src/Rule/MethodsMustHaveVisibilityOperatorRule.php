@@ -79,7 +79,7 @@ class MethodsMustHaveVisibilityOperatorRule extends Rule
 
             try {
 
-                if ($functionToken->getClass() == '' && $functionToken->getInterface() == '') {
+                if ($functionToken->getClass() == '' || $functionToken->getInterface() == '') {
                     $this->file->next();
                     continue;
                 }
