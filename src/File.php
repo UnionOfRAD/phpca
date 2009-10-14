@@ -311,6 +311,14 @@ class File extends \SplDoublyLinkedList implements \SeekableIterator
     }
 
 
+    /**
+     * Seek to token ID, returning true on success
+     * and false if the token is not found.
+     *
+     * @param int $id The token ID
+     * @param bool $backwards Whether to search forwards or backwards
+     * @todo make this the regular seek method
+     */
     public function trySeekTokenId($id, $backwards = false)
     {
         $currentPosition = $this->key();
