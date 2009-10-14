@@ -59,6 +59,11 @@ class File extends \SplQueue implements \SeekableIterator
     protected $sourceCode;
 
     /**
+     * @var string
+     */
+    protected $toString;
+
+    /**
      * Constructs the File object
      *
      * We set the file name and source code to keep File independent
@@ -77,11 +82,16 @@ class File extends \SplQueue implements \SeekableIterator
 
     /**
      * Returns string representation of the object.
+     * Result is cached since __toString() is called often.
      *
      * @return string
      */
     public function __toString()
     {
+        if ($this->toString !== null) {
+            return $this->toString;
+        }
+
         $result = array();
 
         $this->rewind();
@@ -90,7 +100,10 @@ class File extends \SplQueue implements \SeekableIterator
             $this->next();
         }
 
-        return implode(' ', $result);
+        $result = implode(' ', $result);
+        $this->toString = $result;
+
+        return $result;
     }
 
     /**
@@ -208,6 +221,8 @@ class File extends \SplQueue implements \SeekableIterator
      */
     public function add(Token $token)
     {
+        $this->toString = null;
+
         parent::enqueue($token);
     }
 
