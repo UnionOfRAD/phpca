@@ -42,4 +42,8 @@ class Test
     {
     }
 }
+
+function also_ignored()
+{
+}
 ?>

@@ -278,7 +278,11 @@ class Tokenizer
                 if (substr($interface, 0, 1) == '\\' || $namespace == '\\') {
                     $interfaceName = $interface;
                 } else {
-                    $interfaceName = $namespace . '\\' . $interface;
+                    if ($interface != '') {
+                        $interfaceName = $namespace . '\\' . $interface;
+                    } else {
+                        $interfaceName = '';
+                    }
                 }
                 $tokenObj->setInterface($interfaceName);
             }

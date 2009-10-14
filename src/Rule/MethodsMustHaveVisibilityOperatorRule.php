@@ -70,6 +70,11 @@ class MethodsMustHaveVisibilityOperatorRule extends Rule
             try {
                 $this->file->seekTokenId(T_FUNCTION);
                 $functionToken = $this->file->current();
+
+                if ($functionToken->getClass() == '' && $functionToken->getInterface() == '') {
+                    $this->file->next();
+                    continue;
+                }
             }
 
             catch (\spriebsch\PHPca\Exception $e) {
@@ -78,11 +83,6 @@ class MethodsMustHaveVisibilityOperatorRule extends Rule
             }
 
             try {
-
-                if ($functionToken->getClass() == '' || $functionToken->getInterface() == '') {
-                    $this->file->next();
-                    continue;
-                }
 
                 // Skip T_WHITESPACE
                 $this->file->prev();

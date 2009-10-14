@@ -1,5 +1,9 @@
 <?php
 
+function ignored()
+{
+}
+
 class Test
 {
     function a()
@@ -13,5 +17,9 @@ class Test
     function c()
     {
     }
+}
+
+function also_ignored()
+{
 }
 ?>
