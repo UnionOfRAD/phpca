@@ -65,9 +65,9 @@ class IndentationRuleTest extends AbstractRuleTest
         $this->assertTrue($this->result->hasViolations());
         $this->assertEquals(3, $this->result->getNumberOfViolations());
 
-        $this->assertEquals(8, $violations[0]->getLine());
-        $this->assertEquals(10, $violations[1]->getLine());
-        $this->assertEquals(16, $violations[2]->getLine());
+        $this->assertEquals(5, $violations[0]->getLine());
+        $this->assertEquals(7, $violations[1]->getLine());
+        $this->assertEquals(10, $violations[2]->getLine());
     }
 
     /**
@@ -84,15 +84,34 @@ class IndentationRuleTest extends AbstractRuleTest
 
         $this->assertTrue($this->result->hasViolations());
 
-        $this->assertEquals(7, $this->result->getNumberOfViolations());
+        $this->assertEquals(6, $this->result->getNumberOfViolations());
 
         $this->assertEquals(3, $violations[0]->getLine());
         $this->assertEquals(4, $violations[1]->getLine());
         $this->assertEquals(5, $violations[2]->getLine());
-        $this->assertEquals(8, $violations[3]->getLine());
-        $this->assertEquals(9, $violations[4]->getLine());
-        $this->assertEquals(10, $violations[5]->getLine());
-        $this->assertEquals(11, $violations[6]->getLine());
+        $this->assertEquals(6, $violations[3]->getLine());
+        $this->assertEquals(7, $violations[4]->getLine());
+        $this->assertEquals(8, $violations[5]->getLine());
+    }
+
+    /**
+     * @covers \spriebsch\PHPca\Rule\IndentationRule
+     */
+    public function testDetectsWrongDocBlockIndentation()
+    {
+        $this->init(__DIR__ . '/../_testdata/IndentationRule/docblock.php');
+
+        $rule = new IndentationRule();
+        $rule->check($this->file, $this->result);
+
+        $violations = $this->result->getViolations('test.php');
+
+        $this->assertTrue($this->result->hasViolations());
+        $this->assertEquals(3, $this->result->getNumberOfViolations());
+
+        $this->assertEquals(3, $violations[0]->getLine());
+        $this->assertEquals(10, $violations[1]->getLine());
+        $this->assertEquals(10, $violations[2]->getLine());
     }
 }
 ?>

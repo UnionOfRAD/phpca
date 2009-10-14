@@ -48,12 +48,50 @@ class IndentationRule extends Rule
     protected $indentation = '    ';
 
     /**
+     * Checks indentation of a docblock.
+     *
+     * @param spriebsch\PHPca\Token The docblock zoken
+     * @return null
+     */
+    protected function checkDocBlock(\spriebsch\PHPca\Token $token)
+    {
+        if ($token->getId() != T_DOC_COMMENT) {
+            throw new Exception('Token ' . $token->getName() . ' is not a docblock');
+        }
+
+        // normalize line endings, create array of docblock lines
+        $lines = explode("\n", str_replace("\r", '', $token->getText()));
+
+        // if docblock is empty, we are done.
+        if (sizeof($lines) == 0) {
+            return;
+        }
+
+        // first docblock line has been taken care of by the
+        // general indentation check below
+
+        // all other lines of the docblock must start with one space
+        for ($i = 1; $i < sizeof($lines); $i++) {
+            if (strlen(ltrim($lines[$i])) != strlen($lines[$i]) - 1) {
+                $this->addViolation('wrong indentation in line ' . $i . ' of docblock', $token);
+            }
+        }
+    }
+
+    /**
      * Performs the rule check.
      *
      * @returns null
      */
     protected function doCheck()
     {
+        while ($this->file->trySeekTokenId(T_DOC_COMMENT)) {
+            $this->checkDocBlock($this->file->current());
+            $this->file->next();
+        }
+
+        $this->file->rewind();
+
         while (true) {
 
             $token = $this->file->current();
