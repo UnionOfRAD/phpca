@@ -83,6 +83,7 @@ $_classMap = array(
     'spriebsch\PHPca\Rule\NoShutupOperatorsRule'                => 'Rule/NoShutupOperatorsRule.php',
     'spriebsch\PHPca\Rule\NoInlineHtmlRule'                     => 'Rule/NoInlineHtmlRule.php',
     'spriebsch\PHPca\Rule\NoVariableVariablesRule'              => 'Rule/NoVariableVariablesRule.php',
+    'spriebsch\PHPca\Rule\IndentationRule'                      => 'Rule/IndentationRule.php',
 
     'spriebsch\PHPca\Helper'                      => 'Helper.php',
 

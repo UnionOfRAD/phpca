@@ -247,6 +247,29 @@ class File extends \SplDoublyLinkedList implements \SeekableIterator
     }
 
     /**
+     * Seek to next line.
+     *
+     * @return null
+     * @todo how to deal with multiline tokens? probably not at all?
+     */
+    public function seekNextLine()
+    {
+        $line = $this->current()->getLine();
+
+        while (true) {
+            $this->next();
+
+            if (!$this->valid()) {
+                return false;
+            }
+
+            if ($this->current()->getLine() > $line) {
+                return true;
+            }
+        }
+    }
+
+    /**
      * Seek to a class.
      * Search always starts from the beginning.
      *
