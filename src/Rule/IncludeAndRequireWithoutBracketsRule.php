@@ -38,8 +38,6 @@
 namespace spriebsch\PHPca\Rule;
 
 use spriebsch\PHPca\Finder;
-use spriebsch\PHPca\Error;
-use spriebsch\PHPca\Warning;
 
 use spriebsch\PHPca\Pattern\Pattern;
 

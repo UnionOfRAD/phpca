@@ -55,13 +55,6 @@ class FunctionsMustHaveDocBlockRule extends Rule
      */
     protected function doCheck()
     {
-        // If there are no T_FUNCTION tokens, we are done.
-        if (!Finder::containsToken($this->file, T_FUNCTION)) {
-            return;
-        }
-
-        $this->file->rewind();
-
         while (true) {
 
             try {
