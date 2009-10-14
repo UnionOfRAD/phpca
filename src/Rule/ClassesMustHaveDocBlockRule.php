@@ -55,13 +55,6 @@ class ClassesMustHaveDocBlockRule extends Rule
      */
     protected function doCheck()
     {
-        // If there are no T_CLASS tokens, we are done.
-        if (!Finder::containsToken($this->file, T_CLASS)) {
-            return;
-        }
-
-        $this->file->rewind();
-
         while (true) {
 
             try {

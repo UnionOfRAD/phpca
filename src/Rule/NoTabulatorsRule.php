@@ -37,10 +37,6 @@
 
 namespace spriebsch\PHPca\Rule;
 
-use spriebsch\PHPca\Finder;
-use spriebsch\PHPca\Error;
-use spriebsch\PHPca\Warning;
-
 /**
  * No tabulator rule. Makes sure that only blanks are used for indentation.
  *
@@ -56,10 +52,12 @@ class NoTabulatorsRule extends Rule
      */
     protected function doCheck()
     {
-        foreach (Finder::findToken($this->file, T_WHITESPACE) as $token) {
+        while ($this->file->trySeekTokenId(T_WHITESPACE)) {
+            $token = $this->file->current();
             if (false !== strstr($token->getText(), "\t")) {
                 $this->addViolation('Tabulator (\t) character', $token);
             }
+            $this->file->next();
         }
     }
 }

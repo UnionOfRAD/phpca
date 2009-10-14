@@ -37,10 +37,6 @@
 
 namespace spriebsch\PHPca\Rule;
 
-use spriebsch\PHPca\Finder;
-use spriebsch\PHPca\Error;
-use spriebsch\PHPca\Warning;
-
 /**
  * No shutup operator rule.
  *
@@ -56,8 +52,9 @@ class NoShutupOperatorsRule extends Rule
      */
     protected function doCheck()
     {
-        foreach (Finder::findToken($this->file, T_AT) as $token) {
-            $this->addViolation('shutup operator', $token);
+        while ($this->file->trySeekTokenId(T_AT)) {
+            $this->addViolation('shutup operator', $this->file->current());
+            $this->file->next();
         }
     }
 }

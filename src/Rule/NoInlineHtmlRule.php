@@ -37,10 +37,6 @@
 
 namespace spriebsch\PHPca\Rule;
 
-use spriebsch\PHPca\Finder;
-use spriebsch\PHPca\Error;
-use spriebsch\PHPca\Warning;
-
 /**
  * No inline HTML rule.
  *
@@ -56,8 +52,9 @@ class NoInlineHtmlRule extends Rule
      */
     protected function doCheck()
     {
-        foreach (Finder::findToken($this->file, T_INLINE_HTML) as $token) {
-            $this->addViolation('inline HTML', $token);
+        while ($this->file->trySeekTokenId(T_INLINE_HTML)) {
+            $this->addViolation('inline HTML', $this->file->current());
+            $this->file->next();
         }
     }
 }

@@ -56,8 +56,9 @@ class NoGotoStatementsRule extends Rule
      */
     protected function doCheck()
     {
-        foreach (Finder::findToken($this->file, T_GOTO) as $token) {
-            $this->addViolation('goto statement', $token);
+        while ($this->file->trySeekTokenId(T_GOTO)) {
+            $this->addViolation('goto statement', $this->file->current());
+            $this->file->next();
         }
     }
 }

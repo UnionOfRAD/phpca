@@ -37,10 +37,6 @@
 
 namespace spriebsch\PHPca\Rule;
 
-use spriebsch\PHPca\Finder;
-use spriebsch\PHPca\Error;
-use spriebsch\PHPca\Warning;
-
 /**
  * No var keywords rule.
  *
@@ -56,8 +52,9 @@ class NoVarKeywordsRule extends Rule
      */
     protected function doCheck()
     {
-        foreach (Finder::findToken($this->file, T_VAR) as $token) {
-            $this->addViolation('var keyword', $token);
+        while ($this->file->trySeekTokenId(T_VAR)) {
+            $this->addViolation('var keyword', $this->file->current());
+            $this->file->next();
         }
     }
 }

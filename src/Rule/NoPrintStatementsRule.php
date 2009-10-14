@@ -37,10 +37,6 @@
 
 namespace spriebsch\PHPca\Rule;
 
-use spriebsch\PHPca\Finder;
-use spriebsch\PHPca\Error;
-use spriebsch\PHPca\Warning;
-
 /**
  * Finds print statements.
  *
@@ -56,8 +52,9 @@ class NoPrintStatementsRule extends Rule
      */
     protected function doCheck()
     {
-        foreach (Finder::findToken($this->file, T_PRINT) as $token) {
-            $this->addViolation('print statement', $token);
+        while ($this->file->trySeekTokenId(T_PRINT)) {
+            $this->addViolation('print statement', $this->file->current());
+            $this->file->next();
         }
     }
 }

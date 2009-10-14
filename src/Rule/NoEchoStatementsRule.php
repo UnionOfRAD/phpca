@@ -37,10 +37,6 @@
 
 namespace spriebsch\PHPca\Rule;
 
-use spriebsch\PHPca\Finder;
-use spriebsch\PHPca\Error;
-use spriebsch\PHPca\Warning;
-
 /**
  * Finds echo statements.
  *
@@ -56,8 +52,9 @@ class NoEchoStatementsRule extends Rule
      */
     protected function doCheck()
     {
-        foreach (Finder::findToken($this->file, T_ECHO) as $token) {
-            $this->addViolation('echo statement', $token);
+        while ($this->file->trySeekTokenId(T_ECHO)) {
+            $this->addViolation('echo statement', $this->file->current());
+            $this->file->next();
         }
     }
 }

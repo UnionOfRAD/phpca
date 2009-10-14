@@ -37,10 +37,6 @@
 
 namespace spriebsch\PHPca\Rule;
 
-use spriebsch\PHPca\Finder;
-use spriebsch\PHPca\Error;
-use spriebsch\PHPca\Warning;
-
 /**
  * No global statements rule.
  *
@@ -56,8 +52,9 @@ class NoGlobalStatementsRule extends Rule
      */
     protected function doCheck()
     {
-        foreach (Finder::findToken($this->file, T_GLOBAL) as $token) {
-            $this->addViolation('global statement', $token);
+        while ($this->file->trySeekTokenId(T_GLOBAL)) {
+            $this->addViolation('global statement', $this->file->current());
+            $this->file->next();
         }
     }
 }

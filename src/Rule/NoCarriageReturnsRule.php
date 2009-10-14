@@ -37,12 +37,8 @@
 
 namespace spriebsch\PHPca\Rule;
 
-use spriebsch\PHPca\Finder;
-use spriebsch\PHPca\Error;
-use spriebsch\PHPca\Warning;
-
 /**
- * No tabulator rule. Makes sure that only blanks are used for indentation.
+ * No carriage return rule. Complains about Windows line endings.
  *
  * @author     Stefan Priebsch <stefan@priebsch.de>
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
@@ -56,10 +52,12 @@ class NoCarriageReturnsRule extends Rule
      */
     protected function doCheck()
     {
-        foreach (Finder::findToken($this->file, T_WHITESPACE) as $token) {
+        while ($this->file->trySeekTokenId(T_WHITESPACE)) {
+            $token = $this->file->current();
             if (false !== strstr($token->getText(), "\r")) {
                 $this->addViolation('Carriage return (\r) character', $token);
             }
+            $this->file->next();
         }
     }
 }

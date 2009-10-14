@@ -59,9 +59,14 @@ class NoAlternativeSyntaxStatementsRule extends Rule
     protected function doCheck()
     {
         foreach ($this->forbiddenTokens as $forbiddenToken) {
-            foreach (Finder::findToken($this->file, $forbiddenToken) as $token) {
+
+            while ($this->file->trySeekTokenId($forbiddenToken)) {
+                $token = $this->file->current();
                 $this->addViolation('alternative syntax ' . str_replace('end', '', trim($token->getText())) . '/' . trim($token->getText()), $token);
+                $this->file->next();
             }
+
+            $this->file->rewind();
         }
     }
 }

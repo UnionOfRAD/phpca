@@ -37,15 +37,8 @@
 
 namespace spriebsch\PHPca\Rule;
 
-use spriebsch\PHPca\Finder;
-use spriebsch\PHPca\Error;
-use spriebsch\PHPca\Warning;
-
 /**
- * Make sure that code contains no var_dump() statements        if ($token->getId() != T_CLOSE_TAG) {
-//            $this->addViolation('File does not end with PHP close tag', $token);
-//        }
-
+ * Make sure that code contains no var_dump() statements.
  *
  * @author     Stefan Priebsch <stefan@priebsch.de>
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
@@ -59,10 +52,12 @@ class NoVarDumpStatementsRule extends Rule
      */
     protected function doCheck()
     {
-        foreach (Finder::findToken($this->file, T_STRING) as $token) {
+        while ($this->file->trySeekTokenId(T_STRING)) {
+            $token = $this->file->current();
             if ($token->getText() == 'var_dump') {
                 $this->addViolation('var_dump() statement', $token);
             }
+            $this->file->next();
         }
     }
 }

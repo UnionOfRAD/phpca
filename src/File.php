@@ -287,6 +287,22 @@ class File extends \SplDoublyLinkedList implements \SeekableIterator
         throw new Exception('No token ' . $token->getName() . ' found');
     }
 
+
+    public function trySeekTokenId($id, $backwards = false)
+    {
+        $currentPosition = $this->key();
+
+        try {
+            $this->seekTokenId($id, $backwards);
+            return true;
+        }
+
+        catch (Exception $e) {
+            $this->seek($currentPosition);
+            return false;
+        }
+    }
+
     /**
      * Seek to the next token $id. Seeking starts from current element.
      * If the current token has given ID, we do not seek to the next token of

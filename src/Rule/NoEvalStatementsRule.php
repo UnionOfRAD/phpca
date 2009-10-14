@@ -37,10 +37,6 @@
 
 namespace spriebsch\PHPca\Rule;
 
-use spriebsch\PHPca\Finder;
-use spriebsch\PHPca\Error;
-use spriebsch\PHPca\Warning;
-
 /**
  * No eval statements rule.
  *
@@ -56,8 +52,9 @@ class NoEvalStatementsRule extends Rule
      */
     protected function doCheck()
     {
-        foreach (Finder::findToken($this->file, T_EVAL) as $token) {
-            $this->addViolation('eval statement', $token);
+        while ($this->file->trySeekTokenId(T_EVAL)) {
+            $this->addViolation('eval statement', $this->file->current());
+            $this->file->next();
         }
     }
 }
