@@ -49,6 +49,13 @@ use spriebsch\PHPca\Pattern\Pattern;
  */
 class IncludeAndRequireWithoutBracketsRule extends Rule
 {
+    protected $disallowedTokens = array(
+        T_INCLUDE      => 'include statement with bracket',
+        T_INCLUDE_ONCE => 'include_once statement with bracket',
+        T_REQUIRE      => 'require statement with bracket',
+        T_REQUIRE_ONCE => 'require_once statement with bracket',
+    );
+
     /**
      * Performs the rule check.
      *
@@ -56,44 +63,23 @@ class IncludeAndRequireWithoutBracketsRule extends Rule
      */
     protected function doCheck()
     {
-        while ($this->file->trySeekTokenId(T_INCLUDE)) {
-            $this->file->next();
-            $token = $this->file->current();
+        foreach ($this->disallowedTokens as $disallowedToken => $message) {
 
-            if ($token->getId() == T_WHITESPACE) {
+            while ($this->file->trySeekTokenId($disallowedToken)) {
                 $this->file->next();
                 $token = $this->file->current();
+
+                if ($token->getId() == T_WHITESPACE) {
+                    $this->file->next();
+                    $token = $this->file->current();
+                }
+
+                if ($token->getId() == T_OPEN_BRACKET) {
+                    $this->addViolation($message, $token);
+                }
             }
 
-            if ($token->getId() == T_OPEN_BRACKET) {
-                $this->addViolation('include statement with bracket', $token);
-            }
-        }
-
-        $this->file->rewind();
-
-        $pattern = new Pattern();
-        $pattern->token(T_REQUIRE)
-                ->token(T_OPEN_BRACKET);
-
-        foreach (Finder::findPattern($this->file, $pattern) as $token) {
-                $this->addViolation('require statement with bracket', $token);
-        }
-
-        $pattern = new Pattern();
-        $pattern->token(T_INCLUDE_ONCE)
-                ->token(T_OPEN_BRACKET);
-
-        foreach (Finder::findPattern($this->file, $pattern) as $token) {
-                $this->addViolation('include_once statement with bracket', $token);
-        }
-
-        $pattern = new Pattern();
-        $pattern->token(T_REQUIRE_ONCE)
-                ->token(T_OPEN_BRACKET);
-
-        foreach (Finder::findPattern($this->file, $pattern) as $token) {
-                $this->addViolation('require_once statement with bracket', $token);
+            $this->file->rewind();
         }
     }
 }
