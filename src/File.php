@@ -46,7 +46,7 @@ namespace spriebsch\PHPca;
  * @todo clone sub-queue with tokens of a class/function/block?
  * @todo methods to seek to namespace, class or function
  */
-class File extends \SplQueue implements \SeekableIterator
+class File extends \SplDoublyLinkedList implements \SeekableIterator
 {
     /**
      * @var string
@@ -223,7 +223,7 @@ class File extends \SplQueue implements \SeekableIterator
     {
         $this->toString = null;
 
-        parent::enqueue($token);
+        parent::push($token);
     }
 
     /**
