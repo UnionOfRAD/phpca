@@ -37,9 +37,6 @@
 
 namespace spriebsch\PHPca\Rule;
 
-use spriebsch\PHPca\Finder;
-use spriebsch\PHPca\Pattern\Pattern;
-
 /**
  * Make sure that every class has a docblock.
  *
@@ -49,37 +46,29 @@ use spriebsch\PHPca\Pattern\Pattern;
 class ClassesMustHaveDocBlockRule extends Rule
 {
     /**
-     * Performs the rule check.
+     * Makes sure that each class has a docblock.
      *
      * @returns null
      */
     protected function doCheck()
     {
-        while (true) {
+        // We are interested in T_CLASS tokens.
+        while ($this->file->trySeekTokenId(T_CLASS)) {
 
-            try {
-                $this->file->seekTokenId(T_CLASS);
-                $classToken = $this->file->current();
-            }
+            // Remember the class token, we need seek back to here later.
+            $classToken = $this->file->current();
 
-            catch (\spriebsch\PHPca\Exception $e) {
-                // No more T_CLASS tokens found, we are done.
-                return;
-            }
-
-            try {
-                // Search backwards for next docblock.
-                $this->file->seekTokenId(T_DOC_COMMENT, true);
+            // Search backwards for next docblock.
+            if ($this->file->trySeekTokenId(T_DOC_COMMENT, true)) {
 
                 // Docblock must end exactly one line above class token,
-                // otherwise it can be the docblock of another function.
+                // otherwise it can be the something else's docblock.
                 if (($this->file->current()->getEndLine() + 1) != $classToken->getLine()) {
                     $this->addViolation('Class has no docblock comment', $classToken);
                 }
-            }
+            } else {
 
-            catch (\spriebsch\PHPca\Exception $e) {
-                // Search for the docblock has failed,
+                // No docblock found, that's certainly wrong.
                 $this->addViolation('Class has no docblock comment', $classToken);
             }
 

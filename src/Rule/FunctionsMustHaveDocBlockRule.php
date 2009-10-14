@@ -37,9 +37,6 @@
 
 namespace spriebsch\PHPca\Rule;
 
-use spriebsch\PHPca\Finder;
-use spriebsch\PHPca\Pattern\Pattern;
-
 /**
  * Make sure that every function has a docblock.
  *
@@ -55,31 +52,23 @@ class FunctionsMustHaveDocBlockRule extends Rule
      */
     protected function doCheck()
     {
-        while (true) {
+        // We are interested in T_FUNCTION tokens
+        while ($this->file->trySeekTokenId(T_FUNCTION)) {
 
-            try {
-                $this->file->seekTokenId(T_FUNCTION);
-                $functionToken = $this->file->current();
-            }
+            // Remember the function token, we need seek back to here later.
+            $functionToken = $this->file->current();
 
-            catch (\spriebsch\PHPca\Exception $e) {
-                // No more T_FUNCTION tokens found, we are done.
-                return;
-            }
-
-            try {
-                // Search backwards for next docblock.
-                $this->file->seekTokenId(T_DOC_COMMENT, true);
+            // Search backwards for next docblock.
+            if ($this->file->trySeekTokenId(T_DOC_COMMENT, true)) {
 
                 // Docblock must end exactly one line above function token,
                 // otherwise it can be the docblock of another function.
                 if (($this->file->current()->getEndLine() + 1) != $functionToken->getLine()) {
                     $this->addViolation('Function has no docblock comment', $functionToken);
                 }
-            }
+            } else {
 
-            catch (\spriebsch\PHPca\Exception $e) {
-                // Search for the docblock has failed,
+                // No docblock found, that's certainly wrong.
                 $this->addViolation('Function has no docblock comment', $functionToken);
             }
 

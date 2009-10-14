@@ -56,13 +56,21 @@ class IncludeAndRequireWithoutBracketsRule extends Rule
      */
     protected function doCheck()
     {
-        $pattern = new Pattern();
-        $pattern->token(T_INCLUDE)
-                ->token(T_OPEN_BRACKET);
+        while ($this->file->trySeekTokenId(T_INCLUDE)) {
+            $this->file->next();
+            $token = $this->file->current();
 
-        foreach (Finder::findPattern($this->file, $pattern) as $token) {
+            if ($token->getId() == T_WHITESPACE) {
+                $this->file->next();
+                $token = $this->file->current();
+            }
+
+            if ($token->getId() == T_OPEN_BRACKET) {
                 $this->addViolation('include statement with bracket', $token);
+            }
         }
+
+        $this->file->rewind();
 
         $pattern = new Pattern();
         $pattern->token(T_REQUIRE)
