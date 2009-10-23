@@ -2,26 +2,29 @@
 
 <project name="PHPca" default="build" basedir=".">
 
-    <target name="clean" description="Clean up.">
+    <target name="build" depends="phpunit" description="Performs quality assurance." />
+
+    <target name="clean" description="Cleans up.">
         <delete dir="_docs" />
         <delete dir="_coverage" />
         <delete dir="_phar" />
     </target>
 
-    <target name="build" depends="lint, test, doc, phar" description="Performs quality assurance." />
-
-    <target name="phar" description="Creates executable Phar archive in _phar/.">
+    <target name="phar" description="Creates Phar archive.">
         <delete dir="_phar" />
         <mkdir dir="_phar" />
-        <exec command="php CreatePhar.php" checkReturn="true"/>
+        <exec dir="${basedir}" executable="php" failonerror="true">
+            <arg line="CreatePhar.php" />
+        </exec>
     </target>
 
-    <target name="doc" description="Creates API documentation in _docs/html/.">
+    <target name="doc" description="Creates API documentation.">
         <delete dir="_docs" />
         <exec command="doxygen" checkReturn="true"/>
     </target>
 
-    <target name="lint" description="Run a lint check on all PHP files.">
+<!--
+    <target name="lint" description="Runs lint check.">
         <phplint haltonfailure="true">
             <fileset dir="src">
                 <include name="*.php"/>
@@ -38,9 +41,12 @@
             </fileset>
         </phplint>
     </target>
+-->
 
-    <target name="test" description="Runs all unit tests.">
-        <exec command="phpunit --configuration phpunit.xml" passthru="true" checkReturn="true" />
+    <target name="phpunit" description="Runs unit tests.">
+        <exec dir="${basedir}" executable="phpunit" failonerror="true">
+            <arg line="--configuration phpunit.xml" />
+        </exec>
     </target>
 
 </project>
