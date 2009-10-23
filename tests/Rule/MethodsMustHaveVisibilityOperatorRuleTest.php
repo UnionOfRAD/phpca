@@ -42,10 +42,7 @@ use spriebsch\PHPca\Constants;
 use spriebsch\PHPca\Tokenizer;
 use spriebsch\PHPca\Result;
 
-require_once 'PHPUnit/Framework.php';
-require_once __DIR__ . '/AbstractRuleTest.php';
-require_once __DIR__ . '/../../src/Exceptions.php';
-require_once __DIR__ . '/../../src/Loader.php';
+require_once __DIR__ . '/../../src/Rule/MethodsMustHaveVisibilityOperatorRule.php';
 
 /**
  * Tests for the MethodsMustHaveVisibilityOperator rule.

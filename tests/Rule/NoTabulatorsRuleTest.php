@@ -37,15 +37,7 @@
 
 namespace spriebsch\PHPca\Rule;
 
-use spriebsch\PHPca\Loader;
-use spriebsch\PHPca\Constants;
-use spriebsch\PHPca\Tokenizer;
-use spriebsch\PHPca\Result;
-
-require_once 'PHPUnit/Framework.php';
-require_once __DIR__ . '/AbstractRuleTest.php';
-require_once __DIR__ . '/../../src/Exceptions.php';
-require_once __DIR__ . '/../../src/Loader.php';
+require_once __DIR__ . '/../../src/Rule/NoTabulatorsRule.php';
 
 /**
  * Tests for the No tabulators rule.

@@ -37,10 +37,6 @@
 
 namespace spriebsch\PHPca;
 
-require_once 'PHPUnit/Framework.php';
-require_once __DIR__ . '/../src/Exceptions.php';
-require_once __DIR__ . '/../src/Loader.php';
-
 /**
  * Tests for the File class.
  *
@@ -49,17 +45,6 @@ require_once __DIR__ . '/../src/Loader.php';
  */
 class FileTest extends \PHPUnit_Framework_TestCase
 {
-    protected function setUp()
-    {
-        Loader::init();
-        Loader::registerPath(__DIR__ . '/../src');
-    }
-
-    protected function tearDown()
-    {
-        Loader::reset();
-    }
-
     /**
      * @covers spriebsch\PHPca\File::__construct
      * @covers spriebsch\PHPca\File::getFilename

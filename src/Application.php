@@ -210,13 +210,15 @@ class Application
      */
     protected function loadRules(array $requestedRules = array())
     {
-        $builtInRules = $this->listFiles(__DIR__ . '/Rule');
-        $rules = $builtInRules;
+        // List all built-in rules.
+        $rules = $this->listFiles(__DIR__ . '/Rule');
 
+        // Convert requested rule names to namespaced names.
         foreach ($requestedRules as $rule) {
             $this->requestedRules[] = '\\spriebsch\\PHPca\\Rule\\' . $rule . 'Rule';
         }
 
+        // Add all rules from additional rule paths.
         foreach ($this->configuration->getRulePaths() as $path) {
             $rules = array_merge($rules, $this->listFiles($path));
         }
@@ -225,6 +227,7 @@ class Application
 
         foreach ($rules as $rule) {
 
+            // Do not care about non-rule files.
             if (substr($rule, -8) != 'Rule.php') {
                 continue;
             }
@@ -236,20 +239,23 @@ class Application
 //                continue;
 //            }
 
+            // If the rule has no settings, it has no ini section,
+            // thus is not enabled
             if (!$this->configuration->hasSettings($baseName)) {
                 continue;
             }
 
-            if (!in_array($rule, $builtInRules)) {
-                require_once $rule;
-                if (!class_exists($className)) {
-                    throw new Exception('Additional rule ' . $rule . ' not found');
-                }
+            // Load the rule from its absolute path.
+            require_once $rule;
+            if (!class_exists($className)) {
+                throw new Exception('Rule ' . $rule . ' not found');
             }
 
+            // Instantiate and configure the rule.
             $ruleObject = new $className;
             $ruleObject->configure($this->configuration->getSettings($baseName));
 
+            // Keep a reference to the rule.
             $result[] = $ruleObject;
         }
 

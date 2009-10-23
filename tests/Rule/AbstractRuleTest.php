@@ -37,14 +37,8 @@
 
 namespace spriebsch\PHPca\Rule;
 
-use spriebsch\PHPca\Loader;
-use spriebsch\PHPca\Constants;
 use spriebsch\PHPca\Tokenizer;
 use spriebsch\PHPca\Result;
-
-require_once 'PHPUnit/Framework.php';
-require_once __DIR__ . '/../../src/Exceptions.php';
-require_once __DIR__ . '/../../src/Loader.php';
 
 /**
  * Abstract base class for Rule tests.
@@ -55,19 +49,6 @@ require_once __DIR__ . '/../../src/Loader.php';
  */
 abstract class AbstractRuleTest extends \PHPUnit_Framework_TestCase
 {
-    protected function setUp()
-    {
-        Loader::init();
-        Loader::registerPath(__DIR__ . '/../../src');
-
-        Constants::init();
-    }
-
-    protected function tearDown()
-    {
-        Loader::reset();
-    }
-
     protected function init($filename)
     {
         $this->file = Tokenizer::tokenize('test.php', file_get_contents($filename));

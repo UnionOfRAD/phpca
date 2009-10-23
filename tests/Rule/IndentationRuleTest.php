@@ -37,10 +37,7 @@
 
 namespace spriebsch\PHPca\Rule;
 
-require_once 'PHPUnit/Framework.php';
-require_once __DIR__ . '/AbstractRuleTest.php';
-require_once __DIR__ . '/../../src/Exceptions.php';
-require_once __DIR__ . '/../../src/Loader.php';
+require_once __DIR__ . '/../../src/Rule/IndentationRule.php';
 
 /**
  * Tests for the indentation rule.

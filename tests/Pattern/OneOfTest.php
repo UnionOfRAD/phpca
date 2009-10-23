@@ -40,10 +40,6 @@ namespace spriebsch\PHPca\Pattern;
 use spriebsch\PHPca\Loader;
 use spriebsch\PHPca\Constants;
 
-require_once 'PHPUnit/Framework.php';
-require_once __DIR__ . '/../../src/Exceptions.php';
-require_once __DIR__ . '/../../src/Loader.php';
-
 /**
  * Tests for the OneOf Pattern class.
  *
@@ -54,15 +50,7 @@ class OneOfTest extends \PHPUnit_Framework_TestCase
 {
     protected function setUp()
     {
-        Loader::init();
-        Loader::registerPath(__DIR__ . '/../../src');
-
         Constants::init();
-    }
-
-    protected function tearDown()
-    {
-        Loader::reset();
     }
 
     /**

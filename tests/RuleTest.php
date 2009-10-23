@@ -43,10 +43,6 @@ use spriebsch\PHPca\Tokenizer;
 use spriebsch\PHPca\File;
 use spriebsch\PHPca\Result;
 
-require_once 'PHPUnit/Framework.php';
-require_once __DIR__ . '/../src/Exceptions.php';
-require_once __DIR__ . '/../src/Loader.php';
-
 /**
  * Tests for the Rule class. Since Rule is abstract, we test through a subclass.
  *
@@ -57,10 +53,6 @@ class RuleTest extends \PHPUnit_Framework_TestCase
 {
     protected function setUp()
     {
-        Loader::init();
-        Loader::registerPath(__DIR__ . '/../src');
-        Loader::registerPath(__DIR__ . '/_testdata/Rule');
-
         Constants::init();
 
         $this->file = Tokenizer::tokenize('test.php', '<php print true; ?>');
@@ -68,11 +60,6 @@ class RuleTest extends \PHPUnit_Framework_TestCase
         $this->result->addFile('test.php');
 
         $this->rule = new TestRuleSubclass();
-    }
-
-    protected function tearDown()
-    {
-        Loader::reset();
     }
 
     /**

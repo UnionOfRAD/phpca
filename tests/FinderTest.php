@@ -40,10 +40,6 @@ namespace spriebsch\PHPca;
 use spriebsch\PHPca\Pattern\Pattern;
 use spriebsch\PHPca\Pattern\Token;
 
-require_once 'PHPUnit/Framework.php';
-require_once __DIR__ . '/../src/Exceptions.php';
-require_once __DIR__ . '/../src/Loader.php';
-
 /**
  * Tests for the Finder class.
  *
@@ -54,15 +50,7 @@ class FinderTest extends \PHPUnit_Framework_TestCase
 {
     protected function setUp()
     {
-        Loader::init();
-        Loader::registerPath(__DIR__ . '/../src');
-
         Constants::init();
-    }
-
-    protected function tearDown()
-    {
-        Loader::reset();
     }
 
     /**
