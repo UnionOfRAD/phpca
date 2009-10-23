@@ -1,13 +1,11 @@
 Roadmap (tasks listed in decreasing priority)
 
 * Make error/warning know which rule has caused them
-* Allow adding custom rules (by specifying additional Rule directories)
-* Make phpca configurable (see sample phpca.ini for a collection of ideas)
 * Add XML output to comply with phpcs for ci integration
 * Port "interesting" rules from phpcs
 * write a source code highlighter that highlights violations in the source code and attaches the error message as popup
 * write output statistics that aggregate how often each rule has been violated (these are the rules you must teach the developers)
-* internally use realpath, allow for disabling rules for directories as well
+* trySeekTokenId -> seekTokenId 
 
 Rules to add (in no particular order, just a collection of ideas)
 
