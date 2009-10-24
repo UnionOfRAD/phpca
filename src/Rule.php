@@ -151,16 +151,18 @@ abstract class Rule
      *
      * @param string $message
      * @param mixed $tokens
+     * @param int $line
+     * @param int $column
      * @return null
      */
-    protected function addViolation($message, $tokens)
+    protected function addViolation($message, $tokens, $line = null, $column = null)
     {
         if (!is_array($tokens)) {
             $tokens = array($tokens);
         }
 
         foreach ($tokens as $token) {
-            $violation = new Violation($this->file->getFileName(), $message, $token);
+            $violation = new Violation($this->file->getFileName(), $message, $token, $line, $column);
             $violation->setRule($this);
             $this->result->addMessage($violation);
         }

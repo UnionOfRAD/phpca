@@ -61,17 +61,31 @@ class Message
     protected $message;
 
     /**
+     * @var int
+     */
+    protected $line;
+
+    /**
+     * @var int
+     */
+    protected $column;
+
+    /**
     * Creates the Message object.
     *
     * @param string $fileName
     * @param string $message
     * @param Token $token
+    * @param int $line Line number that message refers to (for multiline tokens)
+    * @param int $column
     */
-    public function __construct($fileName, $message, Token $token = null)
+    public function __construct($fileName, $message, Token $token = null, $line = null, $column = null)
     {
         $this->fileName = $fileName;
         $this->message  = $message;
         $this->token    = $token;
+        $this->line     = $line;
+        $this->column   = $column;
     }
 
     /**
@@ -103,10 +117,15 @@ class Message
      */
     public function getLine()
     {
+        // Explicitly set line overrides token start line
+        if ($this->line !== null) {
+            return $this->line;
+        }
+
         if (!$this->token instanceOf Token) {
             return 0;
         }
-    
+        
         return $this->token->getLine();
     }
 
@@ -119,11 +138,16 @@ class Message
      */
     public function getColumn()
     {
+        // Explicitly set column overrides token start column
+        if ($this->column !== null) {
+            return $this->column;
+        }
+
         if (!$this->token instanceOf Token) {
             return 0;
         }
-
-       return $this->token->getColumn();
+    
+        return $this->token->getColumn();
     }
 
     /**
