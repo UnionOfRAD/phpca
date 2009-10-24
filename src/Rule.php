@@ -41,6 +41,7 @@ use spriebsch\PHPca\File;
 use spriebsch\PHPca\Result;
 use spriebsch\PHPca\Message;
 use spriebsch\PHPca\Violation;
+use spriebsch\PHPca\Configuration;
 
 /**
  * Base class for a Rule that is enforced on a token stream.
@@ -53,6 +54,11 @@ abstract class Rule
     protected $settings;
     protected $file;
     protected $result;
+    
+    /**
+     * @var Configuration
+     */
+    protected $configuration;
 
     /**
      * Checks whether a configuration setting exists
@@ -133,6 +139,18 @@ abstract class Rule
         $this->file->rewind();
 
         $this->doCheck();
+    }
+
+    /**
+     * Set the configuration
+     *
+     * @param Configuration $configuration
+     * @return null
+     * @todo should replace configure()
+     */
+    public function setConfiguration(Configuration $configuration)
+    {
+        $this->configuration = $configuration;
     }
 
     /**

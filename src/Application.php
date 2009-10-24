@@ -253,6 +253,7 @@ class Application
 
             // Instantiate and configure the rule.
             $ruleObject = new $className;
+            $ruleObject->setConfiguration($this->configuration);
             $ruleObject->configure($this->configuration->getSettings($baseName));
 
             // Keep a reference to the rule.

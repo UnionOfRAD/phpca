@@ -74,6 +74,20 @@ class Configuration
     protected $extensions = array('php');
 
     /**
+     * The line endings
+     *
+     * @var string
+     */
+    protected $lineEndings;
+
+    /**
+     * The indentation string
+     *
+     * @var string
+     */
+    protected $indentation;
+    
+    /**
      * Additional paths to load rules from.
      *
      * @var array
@@ -152,6 +166,7 @@ class Configuration
      *
      * @param array $configuration
      * @return null
+     * @todo make global section parsing generic
      */
     public function setConfiguration(array $configuration)
     {
@@ -170,9 +185,17 @@ class Configuration
             $this->skipFiles = array_map('trim', $files);
         }
 
+        if (isset($this->settings['line_endings'])) {
+            $this->lineEndings = $this->settings['line_endings'];
+        }
+
+        if (isset($this->settings['indentation'])) {
+            $this->indentation = $this->settings['indentation'];
+        }
+        
         $this->ruleSettings = array_replace($this->ruleSettings, $configuration);
     }
-
+    
     /**
      * Sets the name of the coding standard to use.
      *
@@ -211,7 +234,7 @@ class Configuration
      * @param string $extension File extension
      * @return null
      */
-    public function addtExtension($extension)
+    public function addExtension($extension)
     {
         $this->extensions[] = $extension;
     }
@@ -231,6 +254,48 @@ class Configuration
         return $this->extensions;
     }
 
+    /**
+     * Sets the line endings.
+     *
+     * @param string $lineEndings The line endings
+     * @return null
+     */
+    public function setLineEndings($lineEndings)
+    {
+        $this->lineEndings = $lineEndings;
+    }
+
+    /**
+     * Returns the line endings.
+     *
+     * @return string
+     */
+    public function getLineEndings()
+    {
+        return $this->lineEndings;
+    }
+
+    /**
+     * Sets the indentation string.
+     *
+     * @param string $indentation
+     * @return null
+     */
+    public function setIndentation($indentation)
+    {
+        $this->indentation = $indentation;
+    }
+
+    /**
+     * Returns the indentation string.
+     *
+     * @return string
+     */
+    public function getIndentation()
+    {
+        return $this->indentation;
+    }
+    
     /**
      * Sets the rule paths to load additional rules from.
      *
