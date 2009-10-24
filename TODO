@@ -33,16 +33,6 @@ Rules to add (in no particular order, just a collection of ideas)
 * FIX: ${ token opens block level
 * disallow multiple comma-separated variable declarations (also for globals)
 * disallow $a = $b = $c statements
-* keywords (                T_CLASS,
-                T_INTERFACE,
-                T_EXTENDS,
-                T_IMPLEMENTS,
-                T_ABSTRACT,
-                T_FINAL,
-                T_VAR,
-                T_CONST,
-                array
-  are all lowercase
 * class/function/variable names capitalization
 * one blank line above docblock comments
 * docblock comments for member variables
