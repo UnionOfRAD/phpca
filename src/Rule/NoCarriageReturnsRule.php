@@ -46,6 +46,22 @@ namespace spriebsch\PHPca\Rule;
 class NoCarriageReturnsRule extends Rule
 {
     /**
+	 * Skip this rule when configured line endings contain carriage returns.
+	 *
+	 * @return bool
+	 */
+    protected function skip()
+    {
+        $lineEndings = $this->configuration->getLineEndings();
+
+        if ($lineEndings == "\r\n" || $lineEndings == "\r") {
+            return true;
+        }
+                
+        return parent::skip();
+    }
+
+    /**
      * Performs the rule check.
      *
      * @returns null

@@ -41,6 +41,7 @@ use spriebsch\PHPca\Loader;
 use spriebsch\PHPca\Constants;
 use spriebsch\PHPca\Tokenizer;
 use spriebsch\PHPca\Result;
+use spriebsch\PHPca\Configuration;
 
 require_once __DIR__ . '/../../src/Rule/NoCarriageReturnsRule.php';
 
@@ -59,7 +60,11 @@ class NoCarriageReturnsRuleTest extends AbstractRuleTest
     {
         $this->init(__DIR__ . '/../_testdata/NoCarriageReturnsRule/linefeeds.php');
 
+        $configuration = new Configuration(__DIR__);
+        $configuration->setLineEndings("\n");
+        
         $rule = new NoCarriageReturnsRule();
+        $rule->setConfiguration($configuration);
         $rule->check($this->file, $this->result);
 
         $this->assertFalse($this->result->hasViolations());
@@ -72,7 +77,11 @@ class NoCarriageReturnsRuleTest extends AbstractRuleTest
     {
         $this->init(__DIR__ . '/../_testdata/NoCarriageReturnsRule/carriagereturns.php');
 
+        $configuration = new Configuration(__DIR__);
+        $configuration->setLineEndings("\n");
+        
         $rule = new NoCarriageReturnsRule();
+        $rule->setConfiguration($configuration);
         $rule->check($this->file, $this->result);
 
         $this->assertEquals(26, $this->result->getNumberOfViolations());
