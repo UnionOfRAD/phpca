@@ -55,17 +55,8 @@ class IndentationRule extends Rule
      */
     protected function checkDocBlock(\spriebsch\PHPca\Token $token)
     {
-        if ($token->getId() != T_DOC_COMMENT) {
-            throw new Exception('Token ' . $token->getName() . ' is not a docblock');
-        }
-
         // normalize line endings, create array of docblock lines
         $lines = explode("\n", str_replace("\r", '', $token->getText()));
-
-        // if docblock is empty, we are done.
-        if (sizeof($lines) == 0) {
-            return;
-        }
 
         // first docblock line has been taken care of by the
         // general indentation check below
