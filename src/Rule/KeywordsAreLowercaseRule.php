@@ -123,7 +123,7 @@ class KeywordsAreLowercaseRule extends Rule
         foreach ($this->keywords as $keyword) {
             $this->file->rewind();
 
-            while ($this->file->trySeekTokenId($keyword)) {
+            while ($this->file->seekTokenId($keyword)) {
                 $token = $this->file->current();
 
                 $text = $token->getText();

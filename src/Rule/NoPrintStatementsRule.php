@@ -52,7 +52,7 @@ class NoPrintStatementsRule extends Rule
      */
     protected function doCheck()
     {
-        while ($this->file->trySeekTokenId(T_PRINT)) {
+        while ($this->file->seekTokenId(T_PRINT)) {
             $this->addViolation('print statement', $this->file->current());
             $this->file->next();
         }

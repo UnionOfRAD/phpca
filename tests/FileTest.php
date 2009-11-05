@@ -233,15 +233,14 @@ class FileTest extends \PHPUnit_Framework_TestCase
      * @covers spriebsch\PHPca\File::__construct
      * @covers spriebsch\PHPca\File::seekTokenId
      * @covers spriebsch\PHPca\File::add
-     * @expectedException spriebsch\PHPca\Exception
      */
-    public function testSeekTokenIdThrowsExceptionWhenTokenDoesNotExist()
+    public function testSeekTokenIdReturnsFalseWhenTokenDoesNotExist()
     {
         $file = new File('filename', 'sourcecode');
         $file->add(new Token(T_OPEN_TAG, '<?php'));
-
         $file->rewind();
-        $file->seekTokenId(T_PUBLIC);
+
+        $this->assertFalse($file->seekTokenId(T_PUBLIC));
     }
 
     /**

@@ -57,58 +57,30 @@ class MethodsMustHaveVisibilityOperatorRule extends Rule
      */
     protected function doCheck()
     {
-        $this->file->rewind();
+        while ($this->file->seekTokenId(T_FUNCTION)) {
+            $functionToken = $this->file->current();
 
-        while (true) {
-            try {
-                $this->file->seekTokenId(T_FUNCTION);
-                $functionToken = $this->file->current();
-
-                if ($functionToken->getClass() == '' && $functionToken->getInterface() == '') {
-                    $this->file->next();
-                    continue;
-                }
+            if ($functionToken->getClass() == '' && $functionToken->getInterface() == '') {
+                $this->file->next();
+                continue;
             }
 
-            catch (\spriebsch\PHPca\Exception $e) {
-                // No more T_FUNCTION tokens found, we are done.
-                return;
-            }
+            // Skip T_WHITESPACE
+            $this->file->prev();
 
-            try {
+            $this->file->prev();
 
-                // Skip T_WHITESPACE
+            if ($this->file->current()->getName() == 'T_STATIC') {
+
+                // Skip T_STATIC and T_WHITESPACE
                 $this->file->prev();
-
                 $this->file->prev();
-
-                if ($this->file->current()->getName() == 'T_STATIC') {
-
-                    // Skip T_STATIC and T_WHITESPACE
-                    $this->file->prev();
-                    $this->file->prev();
-                }
-
-                if (!in_array($this->file->current()->getName(), array('T_PUBLIC', 'T_PROTECTED', 'T_PRIVATE'))) {
-                    $this->addViolation('Function has no visibility operator', $functionToken);
-                }
-
-                // Search backwards for next visibility operator.
-//                $this->file->seekTokenId(T_DOC_COMMENT, true);
-
-                // Docblock must end exactly one line above function token,
-                // otherwise it can be the docblock of another function.
-//                if (($this->file->current()->getEndLine() + 1) != $functionToken->getLine()) {
-//                    $this->addViolation('Function has no docblock comment', $functionToken);
-//                }
             }
 
-            catch (\spriebsch\PHPca\Exception $e) {
-                // Search for the docblock has failed,
-                $this->addViolation('Function has no docblock comment', $functionToken);
+            if (!in_array($this->file->current()->getName(), array('T_PUBLIC', 'T_PROTECTED', 'T_PRIVATE'))) {
+                $this->addViolation('Function has no visibility operator', $functionToken);
             }
 
-            // Seek back to the token following the T_FUNCTION we just processed.
             $this->file->seekToken($functionToken);
             $this->file->next();
         }

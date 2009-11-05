@@ -52,7 +52,7 @@ class NoVarDumpStatementsRule extends Rule
      */
     protected function doCheck()
     {
-        while ($this->file->trySeekTokenId(T_STRING)) {
+        while ($this->file->seekTokenId(T_STRING)) {
             $token = $this->file->current();
             if ($token->getText() == 'var_dump') {
                 $this->addViolation('var_dump() statement', $token);

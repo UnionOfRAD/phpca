@@ -52,7 +52,7 @@ class NoVariableVariablesRule extends Rule
      */
     protected function doCheck()
     {
-        while ($this->file->trySeekTokenId(T_VARIABLE)) {
+        while ($this->file->seekTokenId(T_VARIABLE)) {
             $this->file->prev();
             if ($this->file->current()->getId() == T_DOLLAR) {
                 $this->addViolation('variable variable', $this->file->current());

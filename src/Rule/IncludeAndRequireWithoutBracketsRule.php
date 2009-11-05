@@ -65,7 +65,7 @@ class IncludeAndRequireWithoutBracketsRule extends Rule
     {
         foreach ($this->disallowedTokens as $disallowedToken => $message) {
 
-            while ($this->file->trySeekTokenId($disallowedToken)) {
+            while ($this->file->seekTokenId($disallowedToken)) {
                 $this->file->next();
                 $token = $this->file->current();
 

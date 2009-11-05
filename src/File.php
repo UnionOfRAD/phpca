@@ -310,32 +310,10 @@ class File extends \SplDoublyLinkedList implements \SeekableIterator
         throw new Exception('No token ' . $token->getName() . ' found');
     }
 
-
     /**
      * Seek to token ID, returning true on success
      * and false if the token is not found.
-     *
-     * @param int $id The token ID
-     * @param bool $backwards Whether to search forwards or backwards
-     * @todo make this the regular seek method
-     */
-    public function trySeekTokenId($id, $backwards = false)
-    {
-        $currentPosition = $this->key();
-
-        try {
-            $this->seekTokenId($id, $backwards);
-            return true;
-        }
-
-        catch (Exception $e) {
-            $this->seek($currentPosition);
-            return false;
-        }
-    }
-
-    /**
-     * Seek to the next token $id. Seeking starts from current element.
+     * Seeking starts from current element.
      * If the current token has given ID, we do not seek to the next token of
      * that ID.
      *
@@ -345,9 +323,11 @@ class File extends \SplDoublyLinkedList implements \SeekableIterator
      */
     public function seekTokenId($id, $backwards = false)
     {
+        $currentPosition = $this->key();
+    	
         while($this->valid()) {
             if ($this->current()->getId() == $id) {
-                return;
+                return true;
             }
 
             if ($backwards) {
@@ -357,7 +337,8 @@ class File extends \SplDoublyLinkedList implements \SeekableIterator
             }
         }
 
-        throw new Exception('No token ' . Constants::getTokenName($id) . ' found');
+        $this->seek($currentPosition);
+        return false;
     }
 
     /**

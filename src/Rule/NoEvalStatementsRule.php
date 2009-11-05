@@ -52,7 +52,7 @@ class NoEvalStatementsRule extends Rule
      */
     protected function doCheck()
     {
-        while ($this->file->trySeekTokenId(T_EVAL)) {
+        while ($this->file->seekTokenId(T_EVAL)) {
             $this->addViolation('eval statement', $this->file->current());
             $this->file->next();
         }

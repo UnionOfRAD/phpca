@@ -56,7 +56,7 @@ class NoGotoStatementsRule extends Rule
      */
     protected function doCheck()
     {
-        while ($this->file->trySeekTokenId(T_GOTO)) {
+        while ($this->file->seekTokenId(T_GOTO)) {
             $this->addViolation('goto statement', $this->file->current());
             $this->file->next();
         }

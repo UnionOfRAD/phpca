@@ -85,7 +85,7 @@ class IndentationRule extends Rule
      */
     protected function doCheck()
     {
-        while ($this->file->trySeekTokenId(T_DOC_COMMENT)) {
+        while ($this->file->seekTokenId(T_DOC_COMMENT)) {
             $this->checkDocBlock($this->file->current());
             $this->file->next();
         }

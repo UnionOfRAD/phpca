@@ -53,13 +53,13 @@ class FunctionsMustHaveDocBlockRule extends Rule
     protected function doCheck()
     {
         // We are interested in T_FUNCTION tokens
-        while ($this->file->trySeekTokenId(T_FUNCTION)) {
+        while ($this->file->seekTokenId(T_FUNCTION)) {
 
             // Remember the function token, we need seek back to here later.
             $functionToken = $this->file->current();
 
             // Search backwards for next docblock.
-            if ($this->file->trySeekTokenId(T_DOC_COMMENT, true)) {
+            if ($this->file->seekTokenId(T_DOC_COMMENT, true)) {
 
                 // Docblock must end exactly one line above function token,
                 // otherwise it can be the docblock of another function.

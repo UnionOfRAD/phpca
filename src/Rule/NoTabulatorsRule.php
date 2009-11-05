@@ -52,7 +52,7 @@ class NoTabulatorsRule extends Rule
      */
     protected function doCheck()
     {
-        while ($this->file->trySeekTokenId(T_WHITESPACE)) {
+        while ($this->file->seekTokenId(T_WHITESPACE)) {
             $token = $this->file->current();
             if (false !== strstr($token->getText(), "\t")) {
                 $this->addViolation('Tabulator (\t) character', $token);

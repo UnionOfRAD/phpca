@@ -52,7 +52,7 @@ class NoVarKeywordsRule extends Rule
      */
     protected function doCheck()
     {
-        while ($this->file->trySeekTokenId(T_VAR)) {
+        while ($this->file->seekTokenId(T_VAR)) {
             $this->addViolation('var keyword', $this->file->current());
             $this->file->next();
         }

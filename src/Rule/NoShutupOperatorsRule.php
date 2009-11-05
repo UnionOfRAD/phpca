@@ -52,7 +52,7 @@ class NoShutupOperatorsRule extends Rule
      */
     protected function doCheck()
     {
-        while ($this->file->trySeekTokenId(T_AT)) {
+        while ($this->file->seekTokenId(T_AT)) {
             $this->addViolation('shutup operator', $this->file->current());
             $this->file->next();
         }

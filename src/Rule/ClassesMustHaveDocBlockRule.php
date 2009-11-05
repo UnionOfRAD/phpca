@@ -53,13 +53,13 @@ class ClassesMustHaveDocBlockRule extends Rule
     protected function doCheck()
     {
         // We are interested in T_CLASS tokens.
-        while ($this->file->trySeekTokenId(T_CLASS)) {
+        while ($this->file->seekTokenId(T_CLASS)) {
 
             // Remember the class token, we need seek back to here later.
             $classToken = $this->file->current();
 
             // Search backwards for next docblock.
-            if ($this->file->trySeekTokenId(T_DOC_COMMENT, true)) {
+            if ($this->file->seekTokenId(T_DOC_COMMENT, true)) {
 
                 // Docblock must end exactly one line above class token,
                 // otherwise it can be the something else's docblock.

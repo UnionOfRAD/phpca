@@ -52,7 +52,7 @@ class NoEchoStatementsRule extends Rule
      */
     protected function doCheck()
     {
-        while ($this->file->trySeekTokenId(T_ECHO)) {
+        while ($this->file->seekTokenId(T_ECHO)) {
             $this->addViolation('echo statement', $this->file->current());
             $this->file->next();
         }

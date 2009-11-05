@@ -52,7 +52,7 @@ class NoGlobalStatementsRule extends Rule
      */
     protected function doCheck()
     {
-        while ($this->file->trySeekTokenId(T_GLOBAL)) {
+        while ($this->file->seekTokenId(T_GLOBAL)) {
             $this->addViolation('global statement', $this->file->current());
             $this->file->next();
         }
