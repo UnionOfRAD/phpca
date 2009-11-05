@@ -118,27 +118,30 @@ abstract class Rule
 
     /**
      * Checks the rule.
+     * Returns false when the rule has been disabled or skipped.
      * 
      * @param File   $file   Tokenized file to apply rule to
      * @param Result $result Result object
-     * @return null
+     * @return bool
      */
     public function check(File $file, Result $result)
     {
         $this->file = $file;
 
         if ($this->isDisabled()) {
-            return;
+            return false;
         }
 
         if ($this->skip()) {
-            return;
+            return false;
         }
 
         $this->result = $result;
         $this->file->rewind();
 
         $this->doCheck();
+        
+        return true;
     }
 
     /**

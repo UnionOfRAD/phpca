@@ -56,6 +56,36 @@ class NoCarriageReturnsRuleTest extends AbstractRuleTest
     /**
      * @covers \spriebsch\PHPca\Rule\NoCarriageReturnsRule
      */
+    public function testRuleIsSkippedForCarriageReturnLineEndings()
+    {
+        $this->init(__DIR__ . '/../_testdata/NoCarriageReturnsRule/linefeeds.php');
+
+        $configuration = new Configuration(__DIR__);
+        $configuration->setLineEndings("\r");
+        
+        $rule = new NoCarriageReturnsRule();
+        $rule->setConfiguration($configuration);
+        $this->assertFalse($rule->check($this->file, $this->result));
+    }
+
+    /**
+     * @covers \spriebsch\PHPca\Rule\NoCarriageReturnsRule
+     */
+    public function testRuleIsEnforcedForLineFeedLineEndings()
+    {
+        $this->init(__DIR__ . '/../_testdata/NoCarriageReturnsRule/linefeeds.php');
+
+        $configuration = new Configuration(__DIR__);
+        $configuration->setLineEndings("\n");
+        
+        $rule = new NoCarriageReturnsRule();
+        $rule->setConfiguration($configuration);
+        $this->assertTrue($rule->check($this->file, $this->result));
+    }
+    
+    /**
+     * @covers \spriebsch\PHPca\Rule\NoCarriageReturnsRule
+     */
     public function testNoCarriageReturns()
     {
         $this->init(__DIR__ . '/../_testdata/NoCarriageReturnsRule/linefeeds.php');
