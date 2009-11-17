@@ -71,11 +71,11 @@ class Constants
         '@'  => array(521, 'T_AT'),
         '&'  => array(522, 'T_AMPERSAND'),
         '%'  => array(523, 'T_PERCENT'),
-        '|'  => array(523, 'T_PIPE'),
-        '$'  => array(524, 'T_DOLLAR'),
-        '^'  => array(525, 'T_CARET'),
-        '~'  => array(526, 'T_TILDE'),
-        '`'  => array(527, 'T_BACKTICK'),
+        '|'  => array(524, 'T_PIPE'),
+        '$'  => array(525, 'T_DOLLAR'),
+        '^'  => array(526, 'T_CARET'),
+        '~'  => array(527, 'T_TILDE'),
+        '`'  => array(528, 'T_BACKTICK'),
     );
 
     /**
