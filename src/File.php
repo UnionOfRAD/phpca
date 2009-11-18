@@ -324,7 +324,7 @@ class File extends \SplDoublyLinkedList implements \SeekableIterator
     public function seekTokenId($id, $backwards = false)
     {
         $currentPosition = $this->key();
-    	
+
         while($this->valid()) {
             if ($this->current()->getId() == $id) {
                 return true;
