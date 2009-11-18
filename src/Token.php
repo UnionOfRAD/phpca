@@ -289,13 +289,18 @@ class Token
         return $this->line;
     }
 
+    /**
+     * Returns the source code line the token starts on.
+     *
+     * @return int
+     */
     public function getLine()
     {
         return $this->getStartLine();
     }
 
     /**
-     * Returns the source code column the token is located on.
+     * Returns the source code column the token starts on.
      *
      * @return int
      */
@@ -311,6 +316,11 @@ class Token
         return $this->column;
     }
 
+    /**
+     * Returns the source code column the token starts on.
+     *
+     * @return int
+     */
     public function getColumn()
     {
         return $this->getStartColumn();
