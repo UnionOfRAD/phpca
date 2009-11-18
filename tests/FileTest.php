@@ -108,8 +108,26 @@ class FileTest extends \PHPUnit_Framework_TestCase
         $file = Tokenizer::tokenize('test.php', file_get_contents(__DIR__ . '/_testdata/File/functions.php'));
 
         $this->assertEquals(array('a', 'b', 'c'), $file->getFunctions());
-        $this->assertEquals(array('x', 'y', 'z', 'a', 'b', 'c'), $file->getFunctions('A'));
-//        $this->assertEquals(array('a', 'b'), $file->getFunctions('B'));
+    }       
+
+    /**
+     * @covers spriebsch\PHPca\File::getMethods
+     */
+    public function testGetMethods()
+    {
+        $file = Tokenizer::tokenize('test.php', file_get_contents(__DIR__ . '/_testdata/File/functions.php'));
+
+        $this->assertEquals(array('x', 'y', 'z', 'a', 'b', 'c'), $file->getMethods('A'));
+    }       
+
+    /**
+     * @covers spriebsch\PHPca\File::getMethods
+     */
+    public function testGetMethodsFindsAbstractMethods()
+    {
+        $file = Tokenizer::tokenize('test.php', file_get_contents(__DIR__ . '/_testdata/File/functions.php'));
+
+        $this->assertEquals(array('a', 'b'), $file->getMethods('B'));
     }       
 
     /**

@@ -202,12 +202,8 @@ class File extends \SplDoublyLinkedList implements \SeekableIterator
      *
      * @return array
      */
-    public function getFunctions($class = null)
+    public function getFunctions()
     {
-        if ($class !== null) {
-        	return $this->getMethods($class);
-        }
-
         $result = array();
 
         $this->rewind();

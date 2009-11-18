@@ -203,6 +203,13 @@ class Tokenizer
             }
 
             $id = $tokenObj->getId();
+            
+            if ($id == T_SEMICOLON) {
+                if ($waitForFunctionBegin) {
+                    $functionCurlyLevel = $level;
+                    $waitForFunctionBegin = false;
+                }
+            }
 
             // Opening curly brace opens another block, thus increases the level.
             if ($id == T_OPEN_CURLY || $id == T_CURLY_OPEN || $id == T_DOLLAR_OPEN_CURLY_BRACES) {
