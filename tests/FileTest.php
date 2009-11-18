@@ -46,7 +46,16 @@ namespace spriebsch\PHPca;
 class FileTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * Dummy test to achieve constructor code coverage.
+     *
      * @covers spriebsch\PHPca\File::__construct
+     */
+    public function testConstruct()
+    {
+        $file = new File('filename', 'sourcecode');
+    }
+	
+    /**
      * @covers spriebsch\PHPca\File::getFilename
      */
     public function testGetFileName()
@@ -56,7 +65,6 @@ class FileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers spriebsch\PHPca\File::__construct
      * @covers spriebsch\PHPca\File::getSourceCode
      */
     public function testGetSourceCode()
@@ -66,7 +74,45 @@ class FileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers spriebsch\PHPca\File::__construct
+     * @covers spriebsch\PHPca\File::getNamespaces
+     */
+    public function testGetNamespaces()
+    {
+        $file = Tokenizer::tokenize('test.php', file_get_contents(__DIR__ . '/_testdata/File/namespaces.php'));
+    	$this->assertEquals(array('A\\B', 'B\\C', 'D\\E\\F'), $file->getNamespaces());
+    }    	
+
+    /**
+     * @covers spriebsch\PHPca\File::getNamespaces
+     */
+    public function testGetNamespacesWithCurlyBraces()
+    {
+        $file = Tokenizer::tokenize('test.php', file_get_contents(__DIR__ . '/_testdata/File/namespaces_curly.php'));
+        $this->assertEquals(array('A\\B', 'B\\C', 'D\\E\\F'), $file->getNamespaces());
+    }       
+
+    /**
+     * @covers spriebsch\PHPca\File::getClasses
+     */
+    public function testGetClasses()
+    {
+        $file = Tokenizer::tokenize('test.php', file_get_contents(__DIR__ . '/_testdata/File/classes.php'));
+        $this->assertEquals(array('A', 'B', 'C'), $file->getClasses());
+    }       
+
+    /**
+     * @covers spriebsch\PHPca\File::getFunctions
+     */
+    public function testGetFunctions()
+    {
+        $file = Tokenizer::tokenize('test.php', file_get_contents(__DIR__ . '/_testdata/File/functions.php'));
+
+        $this->assertEquals(array('a', 'b', 'c'), $file->getFunctions());
+        $this->assertEquals(array('x', 'y', 'z', 'a', 'b', 'c'), $file->getFunctions('A'));
+//        $this->assertEquals(array('a', 'b'), $file->getFunctions('B'));
+    }       
+
+    /**
      * @covers spriebsch\PHPca\File::__toString
      * @covers spriebsch\PHPca\File::add
      */
@@ -84,7 +130,6 @@ class FileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers spriebsch\PHPca\File::__construct
      * @covers spriebsch\PHPca\File::seek
      * @covers spriebsch\PHPca\File::add
      */
@@ -102,7 +147,6 @@ class FileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers spriebsch\PHPca\File::__construct
      * @covers spriebsch\PHPca\File::seekToken
      * @covers spriebsch\PHPca\File::add
      */
@@ -122,7 +166,6 @@ class FileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers spriebsch\PHPca\File::__construct
      * @covers spriebsch\PHPca\File::seekTokenId
      * @covers spriebsch\PHPca\File::add
      */
@@ -230,7 +273,6 @@ class FileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers spriebsch\PHPca\File::__construct
      * @covers spriebsch\PHPca\File::seekTokenId
      * @covers spriebsch\PHPca\File::add
      */
@@ -244,7 +286,6 @@ class FileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers spriebsch\PHPca\File::__construct
      * @covers spriebsch\PHPca\File::seekToken
      * @covers spriebsch\PHPca\File::add
      * @expectedException spriebsch\PHPca\Exception
@@ -259,7 +300,6 @@ class FileTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers spriebsch\PHPca\File::__construct
      * @covers spriebsch\PHPca\File::seek
      * @expectedException \OutOfBoundsException
      */

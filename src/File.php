@@ -174,6 +174,28 @@ class File extends \SplDoublyLinkedList implements \SeekableIterator
     }
 
     /**
+     * Returns an array of all methods of the given class in a file.
+     * We do not distinguish between static methods and instance methods.
+     *
+     * @return array
+     */
+    public function getMethods($class)
+    {
+        $this->rewind();
+    	$result = array();
+
+        while($this->valid()) {
+            $function = $this->current()->getFunction();
+            if ($this->current()->getClass() == $class && $function != '' && !in_array($function, $result)) {
+                $result[] = $function;
+            }
+            $this->next();
+        }
+
+        return $result;
+    }
+
+    /**
      * Returns an array of all functions in the file, or an array
      * of all methods of the given class. We do not distinguish between
      * static methods and instance methods.
@@ -182,20 +204,8 @@ class File extends \SplDoublyLinkedList implements \SeekableIterator
      */
     public function getFunctions($class = null)
     {
-        if (is_null($class)) {
-            $result = array();
-
-            $this->rewind();
-
-            while($this->valid()) {
-                $function = $this->current()->getClass();
-                if ($function != '' && !in_array($function, $result) && $this->current()->getClass() == '') {
-                    $result[] = $function;
-                }
-                $this->next();
-            }
-
-            return $result;
+        if ($class !== null) {
+        	return $this->getMethods($class);
         }
 
         $result = array();
@@ -203,8 +213,8 @@ class File extends \SplDoublyLinkedList implements \SeekableIterator
         $this->rewind();
 
         while($this->valid()) {
-            $function = $this->current()->getClass();
-            if ($function != '' && !in_array($function, $result) && $this->current()->getClass() == $class) {
+            $function = $this->current()->getFunction();
+            if ($this->current()->getClass() == '' && $function != '' && !in_array($function, $result)) {
                 $result[] = $function;
             }
             $this->next();
