@@ -59,7 +59,7 @@ class NoTrailingWhitespaceRule extends Rule
             $count++;
             
             if (strlen($line) != strlen(rtrim($line))) {
-                $this->addViolation('Trailing whitespace', null, $count);
+                $this->addViolation('Trailing whitespace', null, $count, strlen($line));
             }
         }
     }
