@@ -288,7 +288,7 @@ class Token
 
         return $this->line;
     }
-    
+
     public function getLine()
     {
         return $this->getStartLine();
