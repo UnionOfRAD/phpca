@@ -46,19 +46,23 @@ namespace spriebsch\PHPca\Rule;
 class NoVariableVariablesRule extends Rule
 {
     /**
-     * Performs the rule check.
+     * Finds variable variables ($$variable).
      *
      * @returns null
      */
     protected function doCheck()
     {
         while ($this->file->seekTokenId(T_VARIABLE)) {
+        	$variable = $this->file->current();
             $this->file->prev();
-            if ($this->file->current()->getId() == T_DOLLAR) {
-                $this->addViolation('variable variable', $this->file->current());
+            $token = $this->file->current();
+
+            if ($token->getId() == T_DOLLAR) {
+                $this->addViolation('Variable variable ' . $variable->getText(), $token);
             }
+
             $this->file->next();
-            $this->file->next();
+            $this->file->next();               
         }
     }
 }

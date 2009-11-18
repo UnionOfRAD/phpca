@@ -128,7 +128,7 @@ class KeywordsAreLowercaseRule extends Rule
 
                 $text = $token->getText();
                 if ($text != strtolower($text)) {
-                    $this->addViolation('keyword ' . strtolower(trim($text)) . ' not lowercase', $token);
+                    $this->addViolation('Keyword ' . strtolower(trim($text)) . ' not lowercase', $token);
                 }
 
                 $this->file->next();

@@ -53,7 +53,7 @@ class NoInlineHtmlRule extends Rule
     protected function doCheck()
     {
         while ($this->file->seekTokenId(T_INLINE_HTML)) {
-            $this->addViolation('inline HTML', $this->file->current());
+            $this->addViolation('Inline HTML', $this->file->current());
             $this->file->next();
         }
     }

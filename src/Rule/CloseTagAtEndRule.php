@@ -55,7 +55,7 @@ class CloseTagAtEndRule extends Rule
         $token = $this->file->top();
 
         if ($token->getId() != T_CLOSE_TAG) {
-            $this->addViolation('File does not end with PHP close tag', $token);
+            $this->addViolation('File does not end with ?>', $token);
         }
     }
 }

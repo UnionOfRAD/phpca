@@ -64,7 +64,7 @@ class IndentationRule extends Rule
         // all other lines of the docblock must start with one space
         for ($i = 1; $i < sizeof($lines); $i++) {
             if (strlen(ltrim($lines[$i])) != strlen($lines[$i]) - 1) {
-                $this->addViolation('wrong indentation in line ' . $i . ' of docblock', $token);
+                $this->addViolation('Wrong indentation in docblock line ' . $i, $token);
             }
         }
     }
@@ -101,7 +101,7 @@ class IndentationRule extends Rule
             $fileIndentation = $token->getTrailingWhitespace();
 
             if ($fileIndentation != $indentString) {
-                 $this->addViolation('wrong indentation', $this->file->current());
+                 $this->addViolation('Wrong indentation', $this->file->current());
             }
 
             if (!$this->file->seekNextLine()) {

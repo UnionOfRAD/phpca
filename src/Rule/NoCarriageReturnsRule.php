@@ -71,7 +71,7 @@ class NoCarriageReturnsRule extends Rule
         while ($this->file->seekTokenId(T_WHITESPACE)) {
             $token = $this->file->current();
             if (false !== strstr($token->getText(), "\r")) {
-                $this->addViolation('Carriage return (\r) character', $token);
+                $this->addViolation('Carriage return character', $token);
             }
             $this->file->next();
         }

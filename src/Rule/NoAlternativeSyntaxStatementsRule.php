@@ -62,7 +62,7 @@ class NoAlternativeSyntaxStatementsRule extends Rule
 
             while ($this->file->seekTokenId($forbiddenToken)) {
                 $token = $this->file->current();
-                $this->addViolation('alternative syntax ' . str_replace('end', '', trim($token->getText())) . '/' . trim($token->getText()), $token);
+                $this->addViolation('Alternative syntax ' . str_replace('end', '', trim($token->getText())) . '/' . trim($token->getText()), $token);
                 $this->file->next();
             }
 

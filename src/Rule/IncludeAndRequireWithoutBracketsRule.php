@@ -50,10 +50,10 @@ use spriebsch\PHPca\Pattern\Pattern;
 class IncludeAndRequireWithoutBracketsRule extends Rule
 {
     protected $disallowedTokens = array(
-        T_INCLUDE      => 'include statement with bracket',
-        T_INCLUDE_ONCE => 'include_once statement with bracket',
-        T_REQUIRE      => 'require statement with bracket',
-        T_REQUIRE_ONCE => 'require_once statement with bracket',
+        T_INCLUDE      => 'include statement with brackets',
+        T_INCLUDE_ONCE => 'include_once statement with brackets',
+        T_REQUIRE      => 'require statement with brackets',
+        T_REQUIRE_ONCE => 'require_once statement with brackets',
     );
 
     /**
