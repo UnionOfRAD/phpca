@@ -53,7 +53,7 @@ class PhpFileFilterIterator extends \FilterIterator
     /**
      * Set the extensions to accept
      *
-     * @param array $extensions 
+     * @param array $extensions
      */
     public function setExtensions(array $extensions)
     {

@@ -92,11 +92,11 @@ final class Autoloader
     static public function init()
     {
         $autoloadStack = spl_autoload_functions();
-        
+
         if ($autoloadStack !== false && in_array(array('spriebsch\\Loader\\Autoloader', 'autoload'), $autoloadStack)) {
             throw new AlreadyInitializedException('The Autoloader has already been initialized');
         }
-    
+
         spl_autoload_register(array('spriebsch\\Loader\\Autoloader', 'autoload'));
     }
 
@@ -113,7 +113,7 @@ final class Autoloader
         self::$classMaps = array();
 
         $autoloadStack = spl_autoload_functions();
-        
+
         if ($autoloadStack !== false && in_array(array('spriebsch\\Loader\\Autoloader', 'autoload'), $autoloadStack)) {
             spl_autoload_unregister(array('spriebsch\\Loader\\Autoloader', 'autoload'));
         }
@@ -180,7 +180,7 @@ final class Autoloader
  * Autoloader exception base class.
  *
  * @author Stefan Priebsch <stefan@priebsch.de>
- * @copyright Stefan Priebsch <stefan@priebsch.de>. All rights reserved. 
+ * @copyright Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
 class Exception extends \Exception
 {
@@ -190,7 +190,7 @@ class Exception extends \Exception
  * AlreadyInitializedException
  *
  * @author Stefan Priebsch <stefan@priebsch.de>
- * @copyright Stefan Priebsch <stefan@priebsch.de>. All rights reserved. 
+ * @copyright Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
 class AlreadyInitializedException extends Exception
 {
@@ -200,7 +200,7 @@ class AlreadyInitializedException extends Exception
  * CannotInstantiateLoaderException
  *
  * @author Stefan Priebsch <stefan@priebsch.de>
- * @copyright Stefan Priebsch <stefan@priebsch.de>. All rights reserved. 
+ * @copyright Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
 class CannotInstantiateLoaderException extends Exception
 {
@@ -210,7 +210,7 @@ class CannotInstantiateLoaderException extends Exception
  * ClassMapNotFoundException
  *
  * @author Stefan Priebsch <stefan@priebsch.de>
- * @copyright Stefan Priebsch <stefan@priebsch.de>. All rights reserved. 
+ * @copyright Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
 class ClassMapNotFoundException extends Exception
 {
@@ -220,7 +220,7 @@ class ClassMapNotFoundException extends Exception
  * InvalidClassMapException
  *
  * @author Stefan Priebsch <stefan@priebsch.de>
- * @copyright Stefan Priebsch <stefan@priebsch.de>. All rights reserved. 
+ * @copyright Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
 class InvalidClassMapException extends Exception
 {

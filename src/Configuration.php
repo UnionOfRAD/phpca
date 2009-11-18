@@ -86,7 +86,7 @@ class Configuration
      * @var string
      */
     protected $indentation;
-    
+
     /**
      * Additional paths to load rules from.
      *
@@ -192,10 +192,10 @@ class Configuration
         if (isset($this->settings['indentation'])) {
             $this->indentation = $this->settings['indentation'];
         }
-        
+
         $this->ruleSettings = array_replace($this->ruleSettings, $configuration);
     }
-    
+
     /**
      * Sets the name of the coding standard to use.
      *
@@ -295,7 +295,7 @@ class Configuration
     {
         return $this->indentation;
     }
-    
+
     /**
      * Sets the rule paths to load additional rules from.
      *

@@ -49,7 +49,7 @@ class UnknownTokenException extends Exception
    * @var string
    */
   protected $text;
-  
+
   /**
    * Constructs the exception
    *
@@ -62,7 +62,7 @@ class UnknownTokenException extends Exception
 
     parent::__construct('Unknown token "' . $tokenName . '"');
   }
-  
+
   /**
    * Returns the name of the unknown token.
    *

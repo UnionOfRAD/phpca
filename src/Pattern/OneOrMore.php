@@ -53,7 +53,7 @@ namespace spriebsch\PHPca\Pattern;
 class OneOrMore implements PatternInterface
 {
     protected $innerPattern;
-    
+
     /**
      * Constructs the object.
      *

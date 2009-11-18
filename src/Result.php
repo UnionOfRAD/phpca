@@ -330,7 +330,7 @@ class Result
 
     /**
      * Returns the number of rule violations.
-     * 
+     *
      * @return int
      */
     public function getNumberOfViolations()
@@ -464,7 +464,7 @@ class Result
 
         return $result;
     }
-    
+
     /**
      * Return array with all rule errors for given file.
      *

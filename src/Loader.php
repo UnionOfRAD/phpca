@@ -38,7 +38,7 @@
 namespace spriebsch\PHPca;
 
 /**
- * A class loader (autoloader) that can handle multiple directories 
+ * A class loader (autoloader) that can handle multiple directories
  * (class paths). Each directory must contain a file _ClassMap.php
  * that defines where to load classes from.
  *
@@ -46,7 +46,7 @@ namespace spriebsch\PHPca;
  * from. This directory must contain a file $_ClassMap.php
  * (see Loader::registerPath()). Call Loader::init() to register the autoloader.
  * Now you can go ahead and just use any class that is listed in a class map.
- * It is of course possible to use multiple class paths, when the Loader 
+ * It is of course possible to use multiple class paths, when the Loader
  * searches through them for a class, no filesystem access is involved, but
  * only the map itself is being searched in memory.
  *
@@ -132,7 +132,7 @@ final class Loader
         if (!isset($_classMap) || !is_array($_classMap)) {
             throw new InvalidClassMapException('$_classMap in ' . $classMap . ' is not an array');
         }
-    
+
         self::$classMaps[] = $_classMap;
     }
 
