@@ -17,5 +17,6 @@ print $a;
   $c = 1;
     
   print $a;
-
-?>  
+     
+  echo $a;
+?>
