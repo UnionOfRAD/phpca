@@ -57,7 +57,7 @@ class NoTrailingWhitespaceRule extends Rule
         
         foreach ($lines as $line) {
             $count++;
-
+            
             if (strlen($line) != strlen(rtrim($line))) {
                 $this->addViolation('Trailing whitespace', null, $count);
             }
