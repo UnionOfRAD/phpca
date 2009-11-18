@@ -526,6 +526,7 @@ class CLI implements ProgressPrinterInterface
 
         if ($this->result->hasErrors()) {
             foreach($this->result->getFiles() as $file) {
+           	
                 if ($this->result->hasErrors($file) || $this->result->wasSkipped($file)) {
                     print $file . ':';
 
@@ -536,6 +537,17 @@ class CLI implements ProgressPrinterInterface
                     if ($this->result->hasLintError($file)) {
                         // For lint errors, display original error message
                         print PHP_EOL . $this->result->getLintError($file)->getMessage() . PHP_EOL . PHP_EOL;
+                    }
+
+                    if ($this->result->hasRuleError($file)) {
+                        // For rule errors, display original error message
+                        print PHP_EOL;
+                        
+                        foreach ($this->result->getRuleErrors($file) as $error) {
+                            print $error->getMessage();
+                        }                        
+
+                        print PHP_EOL;
                     }
 
                     foreach ($this->result->getViolations($file) as $error) {
