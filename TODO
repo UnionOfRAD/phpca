@@ -43,3 +43,5 @@ Rules to add (in no particular order, just a collection of ideas)
 * disallow trigger_error
 * warn when private/protected method is never called?
 * disallow interface without methods
+* find classes that are aliased in a namespace, but not used
+* single = in if comparison
