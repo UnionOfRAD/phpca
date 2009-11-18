@@ -273,11 +273,11 @@ class Token
     }
 
     /**
-     * Returns the source code line the token is located on.
+     * Returns the source code line the token starts on.
      *
      * @return int
      */
-    public function getLine()
+    public function getStartLine()
     {
         // For whitespace with leading line breaks, we display
         // the "next" line number instead of the actual line number where the whitespace token starts
@@ -288,22 +288,32 @@ class Token
 
         return $this->line;
     }
+    
+    public function getLine()
+    {
+        return $this->getStartLine();
+    }
 
     /**
      * Returns the source code column the token is located on.
      *
      * @return int
      */
-    public function getColumn()
+    public function getStartColumn()
     {
         // If whitespace starts with newlines, we claim to be on column 1 of the "next" line
         if ($this->id == T_WHITESPACE) {
-            if ($this->getLine() != $this->line) {
+            if ($this->getStartLine() != $this->line) {
                 return 1;
             }
         }
 
         return $this->column;
+    }
+
+    public function getColumn()
+    {
+        return $this->getStartColumn();
     }
 
     /**
