@@ -196,7 +196,7 @@ class CLI implements ProgressPrinterInterface
      */
     protected function loadCodingStandard($standard)
     {
-        if (substr($standard, 0, -4) == '.ini' && file_exists($standard)) {
+        if (substr($standard, -4) == '.ini' && file_exists($standard)) {
             $filename = $standard;
         } else {
             $filename = __DIR__ . '/Standard/' . $standard . '.ini';
@@ -684,7 +684,7 @@ class CLI implements ProgressPrinterInterface
             if ($this->positionCount > 59) {
                 print ' ' . $this->formatFileCount($this->fileCount) . ' / ' . $this->numberOfFiles . PHP_EOL;
                 $this->positionCount = 0;
-            }            
+            }
         }
     }
 }
