@@ -140,7 +140,7 @@ class Application
      */
     protected function toAbsolutePath($path)
     {
-        if (substr($path, 0, 1) == '/') {
+        if (substr($path, 0, 1) == '/' || preg_match('/^[A-Z]:\\\\/i', $path)) {
             return $path;
         }
 
