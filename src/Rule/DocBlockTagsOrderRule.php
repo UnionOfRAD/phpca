@@ -48,7 +48,7 @@ class DocBlockTagsOrderRule extends Rule
                 if ($tagIndex !== false) {
                     if ($tagIndex < $docIndex) {
                         $this->addViolation(
-                            "Doc tag `{$tag}` not ordered correctly, came after `{$lastTag}`",
+                            "DocBlock tag `{$tag}` not ordered correctly, came after `{$lastTag}` tag",
                             $token
                         );
                         continue;
