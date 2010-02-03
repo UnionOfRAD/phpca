@@ -9,22 +9,21 @@ use spriebsch\PHPca\Token;
  */
 class DocBlockTagsOrderRule extends Rule
 {
-    /**
-     * List of possible tags, ordered.
-     *
-     * All tags will be referenced against this list. If they
-     * appear out of order, a violation will be raised. Simple
-     * order check regardless of missing tags.
-     */
-    protected $tagsOrdered = array(
-        "@link",
-        "@see",
-        "@params",
-        "@return"
-    );
+    public function configure(array $settings)
+    {
+        if (isset($settings['order'])) {
+            $settings['order'] = array_map('trim', explode(',', $settings['order']));
+        }
+        return parent::configure($settings);
+    }
 
     /**
      * Performs the rule check.
+     *
+     * All tags will be referenced against the list specified by
+     * `DocBlockTagsOrderRule::$settings['order']`. If they
+     * appear out of order, a violation will be raised. Simple
+     * order check regardless of missing tags.
      *
      * @return null
      */
@@ -36,14 +35,13 @@ class DocBlockTagsOrderRule extends Rule
 
             // Grab ordered array of the tags in this token
             $docTags = array();
-            preg_match_all('/@.*?\s/', $docText, $docTags);
-            $docTags = array_shift($docTags);
+            preg_match_all('/@([a-z]+)\s/', $docText, $docTags);
+            $docTags = $docTags[1];
 
             $docIndex = 0;
             $lastTag = "";
             foreach ($docTags as $tag) {
-                $tag = trim($tag);
-                $tagIndex = array_search($tag, $this->tagsOrdered);
+                $tagIndex = array_search($tag, $this->settings['order']);
 
                 if ($tagIndex !== false) {
                     if ($tagIndex < $docIndex) {
