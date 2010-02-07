@@ -14,8 +14,13 @@ class DocBlockTagsOrderRuleTest extends AbstractRuleTest
         $this->init(__DIR__ . '/../_testdata/DocBlockTagsOrderRule/wrong_order.php');
 
         $rule = new DocBlockTagsOrderRule();
-        $rule->check($this->file, $this->result);
 
+        $rule->configure(array());
+        $rule->check($this->file, $this->result);
+        $this->assertFalse($this->result->hasViolations());
+
+        $rule->configure(array('order' => 'link, see, param, return'));
+        $rule->check($this->file, $this->result);
         $this->assertTrue($this->result->hasViolations());
     }
 }
