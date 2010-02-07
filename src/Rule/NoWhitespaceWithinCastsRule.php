@@ -20,9 +20,9 @@ class NoWhitespaceWithinCastsRule extends Rule
         );
         foreach ($casts as $id) {
             while ($this->file->seekTokenId($id)) {
-                $token = $this->file->next();
+                $token = $this->file->current();
 
-                if ($token->getId() != T_WHITESPACE) {
+                if ($token->hasWhitespace()) {
                     $this->addViolation('Whitespace whithin cast', $token);
                 }
                 $this->file->next();
