@@ -48,22 +48,23 @@ class DocBlockTagsOrderRule extends Rule
 
             $docIndex = 0;
             $lastTag = "";
+
             foreach ($docTags as $tag) {
                 $tagIndex = array_search($tag, $this->settings['order']);
 
-                if ($tagIndex !== false) {
-                    if ($tagIndex < $docIndex) {
-                        $this->addViolation(
-                            "DocBlock tag `{$tag}` not ordered correctly, came after `{$lastTag}` tag",
-                            $token
-                        );
-                        continue;
-                    }
-
-                    $docIndex = $tagIndex;
-                    $lastTag = $tag;
+                if (!$tagIndex) {
+                    continue;
+                }
+                if ($tagIndex < $docIndex) {
+                    $this->addViolation(
+                        "DocBlock tag `{$tag}` not ordered correctly, came after `{$lastTag}` tag",
+                        $token
+                    );
+                    continue;
                 }
 
+                $docIndex = $tagIndex;
+                $lastTag = $tag;
             }
             $this->file->next();
         }
