@@ -8,7 +8,7 @@ use spriebsch\PHPca\Token;
  * Ensures that the control structures have a space before the parenthesis
  * and a space between the parenthesis and the brace.
  */
-class ControlStructuresSpacingRule extends Rule {
+class ControlStructuresBracesRule extends Rule {
 
 	protected $controlTokens = array(
 		T_IF,
@@ -28,28 +28,23 @@ class ControlStructuresSpacingRule extends Rule {
 			while ($this->file->seekTokenId($id)) {
 				$controlToken = $this->file->current();
 				$name = $controlToken->getText();
-				$this->file->next();
-				$token = $this->file->current();
-
-				if ($token->getId() != T_WHITESPACE) {
-					$this->addViolation("No space after `{$name}`", $controlToken);
-					$this->file->prev();
-				}
 
 				if ($this->file->seekTokenId(T_OPEN_CURLY)) {
 					$curlyToken = $this->file->current();
 
-					if ($controlToken->getLine() == $curlyToken->getLine()) {
-						$this->file->prev();
-						$token = $this->file->current();
-
-						if ($token->getId() != T_WHITESPACE) {
-							$this->addViolation("No space before brace in `{$name}` statement", $token);
+					if (!$this->file->valid() || $controlToken->getLine() != $curlyToken->getLine()) {
+						if ($controlToken->getLine() == $curlyToken->getLine() - 1) {
+							$this->addViolation("Brace for `{$name}` statement on wrong line", $curlyToken);
+						} else {
+							$this->addViolation("No brace for `{$name}` statement", $controlToken);
+							$this->file->seekToken($controlToken);
 						}
 					}
+				} else {
+					$this->addViolation("No brace for `{$name}` statement", $controlToken);
+					$this->file->seekToken($controlToken);
 				}
 
-				$this->file->seekToken($controlToken);
 				$this->file->next();
 			}
 			$this->file->rewind();

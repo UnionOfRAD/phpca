@@ -7,6 +7,11 @@ while (false){
 
 }
 
+if(true)
+{
+	//Just checking
+}
+
 switch($foo) {
 	case 'bar' :
 	break;
@@ -19,5 +24,8 @@ while (true) {
 foreach($lackOfSpaces as $violation){
 	//complain
 }
+
+if (ljdfs)
+	//test
 
 ?>
