@@ -17,6 +17,14 @@ class DocBlockTagsOrderRule extends Rule
         return parent::configure($settings);
     }
 
+    protected function isDisabled()
+    {
+        if (empty($this->settings['order'])) {
+            return true;
+        }
+        return parent::isDisabled();
+    }
+
     /**
      * Performs the rule check.
      *
