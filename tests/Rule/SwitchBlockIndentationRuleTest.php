@@ -1,7 +1,8 @@
 <?php
 
-namespace spriebsch\PHPca\Rule;
+//namespace spriebsch\PHPca\Rule;
 
+//require_once __DIR__ . '/../../src/'
 require_once __DIR__ . '/../../src/Rule/SwitchBlockIndentationRule.php';
 
 class SwitchBlockIndentationRuleTest extends AbstractRuleTest
