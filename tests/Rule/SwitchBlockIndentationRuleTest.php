@@ -19,14 +19,14 @@ class SwitchBlockIndentationRuleTest extends AbstractRuleTest
         $this->assertTrue($this->result->hasViolations());
     }
 
-	public function testValidIndentationPasses()
-	{
-		$this->init(__DIR__ . '/../_testdata/SwitchBlockIndentationRule/correctly_indented.php');
+    public function testValidIndentationPasses()
+    {
+        $this->init(__DIR__ . '/../_testdata/SwitchBlockIndentationRule/correctly_indented.php');
 
         $rule = new SwitchBlockIndentationRule();
         $rule->check($this->file, $this->result);
 
         $this->assertFalse($this->result->hasViolations());
-	}
+    }
 }
 ?>

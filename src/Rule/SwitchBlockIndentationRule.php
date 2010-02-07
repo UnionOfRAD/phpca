@@ -9,38 +9,39 @@ use spriebsch\PHPca\Token;
  * indent pattern, such that the closing break statement should be indented
  * to the same level as the corresponding opening case statement.
  */
-class SwitchBlockIndentationRule extends Rule {
+class SwitchBlockIndentationRule extends Rule
+{
+    /**
+     * Performs the rule check
+     *
+     * @return void
+     */
+    protected function doCheck()
+    {
+        while ($this->file->valid()) {
+            $prev = $this->file->current();
+            $this->file->next();
 
-	/**
-	 * Performs the rule check
-	 *
-	 * @return void
-	 */
-	protected function doCheck() {
-		while ($this->file->valid()) {
+            if (!$this->file->valid()) {
+                break;
+            }
+            $current = $this->file->current();
 
-			$token = $this->file->current();
+            if ($current->getId() != T_BREAK) {
+                continue;
+            }
 
-			$this->file->next();
-			if($this->file->valid()) {
-				if ($this->file->current()->getId() == T_BREAK) {
-					$blockLevel = $token->getBlockLevel();
-					$this->file->prev();
+            $expected = str_repeat("\t", $current->getBlockLevel());
+            $indentation = $prev->getText();
 
-		            $indentString = str_repeat('	', $blockLevel);
-		            $fileIndentation = $token->getTrailingWhitespace();
-
-		            if ($fileIndentation != $indentString) {
-		                 $this->addViolation("Inconsistent Indentation: `break` doesn't correspond to `case`", $this->file->current());
-		            }
-
-			        if (!$this->file->seekNextLine()) {
-		                return;
-		            }
-				}
-			}
-		}
-	}
+            if ($indentation != $expected) {
+                 $this->addViolation(
+                     "Inconsistent indentation: `break` doesn't correspond to `case`",
+                     $this->file->current()
+                 );
+            }
+        }
+    }
 }
 
 ?>
