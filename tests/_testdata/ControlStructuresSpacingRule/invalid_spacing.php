@@ -25,6 +25,10 @@ foreach($lackOfSpaces as $violation){
 	//complain
 }
 
+if ($this->{$dynamic}->that){
+	//
+}
+
 if (ljdfs)
 	//test
 
