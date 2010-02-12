@@ -10,6 +10,11 @@ use spriebsch\PHPca\Token;
  */
 class NamespaceComesAfterOpeningAndNewlineRule extends Rule
 {
+
+    protected function skip() {
+        return !$this->file->getNamespaces();
+    }
+
     /**
      * Performs the rule check
      *
