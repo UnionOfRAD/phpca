@@ -5,7 +5,7 @@ namespace spriebsch\PHPca\Rule;
 use spriebsch\PHPca\Token;
 
 /**
- * Ensures that no line is longer than a certain amount of charcters.
+ * Ensures that no line is longer than a certain amount of characters.
  */
 class MaximumLineLengthRule extends Rule
 {
@@ -21,7 +21,12 @@ class MaximumLineLengthRule extends Rule
             $this->file->getSourceCode()
         );
         foreach ($lines as $i => $line) {
-            if (strlen($line) > $this->settings['line_length']) {
+            $length = strlen($line);
+            $tabs = array();
+            $tabs = preg_match_all("/\t/", $line, $tabs);
+            $length += ($tabs*3);
+
+            if ($length > $this->settings['line_length']) {
                 $this->addViolation(
                     'Maximum line length exceeded',
                     null, $i +1, $this->settings['line_length'] + 1
