@@ -17,31 +17,25 @@ class NamespaceComesAfterOpeningAndNewlineRule extends Rule
      */
     protected function doCheck()
     {
-        if($this->file->seekTokenId(T_NAMESPACE))
-        {
+        if ($this->file->seekTokenId(T_NAMESPACE)) {
             $token = $this->file->current();
 
             $this->file->prev();
             $before = $this->file->current();
 
-            if($before->getId() != T_WHITESPACE)
-            {
-                $this->addViolation("Namespace not preceded by empty line.", $token);
+            if ($before->getId() != T_WHITESPACE) {
+                $this->addViolation("Namespace not preceded by empty line", $token);
             }
 
             $this->file->prev();
-            if($before = $this->file->current())
-            {
-                if($before->getId() != T_OPEN_TAG)
-                {
-                    $this->addViolation("Namespace not declared directly after a php open tag.", $token);
+            if ($before = $this->file->current()) {
+                if ($before->getId() != T_OPEN_TAG) {
+                    $this->addViolation("Namespace not declared directly after open tag", $token);
                 }
             }
 
-            if($this->file[1]->getLine() != $token->getLine())
-            {
-
-                $this->addViolation("Namespace not declared directly after the first php open tag.", $token);
+            if ($this->file[1]->getLine() != $token->getLine()) {
+                $this->addViolation("Namespace not declared directly after the first open tag", $token);
             }
 
         }
