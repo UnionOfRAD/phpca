@@ -24,12 +24,12 @@ class MaximumLineLengthRule extends Rule
             $length = strlen($line);
             $tabs = array();
             $tabs = preg_match_all("/\t/", $line, $tabs);
-            $length += ($tabs*3);
+            $length += ($tabs * 3);
 
             if ($length > $this->settings['line_length']) {
                 $this->addViolation(
                     'Maximum line length exceeded',
-                    null, $i +1, $this->settings['line_length'] + 1
+                    null, $i + 1, $this->settings['line_length'] + 1
                 );
             }
         }
