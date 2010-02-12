@@ -46,6 +46,16 @@ class NamespaceComesAfterOpeningAndNewlineRuleTest extends AbstractRuleTest
         $rule = new NamespaceComesAfterOpeningAndNewlineRule();
         $rule->check($this->file, $this->result);
 
+		$this->assertFalse($this->result->hasViolations());
+    }
+
+	public function testProperFormatWithLeadingDocblockPasses()
+    {
+        $this->init(__DIR__ . '/../_testdata/NamespaceComesAfterOpeningAndNewlineRule/proper_with_leading_docblock.php');
+
+        $rule = new NamespaceComesAfterOpeningAndNewlineRule();
+        $rule->check($this->file, $this->result);
+
         $this->assertFalse($this->result->hasViolations());
     }
 }
