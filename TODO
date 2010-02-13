@@ -46,3 +46,4 @@ Rules to add (in no particular order, just a collection of ideas)
 * find classes that are aliased in a namespace, but not used
 * single = in if comparison
 * print rule and printf-family?
+* disallow explicit calling of magic methods (except parent::__construct etc.)
