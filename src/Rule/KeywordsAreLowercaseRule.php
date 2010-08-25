@@ -75,7 +75,6 @@ class KeywordsAreLowercaseRule extends Rule
         T_ENDIF,
         T_ENDSWITCH,
         T_ENDWHILE,
-        T_END_HEREDOC,
         T_EVAL,
         T_EXIT,
         T_EXTENDS,
