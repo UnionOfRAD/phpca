@@ -1,52 +1,66 @@
-<?xml version="1.0"?>
+<project name="PHPca" default="all" basedir=".">
 
-<project name="PHPca" default="build" basedir=".">
+    <property name="src"      location="src"/>
+    <property name="lib"      location="lib"/>
+    <property name="tests"    location="tests"/>
 
-    <target name="build" depends="phpunit" description="Performs quality assurance." />
+    <property name="build"    location="_build"/>
+    <property name="output"   location="_logs"/>
 
-    <target name="clean" description="Cleans up.">
-        <delete dir="_docs" />
-        <delete dir="_coverage" />
-        <delete dir="_phar" />
+    <target name="init">
+        <mkdir dir="${build}"/>
+        <mkdir dir="${output}"/>
+        <mkdir dir="${output}/coverage-html"/>
+        <mkdir dir="${output}/coverage-xml"/>
+        <mkdir dir="${output}/junit"/>
+        <mkdir dir="${output}/testdox"/>
+        <mkdir dir="${output}/apidoc"/>
+        <mkdir dir="${output}/phar"/>
+    </target>
+
+    <target name="clean">
+        <delete dir="${build}"/>
+        <delete dir="${output}"/>
+    </target>
+
+    <target name="create_autoloader">
+        <exec executable="phpab" failonerror="true">
+            <arg value="-o"/>
+            <arg value="${src}/Autoload.php"/>
+            <arg value="${src}"/>
+        </exec>
+        <exec executable="phpab" failonerror="true">
+            <arg value="-o"/>
+            <arg value="${tests}/Autoload.php"/>
+            <arg value="${tests}"/>
+        </exec>
+    </target>
+
+    <target name="test" depends="init">
+        <exec executable="phpunit" failonerror="true">
+            <arg value="--configuration phpunit.xml"/>
+        </exec>
+    </target>
+    
+   <target name="apidoc" depends="init">
+        <exec executable="phpdoc" failonerror="true">
+            <arg value="-d"/>
+            <arg value="${src}"/>
+            <arg value="-t"/>
+            <arg value="${output}/apidoc"/>
+            <arg value="-o"/>
+            <arg value="HTML:frames:earthli"/>
+            <arg value="-i"/>
+            <arg value="Autoload.php"/>
+        </exec>
     </target>
 
     <target name="phar" description="Creates Phar archive.">
-        <delete dir="_phar" />
-        <mkdir dir="_phar" />
         <exec dir="${basedir}" executable="php" failonerror="true">
             <arg line="CreatePhar.php" />
         </exec>
     </target>
 
-    <target name="doc" description="Creates API documentation.">
-        <delete dir="_docs" />
-        <exec command="doxygen" checkReturn="true"/>
-    </target>
-
-<!--
-    <target name="lint" description="Runs lint check.">
-        <phplint haltonfailure="true">
-            <fileset dir="src">
-                <include name="*.php"/>
-                <include name="**/*.php"/>
-            </fileset>
-        </phplint>
-
-        <phplint haltonfailure="true">
-            <fileset dir="tests">
-                <include name="*.php"/>
-                <include name="**/*.php"/>
-                <exclude name="_testdata/*.php"/>
-                <exclude name="_testdata/**/*.php"/>
-            </fileset>
-        </phplint>
-    </target>
--->
-
-    <target name="phpunit" description="Runs unit tests.">
-        <exec dir="${basedir}" executable="phpunit" failonerror="true">
-            <arg line="--configuration phpunit.xml" />
-        </exec>
-    </target>
+    <target name="all" depends="clean, init, test, apidoc"/>
 
 </project>

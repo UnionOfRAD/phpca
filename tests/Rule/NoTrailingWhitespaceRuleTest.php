@@ -70,7 +70,7 @@ class NoTrailingWhitespaceRuleTest extends AbstractRuleTest
         $this->assertEquals(10, $violations[4]->getLine());
         $this->assertEquals(16, $violations[5]->getLine());
         $this->assertEquals(18, $violations[6]->getLine());
-        $this->assertEquals(21, $violations[7]->getLine());
+        $this->assertEquals(20, $violations[7]->getLine());
     }
 }
 ?>

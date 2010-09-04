@@ -18,7 +18,7 @@
  *     without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT  * NOT LIMITED TO,
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
  * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
  * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER ORCONTRIBUTORS
  * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
@@ -37,10 +37,7 @@
 
 // @codeCoverageIgnoreStart
 require_once __DIR__ . '/Exceptions.php';
-require_once __DIR__ . '/Loader.php';
-
-spriebsch\PHPca\Loader::init();
-spriebsch\PHPca\Loader::registerPath(__DIR__);
+require_once __DIR__ . '/Autoload.php';
 
 $cli = new spriebsch\PHPca\CLI(getcwd());
 $cli->run($argv);

@@ -174,37 +174,43 @@ class File extends \SplDoublyLinkedList implements \SeekableIterator
     }
 
     /**
+     * Returns an array of all methods of the given class in a file.
+     * We do not distinguish between static methods and instance methods.
+     *
+     * @return array
+     */
+    public function getMethods($class)
+    {
+        $this->rewind();
+    	$result = array();
+
+        while($this->valid()) {
+            $function = $this->current()->getFunction();
+            if ($this->current()->getClass() == $class && $function != '' && !in_array($function, $result)) {
+                $result[] = $function;
+            }
+            $this->next();
+        }
+
+        return $result;
+    }
+
+    /**
      * Returns an array of all functions in the file, or an array
      * of all methods of the given class. We do not distinguish between
      * static methods and instance methods.
      *
      * @return array
      */
-    public function getFunctions($class = null)
+    public function getFunctions()
     {
-        if (is_null($class)) {
-            $result = array();
-
-            $this->rewind();
-
-            while($this->valid()) {
-                $function = $this->current()->getClass();
-                if ($function != '' && !in_array($function, $result) && $this->current()->getClass() == '') {
-                    $result[] = $function;
-                }
-                $this->next();
-            }
-
-            return $result;
-        }
-
         $result = array();
 
         $this->rewind();
 
         while($this->valid()) {
-            $function = $this->current()->getClass();
-            if ($function != '' && !in_array($function, $result) && $this->current()->getClass() == $class) {
+            $function = $this->current()->getFunction();
+            if ($this->current()->getClass() == '' && $function != '' && !in_array($function, $result)) {
                 $result[] = $function;
             }
             $this->next();
@@ -324,7 +330,7 @@ class File extends \SplDoublyLinkedList implements \SeekableIterator
     public function seekTokenId($id, $backwards = false)
     {
         $currentPosition = $this->key();
-    	
+
         while($this->valid()) {
             if ($this->current()->getId() == $id) {
                 return true;
@@ -401,12 +407,13 @@ class File extends \SplDoublyLinkedList implements \SeekableIterator
     {
         $this->rewind();
         $position = 0;
-        while($position < $index && $this->valid()) {
+        while($position < $index) {
+            if (!$this->valid()) {
+                throw new \OutOfBoundsException('Invalid seek position');
+            }
+
             $this->next();
             $position++;
-        }
-        if (!$this->valid()) {
-            throw new \OutOfBoundsException('Invalid seek position');
         }
     }
 }

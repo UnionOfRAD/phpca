@@ -69,11 +69,11 @@ class NoAlternativeSyntaxStatementsRuleTest extends AbstractRuleTest
         $this->assertTrue($this->result->hasViolations());
         $this->assertEquals(5, $this->result->getNumberOfViolations());
 
-        $this->assertEquals('alternative syntax if/endif', $violations[0]->getMessage());
-        $this->assertEquals('alternative syntax for/endfor', $violations[1]->getMessage());
-        $this->assertEquals('alternative syntax foreach/endforeach', $violations[2]->getMessage());
-        $this->assertEquals('alternative syntax while/endwhile', $violations[3]->getMessage());
-        $this->assertEquals('alternative syntax switch/endswitch', $violations[4]->getMessage());
+        $this->assertEquals('Alternative syntax if/endif', $violations[0]->getMessage());
+        $this->assertEquals('Alternative syntax for/endfor', $violations[1]->getMessage());
+        $this->assertEquals('Alternative syntax foreach/endforeach', $violations[2]->getMessage());
+        $this->assertEquals('Alternative syntax while/endwhile', $violations[3]->getMessage());
+        $this->assertEquals('Alternative syntax switch/endswitch', $violations[4]->getMessage());
     }
 }
 ?>

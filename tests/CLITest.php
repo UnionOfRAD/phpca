@@ -50,8 +50,6 @@ class CLITest extends \PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        Loader::registerPath(__DIR__ . '/_testdata/CLI');
-
         $this->cli = new TestCLISubclass(getcwd());
     }
 

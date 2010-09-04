@@ -104,12 +104,12 @@ class Linter
         }
 
         $cmd = $this->phpExecutable . ' -v';
-        
+
         // Do not try to redirect strerr on Windows, thanks to pcdinh for the patch
         if (false === strpos(PHP_OS, 'WIN')) {
             $cmd .= ' 2>/dev/null';
         }
-        
+
         $output = trim(shell_exec($cmd));
 
         if (substr($output, 0, 5) != 'PHP 5') {

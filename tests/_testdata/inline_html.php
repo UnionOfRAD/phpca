@@ -8,4 +8,6 @@ print 'hello world';
 <p>Hello world</p>
 <?php
 
+// trailing whitespace after closing tag has lead to a rule error.
+
 ?>

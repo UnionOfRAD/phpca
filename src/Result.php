@@ -330,7 +330,7 @@ class Result
 
     /**
      * Returns the number of rule violations.
-     * 
+     *
      * @return int
      */
     public function getNumberOfViolations()
@@ -456,6 +456,31 @@ class Result
 
         foreach ($this->messages[$file] as $message) {
             if ($message instanceOf Violation) {
+                $result[] = $message;
+            }
+        }
+
+        usort($result, array($this, 'sortByLine'));
+
+        return $result;
+    }
+
+    /**
+     * Return array with all rule errors for given file.
+     *
+     * @param string $file
+     * @return array
+     */
+    public function getRuleErrors($file)
+    {
+        $result = array();
+
+        if (!isset($this->messages[$file])) {
+            return array();
+        }
+
+        foreach ($this->messages[$file] as $message) {
+            if ($message instanceOf RuleError) {
                 $result[] = $message;
             }
         }
