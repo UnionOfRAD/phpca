@@ -21,7 +21,7 @@ class MaximumLineLengthRule extends Rule
             $this->file->getSourceCode()
         );
         foreach ($lines as $i => $line) {
-            $length = strlen($line);
+            $length = mb_strlen($line, 'UTF8');
             $tabs = array();
             $tabs = preg_match_all("/\t/", $line, $tabs);
             $length += ($tabs * 3);
