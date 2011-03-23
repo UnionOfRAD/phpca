@@ -5,7 +5,7 @@ namespace spriebsch\PHPca\Rule;
 /**
  * Ensures that there is one space before and after an operator.
  *
- * However there are a few exceptions to the spacing rule◌:
+ * However there are a few exceptions to the spacing rule:
  *  1. Increment and decrement operators must be directly followed by or following the variable.
  *  2. The exclamation mark must be directly followed by the variable.
  *  3. Colons appearing as part of a case condition must have no spaces surrounding them.
