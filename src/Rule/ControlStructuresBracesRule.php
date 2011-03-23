@@ -8,8 +8,7 @@ use spriebsch\PHPca\Pattern\Pattern;
 use spriebsch\PHPca\Finder;
 
 /**
- * Ensures that the control structures have a space before the parenthesis
- * and a space between the parenthesis and the brace.
+ * Ensures that the control structures curly braces are on the correct lines.
  */
 class ControlStructuresBracesRule extends Rule
 {
