@@ -38,7 +38,21 @@ class ControlStructuresSpacingRule extends Rule
                     $this->file->prev();
                 }
 
-                if ($this->file->seekTokenId(T_OPEN_CURLY)) {
+                while ($this->file->valid()) {
+                    $this->file->seekTokenId(T_CLOSE_BRACKET);
+
+                    while ($this->file->valid()) {
+                        $this->file->next();
+
+                        if ($this->file->current()->getId() !== T_WHITESPACE) {
+                            continue(2);
+                        }
+                        if ($this->file->current()->getId() !== T_OPEN_CURLY) {
+                            break(2);
+                        }
+                    }
+                }
+                if ($this->file->current()->getId() === T_OPEN_CURLY) {
                     $curlyToken = $this->file->current();
 
                     if ($controlToken->getLine() == $curlyToken->getLine()) {
