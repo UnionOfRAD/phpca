@@ -38,14 +38,15 @@
 namespace spriebsch\PHPca\Rule;
 
 /**
- * Make sure that all keywords are lowercase.
+ * Make sure that all keywords are lowercase also cecks for boolean types
+ * `true` and `false`, NULL type `null`.
  *
  * @author     Stefan Priebsch <stefan@priebsch.de>
  * @copyright  Stefan Priebsch <stefan@priebsch.de>. All rights reserved.
  */
 class KeywordsAreLowercaseRule extends Rule
 {
-    protected $keywords = array(
+    protected $tokens = array(
         T_CLASS,
         T_FUNCTION,
         T_PRIVATE,
@@ -112,6 +113,12 @@ class KeywordsAreLowercaseRule extends Rule
         T_WHILE,
     );
 
+    protected $strings = array(
+        'true',
+        'false',
+        'null'
+    );
+
     /**
      * Performs the rule check.
      *
@@ -119,10 +126,10 @@ class KeywordsAreLowercaseRule extends Rule
      */
     protected function doCheck()
     {
-        foreach ($this->keywords as $keyword) {
+        foreach ($this->tokens as $tokenId) {
             $this->file->rewind();
 
-            while ($this->file->seekTokenId($keyword)) {
+            while ($this->file->seekTokenId($tokenId)) {
                 $token = $this->file->current();
 
                 $text = $token->getText();
@@ -132,6 +139,19 @@ class KeywordsAreLowercaseRule extends Rule
 
                 $this->file->next();
             }
+        }
+        $this->file->rewind();
+        $regex = '^(' . implode('|', $this->strings) . ')$';
+
+        while ($this->file->seekTokenId(T_STRING)) {
+            $token = $this->file->current();
+
+            if (preg_match("/{$regex}/i", $text = $token->getText())) {
+                if ($text != strtolower($text)) {
+                    $this->addViolation('Keyword ' . strtolower($text) . ' not lowercase', $token);
+                }
+            }
+            $this->file->next();
         }
     }
 }
