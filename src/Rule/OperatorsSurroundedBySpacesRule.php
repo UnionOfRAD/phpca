@@ -60,7 +60,7 @@ class OperatorsSurroundedBySpacesRule extends Rule
             if (!in_array($current->getId(), $operators)) {
                continue;
             }
-            if ($before && $before->getId() !== T_WHITESPACE) {
+            if ($before && !in_array($before->getId(), array(T_EQUAL, T_WHITESPACE))) {
                 $this->addViolation('No space before operator', $before);
             } elseif ($after && $after->getId() !== T_WHITESPACE) {
                 $this->addViolation('No space after operator', $after);
