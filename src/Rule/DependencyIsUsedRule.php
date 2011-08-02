@@ -46,7 +46,7 @@ class DependencyIsUsedRule extends Rule
                 "extends {$name}",
                 "implements {$name}"
             );
-            if (!preg_match('/(' . implode('|', $patterns) . ')/', $code)) {
+            if (!preg_match('/(' . implode('|', $patterns) . ')/i', $code)) {
                 $qualified = implode('\\', $parts);
                 $this->addViolation("Dependency `{$qualified}` declared but not used", $use);
             }
