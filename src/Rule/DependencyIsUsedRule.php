@@ -44,7 +44,8 @@ class DependencyIsUsedRule extends Rule
                 "\({$name} \\$",
                 "instanceof {$name}(;|:|\))",
                 "extends {$name}",
-                "implements {$name}"
+                "implements {$name}",
+                "function\s?\(.*{$name}\s.*\)"
             );
             if (!preg_match('/(' . implode('|', $patterns) . ')/i', $code)) {
                 $qualified = implode('\\', $parts);
