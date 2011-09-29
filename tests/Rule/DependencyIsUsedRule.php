@@ -45,5 +45,21 @@ class DependencyIsUedRuleTest extends AbstractRuleTest
 		$this->assertFalse($this->result->hasViolations());
         $this->assertEquals(0, $this->result->getNumberOfViolations());
     }
+
+	/**
+     * @covers \spriebsch\PHPca\Rule\DependencyIsUsedRule
+     */
+    public function testDetectTypeHint()
+    {
+        $this->init(__DIR__ . '/../_testdata/DependencyIsUsedRule/hint.php');
+
+        $rule = new DependencyIsUsedRule();
+
+        $rule->check($this->file, $this->result);
+
+		$this->assertFalse($this->result->hasViolations());
+        $this->assertEquals(0, $this->result->getNumberOfViolations());
+    }
 }
+
 ?>
