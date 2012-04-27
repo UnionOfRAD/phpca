@@ -284,7 +284,7 @@ class Application
 
             catch (\Exception $e) {
                 // Convert any exceptions inside a rule to a RuleError
-                $this->result->addMessage(new RuleError($fileName, 'Rule ' . get_class($rule) . ': ' . $e->getMessage()));
+                $this->result->addMessage(new RuleError($fileName, $e->getMessage()));
             }
         }
     }
