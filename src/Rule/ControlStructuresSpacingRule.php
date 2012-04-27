@@ -44,6 +44,10 @@ class ControlStructuresSpacingRule extends Rule
                     while ($this->file->valid()) {
                         $this->file->next();
 
+                        if (!$this->file->valid()) {
+                            break(2);
+                        }
+
                         if ($this->file->current()->getId() !== T_WHITESPACE) {
                             continue(2);
                         }
