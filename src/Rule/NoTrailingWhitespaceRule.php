@@ -52,7 +52,7 @@ class NoTrailingWhitespaceRule extends Rule
      */
     protected function doCheck()
     {
-        $lines = explode("\n", $this->file->getSourceCode());
+        $lines = explode($this->configuration->getLineEndings(), $this->file->getSourceCode());
         $count = 0;
 
         foreach ($lines as $line) {
