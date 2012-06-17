@@ -78,7 +78,7 @@ abstract class Rule
     protected function getSetting($setting)
     {
         if (!isset($this->settings[$setting])) {
-            throw new Exception('Configuration setting ' . $setting . ' does not exist');
+            throw new \Exception('Configuration setting ' . $setting . ' does not exist');
         }
 
         return $this->settings[$setting];
